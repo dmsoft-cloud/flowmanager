@@ -16,4 +16,7 @@
 /DMFlowManager-app/.settings/
 /DMFlowManager-app/.classpath
 /DMFlowManager-app/target/
-DMFlowManager-api/.factorypath
+/DMFlowManager-api/.factorypath
+
+/DMFlowManagerDocker/.project
+/DMFlowManagerDocker/.settings
