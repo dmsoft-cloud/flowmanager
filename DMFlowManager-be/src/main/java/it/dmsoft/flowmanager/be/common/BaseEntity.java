@@ -154,4 +154,28 @@ public class BaseEntity {
  		}
  	}
     
+    
+    public enum RecipientType implements CodeEnum {
+ 		CC("CC"),
+ 		TO("TO"),
+ 		BCC("BCC");
+ 		
+ 		private String code;
+ 		
+ 		private RecipientType(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static RecipientType geRecipientType(String code) {
+ 			return CodeEnum.getCodeEnum(RecipientType.class, code);
+ 		}
+ 	}
+    
+    
+    
 }

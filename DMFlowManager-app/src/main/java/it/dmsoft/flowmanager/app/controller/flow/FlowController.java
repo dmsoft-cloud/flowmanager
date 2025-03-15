@@ -22,7 +22,7 @@ import jakarta.annotation.Resource;
 public class FlowController {
 	
 	@Resource(name = "flowService")
-    private BaseService<ConfigurationGroup, FlowData, String> flowService;
+    private BaseService<Flow, FlowData, String> flowService;
 
     /**
      * <p>Get all Flow data in the system.For production system you many want to use

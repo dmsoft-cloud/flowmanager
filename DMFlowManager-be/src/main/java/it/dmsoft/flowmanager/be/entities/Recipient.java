@@ -1,0 +1,92 @@
+package it.dmsoft.flowmanager.be.entities;
+
+import java.util.List;
+
+import it.dmsoft.flowmanager.be.common.BaseEntity.RecipientType;
+import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
+import it.dmsoft.flowmanager.be.converter.YesNoConverter;
+import it.dmsoft.flowmanager.be.keys.RecipientId;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+@Entity
+@IdClass(RecipientId.class) // Chiave composta
+public class Recipient {
+
+	//@EmbeddedId
+    //private RecipientId id; // Chiave composta (emailId + emailAddress)
+	
+	@Id
+    @Column(name = "email_id")
+    private String emailId;
+
+    @Id
+    @Column(name = "email_address")
+    private String emailAddress;	
+
+	//@Convert(converter = RecipientType.class)
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false, length = 3)
+    private RecipientType type; // TO o CC
+
+
+	@ManyToOne
+	@JoinColumn(name = "email_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private Email email; // Relazione con Email
+
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+
+
+	public RecipientType getType() {
+		return type;
+	}
+
+
+	public void setType(RecipientType type) {
+		this.type = type;
+	}
+
+
+	public Email getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(Email email) {
+		this.email = email;
+	}
+
+	
+
+}
