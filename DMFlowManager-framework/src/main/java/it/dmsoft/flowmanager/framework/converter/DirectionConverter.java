@@ -1,7 +1,7 @@
-package it.dmsoft.flowmanager.agent.be.converter;
+package it.dmsoft.flowmanager.framework.converter;
 
-import it.dmsoft.flowmanager.agent.be.converter.base.BaseCodeEnumConverter;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.framework.converter.base.BaseCodeEnumConverter;
 import jakarta.persistence.Converter;
 
 @Converter

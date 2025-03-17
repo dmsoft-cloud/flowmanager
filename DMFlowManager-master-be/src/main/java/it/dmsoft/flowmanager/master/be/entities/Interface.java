@@ -2,8 +2,8 @@ package it.dmsoft.flowmanager.master.be.entities;
 
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.master.be.converter.ConnectionTypeConverter;
-import it.dmsoft.flowmanager.master.be.converter.YesNoConverter;
+import it.dmsoft.flowmanager.framework.converter.ConnectionTypeConverter;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

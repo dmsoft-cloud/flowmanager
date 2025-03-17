@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.master.be.entities;
 import java.util.List;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.master.be.converter.YesNoConverter;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

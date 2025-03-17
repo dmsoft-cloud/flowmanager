@@ -1,7 +1,7 @@
 package it.dmsoft.flowmanager.agent.be.entities;
 
-import it.dmsoft.flowmanager.agent.be.converter.YesNoConverter;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

@@ -1,15 +1,15 @@
 package it.dmsoft.flowmanager.agent.be.entities;
 
-import it.dmsoft.flowmanager.agent.be.converter.DirectionConverter;
-import it.dmsoft.flowmanager.agent.be.converter.FileFormatConverter;
-import it.dmsoft.flowmanager.agent.be.converter.LocaleConverter;
-import it.dmsoft.flowmanager.agent.be.converter.TypeConverter;
-import it.dmsoft.flowmanager.agent.be.converter.YesNoConverter;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
 import it.dmsoft.flowmanager.common.domain.Domains.Locale;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.framework.converter.DirectionConverter;
+import it.dmsoft.flowmanager.framework.converter.FileFormatConverter;
+import it.dmsoft.flowmanager.framework.converter.LocaleConverter;
+import it.dmsoft.flowmanager.framework.converter.TypeConverter;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

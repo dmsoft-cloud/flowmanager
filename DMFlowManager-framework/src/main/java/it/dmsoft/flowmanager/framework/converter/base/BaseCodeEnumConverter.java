@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.master.be.converter.base;
+package it.dmsoft.flowmanager.framework.converter.base;
 
 
 
