@@ -32,7 +32,7 @@ public class GroupController {
      * @return List<OriginData>
      */
     @GetMapping
-    public List<GroupData> getModels() {
+    public List<GroupData> getGroups() {
         return groupService.getAll();
     }
 
@@ -42,7 +42,7 @@ public class GroupController {
      * @return OriginData
      */
     @GetMapping("/group/{id}")
-    public GroupData getModel(@PathVariable String id) {
+    public GroupData getGroup(@PathVariable String id) {
         return groupService.getById(id);
     }
 
@@ -52,7 +52,7 @@ public class GroupController {
      * @return
      */
     @PostMapping("/group")
-    public GroupData saveModel(final @RequestBody GroupData groupData) {
+    public GroupData saveGroup(final @RequestBody GroupData groupData) {
         return groupService.save(groupData);
     }
 
@@ -63,7 +63,7 @@ public class GroupController {
      * @return
      */
     @DeleteMapping("/group/{id}")
-    public Boolean deleteModel(@PathVariable String id) {
+    public Boolean deleteGroup(@PathVariable String id) {
         return groupService.delete(id);
     }
 	

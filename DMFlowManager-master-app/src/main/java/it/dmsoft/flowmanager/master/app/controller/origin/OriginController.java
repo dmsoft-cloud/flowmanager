@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.master.app.controller;
+package it.dmsoft.flowmanager.master.app.controller.origin;
 
 import java.util.List;
 

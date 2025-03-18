@@ -28,7 +28,7 @@ public class InterfaceController {
 	     * @return List<OriginData>
 	     */
 	    @GetMapping
-	    public List<InterfaceData> getModels() {
+	    public List<InterfaceData> getInterfaces() {
 	        return interfaceService.getAll();
 	    }
 
@@ -38,7 +38,7 @@ public class InterfaceController {
 	     * @return OriginData
 	     */
 	    @GetMapping("/interface/{id}")
-	    public InterfaceData getModel(@PathVariable String id) {
+	    public InterfaceData getInterface(@PathVariable String id) {
 	        return interfaceService.getById(id);
 	    }
 
@@ -48,7 +48,7 @@ public class InterfaceController {
 	     * @return
 	     */
 	    @PostMapping("/interface")
-	    public InterfaceData saveModel(final @RequestBody InterfaceData interfaceData) {
+	    public InterfaceData saveInterface(final @RequestBody InterfaceData interfaceData) {
 	        return interfaceService.save(interfaceData);
 	    }
 
@@ -59,7 +59,7 @@ public class InterfaceController {
 	     * @return
 	     */
 	    @DeleteMapping("/interface/{id}")
-	    public Boolean deleteModel(@PathVariable String id) {
+	    public Boolean deleteInterface(@PathVariable String id) {
 	        return interfaceService.delete(id);
 	    }
 
