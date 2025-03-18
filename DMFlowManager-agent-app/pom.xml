@@ -32,7 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>
-			<artifactId>DMFlowManager-master-api</artifactId>
+			<artifactId>DMFlowManager-agent-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
