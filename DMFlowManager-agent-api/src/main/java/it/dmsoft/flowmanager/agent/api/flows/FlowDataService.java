@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.dmsoft.flowmanager.agent.api.flows.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.api.flows.model.FullFlowData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowsData;
@@ -31,6 +32,15 @@ public class FlowDataService {
 		}
 		
 		return fullFlowsData;
+	}
+	
+	public ExecutionFlowData getExecutionFlowData(String flowId) {
+		return getExecutionFlowData(getFullFlowData(flowId));
+	}
+	
+	
+	public ExecutionFlowData getExecutionFlowData(FullFlowData fullFlowData) {
+		return null;
 	}
 	
 	public FullFlowData getFullFlowData(String flowId) {
