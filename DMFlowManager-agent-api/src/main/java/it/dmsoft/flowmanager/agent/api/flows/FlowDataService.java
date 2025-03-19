@@ -42,12 +42,15 @@ public class FlowDataService {
 		
 		FlowData flowData = flowsData.getFlows().stream().filter(x -> x.getId().equals(flowId)).findAny().get();
 		fullFlowData.setFlow(flowData);
-		flowsData.getGroups().stream().filter(x -> x.getId().equals(flowData.getGroupId())).findAny().get();
-		flowsData.getEmails().stream().filter(x -> x.getId().equals(flowData.getNotificationOk())).findAny().get();
-		flowsData.getEmails().stream().filter(x -> x.getId().equals(flowData.getNotificationKo())).findAny().get();
+		fullFlowData.setGroup(flowsData.getGroups().stream().filter(x -> x.getId().equals(flowData.getGroupId())).findAny().get());
+		fullFlowData.setEmailOk(flowsData.getEmails().stream().filter(x -> x.getId().equals(flowData.getNotificationOk())).findAny().get());
+		fullFlowData.setEmailKo(flowsData.getEmails().stream().filter(x -> x.getId().equals(flowData.getNotificationKo())).findAny().get());
 		//flowsData.get
+		fullFlowData.setInterface(flowsData.getInterfaces().stream().filter(x -> x.getId().equals(flowData.getInterfaceId())).findAny().get());
+		fullFlowData.setModel(flowsData.getModels().stream().filter(x -> x.getId().equals(flowData.getModel())).findAny().get());
+		fullFlowData.setOrigin(flowsData.getOrigins().stream().filter(x -> x.getId().equals(flowData.getOrigin())).findAny().get());
 		
-		return null;
+		return fullFlowData;
 	}
 	
 	

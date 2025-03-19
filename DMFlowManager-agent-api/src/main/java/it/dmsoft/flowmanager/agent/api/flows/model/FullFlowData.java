@@ -9,8 +9,10 @@ import it.dmsoft.flowmanager.common.model.OriginData;
 
 public class FullFlowData {
 	
-	private EmailData email;
+	private EmailData emailOk;
 
+	private EmailData emailKo;
+	
 	private FlowData flow;
 
 	private GroupData group;
@@ -21,12 +23,20 @@ public class FullFlowData {
 
 	private OriginData origin;
 
-	public EmailData getEmail() {
-		return email;
+	public EmailData getEmailOk() {
+		return emailOk;
 	}
 
-	public void setEmail(EmailData email) {
-		this.email = email;
+	public void setEmailOk(EmailData emailOk) {
+		this.emailOk = emailOk;
+	}
+
+	public EmailData getEmailKo() {
+		return emailKo;
+	}
+
+	public void setEmailKo(EmailData emailKo) {
+		this.emailKo = emailKo;
 	}
 
 	public FlowData getFlow() {
