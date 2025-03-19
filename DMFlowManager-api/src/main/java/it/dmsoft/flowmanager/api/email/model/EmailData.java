@@ -10,6 +10,7 @@ public class EmailData {
     private String subject;
     private String bodyHtml;
 	private YesNo enabled;
+	private String note;
 	private List<RecipientData> recipients;
 	
 	public  String getId() {
@@ -49,6 +50,14 @@ public class EmailData {
 	
 	public void setRecipients(List<RecipientData> recipients) {
 		this.recipients = recipients;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 	
 

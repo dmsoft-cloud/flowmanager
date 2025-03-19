@@ -32,6 +32,9 @@ public class Email {
 	@Column(name = "enabled", nullable = false, length = 1)
 	private YesNo enabled;
 	
+	@Column(length = 2000)
+	private String note;
+	
 
     @OneToMany(mappedBy = "email", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recipient> recipients;
@@ -84,6 +87,16 @@ public class Email {
 
 	public void setRecipients(List<Recipient> recipients) {
 		this.recipients = recipients;
+	}
+
+
+	public String getNote() {
+		return note;
+	}
+
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 
