@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.common.model;
 
 import java.util.List;
 
-public class SynchData {
+public class FullFlowsData {
 
 	private List<EmailData> emails;
 
