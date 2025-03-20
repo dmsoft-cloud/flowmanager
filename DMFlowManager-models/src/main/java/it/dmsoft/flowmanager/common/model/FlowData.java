@@ -43,6 +43,7 @@ public class FlowData {
 	private String remoteFolder;
 	private String remoteFile;
 	private Integer lengthFixed;
+	
 	public String getId() {
 		return id;
 	}
