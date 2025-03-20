@@ -15,6 +15,21 @@ public class FullFlowsData {
 	private List<ModelData> models;
 
 	private List<OriginData> origins;
+	
+	public FullFlowsData() {
+		super();
+	}
+
+	public FullFlowsData(List<EmailData> emails, List<FlowData> flows, List<GroupData> groups,
+			List<InterfaceData> interfaces, List<ModelData> models, List<OriginData> origins) {
+		super();
+		this.emails = emails;
+		this.flows = flows;
+		this.groups = groups;
+		this.interfaces = interfaces;
+		this.models = models;
+		this.origins = origins;
+	}
 
 	public List<EmailData> getEmails() {
 		return emails;

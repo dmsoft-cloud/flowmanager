@@ -1,5 +1,8 @@
 package it.dmsoft.flowmanager.master.api.synch;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.common.model.AgentData;
@@ -45,11 +48,37 @@ public class SynchDataService {
     private BaseService<Origin, OriginData, String> originService;
 
 	public FullFlowsData synchFullFlowsData() {
-		return null;
+		List<AgentData> agents = agentService.getAll();
+		FullFlowsData flowsData = retrieveFullFlowsData();
+		
+		if (agents == null || agents.size() == 0) {
+			agents = Arrays.asList(AgentData.DEFAULT_AGENT);
+		}
+		
+		for (AgentData agent : agents) {
+			synchFullFlowsData(agent, flowsData);
+		}
+		
+		return flowsData;
 	}
 
 	public FullFlowsData synchFullFlowsData(String agentId) {
-		return null;
+		AgentData agent = agentService.getById(agentId);		
+		return synchFullFlowsData(agent, null);
+	}
+	
+	
+	public FullFlowsData synchFullFlowsData(AgentData agent, FullFlowsData flowsData) {
+		
+		return flowsData;
+	}
+	
+	private FullFlowsData retrieveFullFlowsData() {
+		FullFlowsData fullFlowsData = new FullFlowsData(
+				emailService.getAll(), flowService.getAll(), groupService.getAll(), 
+				interfaceService.getAll(), modelService.getAll(), originService.getAll());
+		
+		return fullFlowsData;
 	}
 
 	
