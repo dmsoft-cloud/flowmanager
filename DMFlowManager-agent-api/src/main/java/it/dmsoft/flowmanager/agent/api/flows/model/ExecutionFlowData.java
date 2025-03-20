@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.agent.api.flows.model;
 
 public class ExecutionFlowData {
 
-	private static String[] pippo = new String[] { "FANA_ID", "FANA_DESC", "FANA_GRUPPO", "FANA_COD_INTERFACCIA",
+	private static String[] fields = new String[] { "FANA_ID", "FANA_DESC", "FANA_GRUPPO", "FANA_COD_INTERFACCIA",
 			"FANA_STATO", "FANA_TIP_FLUSSO", "FANA_DIREZIONE", "FANA_LIBRERIA", "FANA_FILE", "FANA_MEMBRO",
 			"FANA_LIB_SOURCE", "FANA_FILE_SOURCE", "FANA_MEMBRO_SOURCE", "FANA_FOLDER", "FANA_FILE_NAME",
 			"FANA_FORMATO", "FANA_DELIM_RECORD", "FANA_DELIM_STRINGA", "FANA_RIMOZ_SPAZI", "FANA_DELIM_CAMPO",
@@ -19,679 +19,523 @@ public class ExecutionFlowData {
 			"FANA_INTERACTIVE_RESULT", "FANA_INTERACTIVE_COMMAND", "FANA_DELAY_SEMAFORO", "FANA_HASH_UNICO",
 			"FANA_EXPORT_FLAG", "FANA_EXPORT_CODE", "FANA_FETCH_SIZE", "FANA_CHAR_EMPTY_SPACE" };
 
-	private String fanaId;
-	private String fanaDesc;
-	private String fanaGruppo;
-	private String fanaCodInterfaccia;
-	private String fanaStato;
-	private String fanaTipFlusso;
-	private String fanaDirezione;
-	private String fanaLibreria;
-	private String fanaFile;
-	private String fanaMembro;
-	private String fanaLibSource;
-	private String fanaFileSource;
-	private String fanaMembroSource;
-	private String fanaFolder;
-	private String fanaFileName;
-	private String fanaFormato;
-	private String fanaDelimRecord;
-	private String fanaDelimStringa;
-	private String fanaRimozSpazi;
-	private String fanaDelimCampo;
-	private String fanaRiempCampo;
-	private String fanaCodepage;
-	private String fanaModAcquisizione;
-	private String fanaFromCcsid;
-	private String fanaPgmControllo;
-	private String fanaTipologiaConn;
-	private String fanaHost;
-	private String fanaPort;
-	private String fanaRemoteFolder;
-	private String fanaRemoteFileName;
-	private String fanaUtente;
-	private String fanaPassword;
-	private String fanaUtenteSftp;
-	private String fanaIntegrityCheck;
-	private String fanaFlNameSemaforo;
-	private String fanaNumTentaRicez;
-	private String fanaIntervalloRetry;
-	private String fanaRetention;
-	private String fanaCompression;
-	private String fanaDeCompression;
-	private String fanaBackup;
-	private String fanaInviaMail;
-	private String fanaLetteraOk;
-	private String fanaLetteraKo;
-	private String fanaProgPerson;
-	private String fanaKnownHtFl;
-	private String fanaKeyFl;
-	private String fanaModalitaPassiva;
-	private String fanaJobDesc;
-	private String fanaLibJobDesc;
-	private String fanaCancellaFil;
-	private String fanaRisottomet;
-	private String fanaLunghezzaFlFlat;
-	private String fanaTipoTrasferimento;
-	private String fanaBypassQtemp;
-	private String fanaEsistenzaFile;
-	private String fanaLetteraFlusso;
-	private String fanaAggNomiCol;
-	private String fanaCreaVuoto;
-	private String fanaInternaz;
-	private String fanaSostValNull;
-	private String fanaElimNomCol;
-	private String fanaFlagOkVuoto;
-	private String fanaFtpSecure;
-	private String fanaInteractiveType;
-	private String fanaInteractiveProgram;
-	private String fanaInteractiveResult;
-	private String fanaInteractiveCommand;
-	private String fanaDelaySemaforo;
-	private String fanaHashUnico;
-	private String fanaExportFlag;
-	private String fanaExportCode;
-	private String fanaFetchSize;
-	private String fanaCharEmptySpace;
-
-	public static String[] getPippo() {
-		return pippo;
-	}
-
-	public static void setPippo(String[] pippo) {
-		ExecutionFlowData.pippo = pippo;
-	}
-
-	public String getFanaId() {
-		return fanaId;
-	}
-
-	public void setFanaId(String fanaId) {
-		this.fanaId = fanaId;
-	}
-
-	public String getFanaDesc() {
-		return fanaDesc;
-	}
-
-	public void setFanaDesc(String fanaDesc) {
-		this.fanaDesc = fanaDesc;
-	}
-
-	public String getFanaGruppo() {
-		return fanaGruppo;
-	}
-
-	public void setFanaGruppo(String fanaGruppo) {
-		this.fanaGruppo = fanaGruppo;
-	}
-
-	public String getFanaCodInterfaccia() {
-		return fanaCodInterfaccia;
-	}
-
-	public void setFanaCodInterfaccia(String fanaCodInterfaccia) {
-		this.fanaCodInterfaccia = fanaCodInterfaccia;
-	}
-
-	public String getFanaStato() {
-		return fanaStato;
-	}
-
-	public void setFanaStato(String fanaStato) {
-		this.fanaStato = fanaStato;
-	}
-
-	public String getFanaTipFlusso() {
-		return fanaTipFlusso;
-	}
-
-	public void setFanaTipFlusso(String fanaTipFlusso) {
-		this.fanaTipFlusso = fanaTipFlusso;
-	}
-
-	public String getFanaDirezione() {
-		return fanaDirezione;
-	}
-
-	public void setFanaDirezione(String fanaDirezione) {
-		this.fanaDirezione = fanaDirezione;
-	}
-
-	public String getFanaLibreria() {
-		return fanaLibreria;
-	}
-
-	public void setFanaLibreria(String fanaLibreria) {
-		this.fanaLibreria = fanaLibreria;
-	}
-
-	public String getFanaFile() {
-		return fanaFile;
-	}
-
-	public void setFanaFile(String fanaFile) {
-		this.fanaFile = fanaFile;
-	}
-
-	public String getFanaMembro() {
-		return fanaMembro;
-	}
-
-	public void setFanaMembro(String fanaMembro) {
-		this.fanaMembro = fanaMembro;
-	}
-
-	public String getFanaLibSource() {
-		return fanaLibSource;
-	}
-
-	public void setFanaLibSource(String fanaLibSource) {
-		this.fanaLibSource = fanaLibSource;
-	}
-
-	public String getFanaFileSource() {
-		return fanaFileSource;
-	}
-
-	public void setFanaFileSource(String fanaFileSource) {
-		this.fanaFileSource = fanaFileSource;
-	}
-
-	public String getFanaMembroSource() {
-		return fanaMembroSource;
-	}
-
-	public void setFanaMembroSource(String fanaMembroSource) {
-		this.fanaMembroSource = fanaMembroSource;
-	}
-
-	public String getFanaFolder() {
-		return fanaFolder;
-	}
-
-	public void setFanaFolder(String fanaFolder) {
-		this.fanaFolder = fanaFolder;
-	}
-
-	public String getFanaFileName() {
-		return fanaFileName;
-	}
-
-	public void setFanaFileName(String fanaFileName) {
-		this.fanaFileName = fanaFileName;
-	}
-
-	public String getFanaFormato() {
-		return fanaFormato;
-	}
-
-	public void setFanaFormato(String fanaFormato) {
-		this.fanaFormato = fanaFormato;
-	}
-
-	public String getFanaDelimRecord() {
-		return fanaDelimRecord;
-	}
-
-	public void setFanaDelimRecord(String fanaDelimRecord) {
-		this.fanaDelimRecord = fanaDelimRecord;
-	}
-
-	public String getFanaDelimStringa() {
-		return fanaDelimStringa;
-	}
-
-	public void setFanaDelimStringa(String fanaDelimStringa) {
-		this.fanaDelimStringa = fanaDelimStringa;
-	}
-
-	public String getFanaRimozSpazi() {
-		return fanaRimozSpazi;
-	}
-
-	public void setFanaRimozSpazi(String fanaRimozSpazi) {
-		this.fanaRimozSpazi = fanaRimozSpazi;
-	}
-
-	public String getFanaDelimCampo() {
-		return fanaDelimCampo;
-	}
-
-	public void setFanaDelimCampo(String fanaDelimCampo) {
-		this.fanaDelimCampo = fanaDelimCampo;
-	}
-
-	public String getFanaRiempCampo() {
-		return fanaRiempCampo;
-	}
-
-	public void setFanaRiempCampo(String fanaRiempCampo) {
-		this.fanaRiempCampo = fanaRiempCampo;
-	}
-
-	public String getFanaCodepage() {
-		return fanaCodepage;
-	}
-
-	public void setFanaCodepage(String fanaCodepage) {
-		this.fanaCodepage = fanaCodepage;
-	}
-
-	public String getFanaModAcquisizione() {
-		return fanaModAcquisizione;
-	}
-
-	public void setFanaModAcquisizione(String fanaModAcquisizione) {
-		this.fanaModAcquisizione = fanaModAcquisizione;
-	}
-
-	public String getFanaFromCcsid() {
-		return fanaFromCcsid;
-	}
-
-	public void setFanaFromCcsid(String fanaFromCcsid) {
-		this.fanaFromCcsid = fanaFromCcsid;
-	}
-
-	public String getFanaPgmControllo() {
-		return fanaPgmControllo;
-	}
-
-	public void setFanaPgmControllo(String fanaPgmControllo) {
-		this.fanaPgmControllo = fanaPgmControllo;
-	}
-
-	public String getFanaTipologiaConn() {
-		return fanaTipologiaConn;
-	}
-
-	public void setFanaTipologiaConn(String fanaTipologiaConn) {
-		this.fanaTipologiaConn = fanaTipologiaConn;
-	}
-
-	public String getFanaHost() {
-		return fanaHost;
-	}
-
-	public void setFanaHost(String fanaHost) {
-		this.fanaHost = fanaHost;
-	}
-
-	public String getFanaPort() {
-		return fanaPort;
-	}
-
-	public void setFanaPort(String fanaPort) {
-		this.fanaPort = fanaPort;
-	}
-
-	public String getFanaRemoteFolder() {
-		return fanaRemoteFolder;
-	}
-
-	public void setFanaRemoteFolder(String fanaRemoteFolder) {
-		this.fanaRemoteFolder = fanaRemoteFolder;
-	}
-
-	public String getFanaRemoteFileName() {
-		return fanaRemoteFileName;
-	}
-
-	public void setFanaRemoteFileName(String fanaRemoteFileName) {
-		this.fanaRemoteFileName = fanaRemoteFileName;
-	}
-
-	public String getFanaUtente() {
-		return fanaUtente;
-	}
-
-	public void setFanaUtente(String fanaUtente) {
-		this.fanaUtente = fanaUtente;
-	}
-
-	public String getFanaPassword() {
-		return fanaPassword;
-	}
-
-	public void setFanaPassword(String fanaPassword) {
-		this.fanaPassword = fanaPassword;
-	}
-
-	public String getFanaUtenteSftp() {
-		return fanaUtenteSftp;
-	}
-
-	public void setFanaUtenteSftp(String fanaUtenteSftp) {
-		this.fanaUtenteSftp = fanaUtenteSftp;
-	}
-
-	public String getFanaIntegrityCheck() {
-		return fanaIntegrityCheck;
-	}
-
-	public void setFanaIntegrityCheck(String fanaIntegrityCheck) {
-		this.fanaIntegrityCheck = fanaIntegrityCheck;
-	}
-
-	public String getFanaFlNameSemaforo() {
-		return fanaFlNameSemaforo;
-	}
-
-	public void setFanaFlNameSemaforo(String fanaFlNameSemaforo) {
-		this.fanaFlNameSemaforo = fanaFlNameSemaforo;
-	}
-
-	public String getFanaNumTentaRicez() {
-		return fanaNumTentaRicez;
-	}
-
-	public void setFanaNumTentaRicez(String fanaNumTentaRicez) {
-		this.fanaNumTentaRicez = fanaNumTentaRicez;
-	}
-
-	public String getFanaIntervalloRetry() {
-		return fanaIntervalloRetry;
-	}
-
-	public void setFanaIntervalloRetry(String fanaIntervalloRetry) {
-		this.fanaIntervalloRetry = fanaIntervalloRetry;
-	}
-
-	public String getFanaRetention() {
-		return fanaRetention;
-	}
-
-	public void setFanaRetention(String fanaRetention) {
-		this.fanaRetention = fanaRetention;
-	}
-
-	public String getFanaCompression() {
-		return fanaCompression;
-	}
-
-	public void setFanaCompression(String fanaCompression) {
-		this.fanaCompression = fanaCompression;
-	}
-
-	public String getFanaDeCompression() {
-		return fanaDeCompression;
-	}
-
-	public void setFanaDeCompression(String fanaDeCompression) {
-		this.fanaDeCompression = fanaDeCompression;
-	}
-
-	public String getFanaBackup() {
-		return fanaBackup;
-	}
-
-	public void setFanaBackup(String fanaBackup) {
-		this.fanaBackup = fanaBackup;
-	}
-
-	public String getFanaInviaMail() {
-		return fanaInviaMail;
-	}
-
-	public void setFanaInviaMail(String fanaInviaMail) {
-		this.fanaInviaMail = fanaInviaMail;
-	}
-
-	public String getFanaLetteraOk() {
-		return fanaLetteraOk;
-	}
-
-	public void setFanaLetteraOk(String fanaLetteraOk) {
-		this.fanaLetteraOk = fanaLetteraOk;
-	}
-
-	public String getFanaLetteraKo() {
-		return fanaLetteraKo;
-	}
-
-	public void setFanaLetteraKo(String fanaLetteraKo) {
-		this.fanaLetteraKo = fanaLetteraKo;
-	}
-
-	public String getFanaProgPerson() {
-		return fanaProgPerson;
-	}
-
-	public void setFanaProgPerson(String fanaProgPerson) {
-		this.fanaProgPerson = fanaProgPerson;
-	}
-
-	public String getFanaKnownHtFl() {
-		return fanaKnownHtFl;
-	}
-
-	public void setFanaKnownHtFl(String fanaKnownHtFl) {
-		this.fanaKnownHtFl = fanaKnownHtFl;
-	}
-
-	public String getFanaKeyFl() {
-		return fanaKeyFl;
-	}
-
-	public void setFanaKeyFl(String fanaKeyFl) {
-		this.fanaKeyFl = fanaKeyFl;
-	}
-
-	public String getFanaModalitaPassiva() {
-		return fanaModalitaPassiva;
-	}
-
-	public void setFanaModalitaPassiva(String fanaModalitaPassiva) {
-		this.fanaModalitaPassiva = fanaModalitaPassiva;
-	}
-
-	public String getFanaJobDesc() {
-		return fanaJobDesc;
-	}
-
-	public void setFanaJobDesc(String fanaJobDesc) {
-		this.fanaJobDesc = fanaJobDesc;
-	}
-
-	public String getFanaLibJobDesc() {
-		return fanaLibJobDesc;
-	}
-
-	public void setFanaLibJobDesc(String fanaLibJobDesc) {
-		this.fanaLibJobDesc = fanaLibJobDesc;
-	}
-
-	public String getFanaCancellaFil() {
-		return fanaCancellaFil;
-	}
-
-	public void setFanaCancellaFil(String fanaCancellaFil) {
-		this.fanaCancellaFil = fanaCancellaFil;
-	}
-
-	public String getFanaRisottomet() {
-		return fanaRisottomet;
-	}
-
-	public void setFanaRisottomet(String fanaRisottomet) {
-		this.fanaRisottomet = fanaRisottomet;
-	}
-
-	public String getFanaLunghezzaFlFlat() {
-		return fanaLunghezzaFlFlat;
-	}
-
-	public void setFanaLunghezzaFlFlat(String fanaLunghezzaFlFlat) {
-		this.fanaLunghezzaFlFlat = fanaLunghezzaFlFlat;
-	}
-
-	public String getFanaTipoTrasferimento() {
-		return fanaTipoTrasferimento;
-	}
-
-	public void setFanaTipoTrasferimento(String fanaTipoTrasferimento) {
-		this.fanaTipoTrasferimento = fanaTipoTrasferimento;
-	}
-
-	public String getFanaBypassQtemp() {
-		return fanaBypassQtemp;
-	}
-
-	public void setFanaBypassQtemp(String fanaBypassQtemp) {
-		this.fanaBypassQtemp = fanaBypassQtemp;
-	}
-
-	public String getFanaEsistenzaFile() {
-		return fanaEsistenzaFile;
-	}
-
-	public void setFanaEsistenzaFile(String fanaEsistenzaFile) {
-		this.fanaEsistenzaFile = fanaEsistenzaFile;
-	}
-
-	public String getFanaLetteraFlusso() {
-		return fanaLetteraFlusso;
-	}
-
-	public void setFanaLetteraFlusso(String fanaLetteraFlusso) {
-		this.fanaLetteraFlusso = fanaLetteraFlusso;
-	}
-
-	public String getFanaAggNomiCol() {
-		return fanaAggNomiCol;
-	}
-
-	public void setFanaAggNomiCol(String fanaAggNomiCol) {
-		this.fanaAggNomiCol = fanaAggNomiCol;
-	}
-
-	public String getFanaCreaVuoto() {
-		return fanaCreaVuoto;
-	}
-
-	public void setFanaCreaVuoto(String fanaCreaVuoto) {
-		this.fanaCreaVuoto = fanaCreaVuoto;
-	}
-
-	public String getFanaInternaz() {
-		return fanaInternaz;
-	}
-
-	public void setFanaInternaz(String fanaInternaz) {
-		this.fanaInternaz = fanaInternaz;
-	}
-
-	public String getFanaSostValNull() {
-		return fanaSostValNull;
-	}
-
-	public void setFanaSostValNull(String fanaSostValNull) {
-		this.fanaSostValNull = fanaSostValNull;
-	}
-
-	public String getFanaElimNomCol() {
-		return fanaElimNomCol;
-	}
-
-	public void setFanaElimNomCol(String fanaElimNomCol) {
-		this.fanaElimNomCol = fanaElimNomCol;
-	}
-
-	public String getFanaFlagOkVuoto() {
-		return fanaFlagOkVuoto;
-	}
-
-	public void setFanaFlagOkVuoto(String fanaFlagOkVuoto) {
-		this.fanaFlagOkVuoto = fanaFlagOkVuoto;
-	}
-
-	public String getFanaFtpSecure() {
-		return fanaFtpSecure;
-	}
-
-	public void setFanaFtpSecure(String fanaFtpSecure) {
-		this.fanaFtpSecure = fanaFtpSecure;
-	}
-
-	public String getFanaInteractiveType() {
-		return fanaInteractiveType;
-	}
-
-	public void setFanaInteractiveType(String fanaInteractiveType) {
-		this.fanaInteractiveType = fanaInteractiveType;
-	}
-
-	public String getFanaInteractiveProgram() {
-		return fanaInteractiveProgram;
-	}
-
-	public void setFanaInteractiveProgram(String fanaInteractiveProgram) {
-		this.fanaInteractiveProgram = fanaInteractiveProgram;
-	}
-
-	public String getFanaInteractiveResult() {
-		return fanaInteractiveResult;
-	}
-
-	public void setFanaInteractiveResult(String fanaInteractiveResult) {
-		this.fanaInteractiveResult = fanaInteractiveResult;
-	}
-
-	public String getFanaInteractiveCommand() {
-		return fanaInteractiveCommand;
-	}
-
-	public void setFanaInteractiveCommand(String fanaInteractiveCommand) {
-		this.fanaInteractiveCommand = fanaInteractiveCommand;
-	}
-
-	public String getFanaDelaySemaforo() {
-		return fanaDelaySemaforo;
-	}
-
-	public void setFanaDelaySemaforo(String fanaDelaySemaforo) {
-		this.fanaDelaySemaforo = fanaDelaySemaforo;
-	}
-
-	public String getFanaHashUnico() {
-		return fanaHashUnico;
-	}
-
-	public void setFanaHashUnico(String fanaHashUnico) {
-		this.fanaHashUnico = fanaHashUnico;
-	}
-
-	public String getFanaExportFlag() {
-		return fanaExportFlag;
-	}
-
-	public void setFanaExportFlag(String fanaExportFlag) {
-		this.fanaExportFlag = fanaExportFlag;
-	}
-
-	public String getFanaExportCode() {
-		return fanaExportCode;
-	}
-
-	public void setFanaExportCode(String fanaExportCode) {
-		this.fanaExportCode = fanaExportCode;
-	}
-
-	public String getFanaFetchSize() {
-		return fanaFetchSize;
-	}
-
-	public void setFanaFetchSize(String fanaFetchSize) {
-		this.fanaFetchSize = fanaFetchSize;
-	}
-
-	public String getFanaCharEmptySpace() {
-		return fanaCharEmptySpace;
-	}
-
-	public void setFanaCharEmptySpace(String fanaCharEmptySpace) {
-		this.fanaCharEmptySpace = fanaCharEmptySpace;
+	private String flowId;
+	private String flowDesc;
+	private String flowGruppo;
+	private String flowCodInterfaccia;
+	private String flowStato;
+	private String flowTipFlusso;
+	private String flowDirezione;
+	private String flowLibreria;
+	private String flowFile;
+	private String flowMembro;
+	private String flowLibSource;
+	private String flowFileSource;
+	private String flowMembroSource;
+	private String flowFolder;
+	private String flowFileName;
+	private String flowFormato;
+	private String flowDelimRecord;
+	private String flowDelimStringa;
+	private String flowRimozSpazi;
+	private String flowDelimCampo;
+	private String flowRiempCampo;
+	private String flowCodepage;
+	private String flowModAcquisizione;
+	private String flowFromCcsid;
+	private String flowPgmControllo;
+	private String flowTipologiaConn;
+	private String flowHost;
+	private String flowPort;
+	private String flowRemoteFolder;
+	private String flowRemoteFileName;
+	private String flowUtente;
+	private String flowPassword;
+	private String flowUtenteSftp;
+	private String flowIntegrityCheck;
+	private String flowFlNameSemaforo;
+	private String flowNumTentaRicez;
+	private String flowIntervalloRetry;
+	private String flowRetention;
+	private String flowCompression;
+	private String flowDeCompression;
+	private String flowBackup;
+	private String flowInviaMail;
+	private String flowLetteraOk;
+	private String flowLetteraKo;
+	private String flowProgPerson;
+	private String flowKnownHtFl;
+	private String flowKeyFl;
+	private String flowModalitaPassiva;
+	private String flowJobDesc;
+	private String flowLibJobDesc;
+	private String flowCancellaFil;
+	private String flowRisottomet;
+	private String flowLunghezzaFlFlat;
+	private String flowTipoTrasferimento;
+	private String flowBypassQtemp;
+	private String flowEsistenzaFile;
+	private String flowLetteraFlusso;
+	private String flowAggNomiCol;
+	private String flowCreaVuoto;
+	private String flowInternaz;
+	private String flowSostValNull;
+	private String flowElimNomCol;
+	private String flowFlagOkVuoto;
+	private String flowFtpSecure;
+	private String flowInteractiveType;
+	private String flowInteractiveProgram;
+	private String flowInteractiveResult;
+	private String flowInteractiveCommand;
+	private String flowDelaySemaforo;
+	private String flowHashUnico;
+	private String flowExportFlag;
+	private String flowExportCode;
+	private String flowFetchSize;
+	private String flowCharEmptySpace;
+	public String getFlowId() {
+		return flowId;
+	}
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
+	}
+	public String getFlowDesc() {
+		return flowDesc;
+	}
+	public void setFlowDesc(String flowDesc) {
+		this.flowDesc = flowDesc;
+	}
+	public String getFlowGruppo() {
+		return flowGruppo;
+	}
+	public void setFlowGruppo(String flowGruppo) {
+		this.flowGruppo = flowGruppo;
+	}
+	public String getFlowCodInterfaccia() {
+		return flowCodInterfaccia;
+	}
+	public void setFlowCodInterfaccia(String flowCodInterfaccia) {
+		this.flowCodInterfaccia = flowCodInterfaccia;
+	}
+	public String getFlowStato() {
+		return flowStato;
+	}
+	public void setFlowStato(String flowStato) {
+		this.flowStato = flowStato;
+	}
+	public String getFlowTipFlusso() {
+		return flowTipFlusso;
+	}
+	public void setFlowTipFlusso(String flowTipFlusso) {
+		this.flowTipFlusso = flowTipFlusso;
+	}
+	public String getFlowDirezione() {
+		return flowDirezione;
+	}
+	public void setFlowDirezione(String flowDirezione) {
+		this.flowDirezione = flowDirezione;
+	}
+	public String getFlowLibreria() {
+		return flowLibreria;
+	}
+	public void setFlowLibreria(String flowLibreria) {
+		this.flowLibreria = flowLibreria;
+	}
+	public String getFlowFile() {
+		return flowFile;
+	}
+	public void setFlowFile(String flowFile) {
+		this.flowFile = flowFile;
+	}
+	public String getFlowMembro() {
+		return flowMembro;
+	}
+	public void setFlowMembro(String flowMembro) {
+		this.flowMembro = flowMembro;
+	}
+	public String getFlowLibSource() {
+		return flowLibSource;
+	}
+	public void setFlowLibSource(String flowLibSource) {
+		this.flowLibSource = flowLibSource;
+	}
+	public String getFlowFileSource() {
+		return flowFileSource;
+	}
+	public void setFlowFileSource(String flowFileSource) {
+		this.flowFileSource = flowFileSource;
+	}
+	public String getFlowMembroSource() {
+		return flowMembroSource;
+	}
+	public void setFlowMembroSource(String flowMembroSource) {
+		this.flowMembroSource = flowMembroSource;
+	}
+	public String getFlowFolder() {
+		return flowFolder;
+	}
+	public void setFlowFolder(String flowFolder) {
+		this.flowFolder = flowFolder;
+	}
+	public String getFlowFileName() {
+		return flowFileName;
+	}
+	public void setFlowFileName(String flowFileName) {
+		this.flowFileName = flowFileName;
+	}
+	public String getFlowFormato() {
+		return flowFormato;
+	}
+	public void setFlowFormato(String flowFormato) {
+		this.flowFormato = flowFormato;
+	}
+	public String getFlowDelimRecord() {
+		return flowDelimRecord;
+	}
+	public void setFlowDelimRecord(String flowDelimRecord) {
+		this.flowDelimRecord = flowDelimRecord;
+	}
+	public String getFlowDelimStringa() {
+		return flowDelimStringa;
+	}
+	public void setFlowDelimStringa(String flowDelimStringa) {
+		this.flowDelimStringa = flowDelimStringa;
+	}
+	public String getFlowRimozSpazi() {
+		return flowRimozSpazi;
+	}
+	public void setFlowRimozSpazi(String flowRimozSpazi) {
+		this.flowRimozSpazi = flowRimozSpazi;
+	}
+	public String getFlowDelimCampo() {
+		return flowDelimCampo;
+	}
+	public void setFlowDelimCampo(String flowDelimCampo) {
+		this.flowDelimCampo = flowDelimCampo;
+	}
+	public String getFlowRiempCampo() {
+		return flowRiempCampo;
+	}
+	public void setFlowRiempCampo(String flowRiempCampo) {
+		this.flowRiempCampo = flowRiempCampo;
+	}
+	public String getFlowCodepage() {
+		return flowCodepage;
+	}
+	public void setFlowCodepage(String flowCodepage) {
+		this.flowCodepage = flowCodepage;
+	}
+	public String getFlowModAcquisizione() {
+		return flowModAcquisizione;
+	}
+	public void setFlowModAcquisizione(String flowModAcquisizione) {
+		this.flowModAcquisizione = flowModAcquisizione;
+	}
+	public String getFlowFromCcsid() {
+		return flowFromCcsid;
+	}
+	public void setFlowFromCcsid(String flowFromCcsid) {
+		this.flowFromCcsid = flowFromCcsid;
+	}
+	public String getFlowPgmControllo() {
+		return flowPgmControllo;
+	}
+	public void setFlowPgmControllo(String flowPgmControllo) {
+		this.flowPgmControllo = flowPgmControllo;
+	}
+	public String getFlowTipologiaConn() {
+		return flowTipologiaConn;
+	}
+	public void setFlowTipologiaConn(String flowTipologiaConn) {
+		this.flowTipologiaConn = flowTipologiaConn;
+	}
+	public String getFlowHost() {
+		return flowHost;
+	}
+	public void setFlowHost(String flowHost) {
+		this.flowHost = flowHost;
+	}
+	public String getFlowPort() {
+		return flowPort;
+	}
+	public void setFlowPort(String flowPort) {
+		this.flowPort = flowPort;
+	}
+	public String getFlowRemoteFolder() {
+		return flowRemoteFolder;
+	}
+	public void setFlowRemoteFolder(String flowRemoteFolder) {
+		this.flowRemoteFolder = flowRemoteFolder;
+	}
+	public String getFlowRemoteFileName() {
+		return flowRemoteFileName;
+	}
+	public void setFlowRemoteFileName(String flowRemoteFileName) {
+		this.flowRemoteFileName = flowRemoteFileName;
+	}
+	public String getFlowUtente() {
+		return flowUtente;
+	}
+	public void setFlowUtente(String flowUtente) {
+		this.flowUtente = flowUtente;
+	}
+	public String getFlowPassword() {
+		return flowPassword;
+	}
+	public void setFlowPassword(String flowPassword) {
+		this.flowPassword = flowPassword;
+	}
+	public String getFlowUtenteSftp() {
+		return flowUtenteSftp;
+	}
+	public void setFlowUtenteSftp(String flowUtenteSftp) {
+		this.flowUtenteSftp = flowUtenteSftp;
+	}
+	public String getFlowIntegrityCheck() {
+		return flowIntegrityCheck;
+	}
+	public void setFlowIntegrityCheck(String flowIntegrityCheck) {
+		this.flowIntegrityCheck = flowIntegrityCheck;
+	}
+	public String getFlowFlNameSemaforo() {
+		return flowFlNameSemaforo;
+	}
+	public void setFlowFlNameSemaforo(String flowFlNameSemaforo) {
+		this.flowFlNameSemaforo = flowFlNameSemaforo;
+	}
+	public String getFlowNumTentaRicez() {
+		return flowNumTentaRicez;
+	}
+	public void setFlowNumTentaRicez(String flowNumTentaRicez) {
+		this.flowNumTentaRicez = flowNumTentaRicez;
+	}
+	public String getFlowIntervalloRetry() {
+		return flowIntervalloRetry;
+	}
+	public void setFlowIntervalloRetry(String flowIntervalloRetry) {
+		this.flowIntervalloRetry = flowIntervalloRetry;
+	}
+	public String getFlowRetention() {
+		return flowRetention;
+	}
+	public void setFlowRetention(String flowRetention) {
+		this.flowRetention = flowRetention;
+	}
+	public String getFlowCompression() {
+		return flowCompression;
+	}
+	public void setFlowCompression(String flowCompression) {
+		this.flowCompression = flowCompression;
+	}
+	public String getFlowDeCompression() {
+		return flowDeCompression;
+	}
+	public void setFlowDeCompression(String flowDeCompression) {
+		this.flowDeCompression = flowDeCompression;
+	}
+	public String getFlowBackup() {
+		return flowBackup;
+	}
+	public void setFlowBackup(String flowBackup) {
+		this.flowBackup = flowBackup;
+	}
+	public String getFlowInviaMail() {
+		return flowInviaMail;
+	}
+	public void setFlowInviaMail(String flowInviaMail) {
+		this.flowInviaMail = flowInviaMail;
+	}
+	public String getFlowLetteraOk() {
+		return flowLetteraOk;
+	}
+	public void setFlowLetteraOk(String flowLetteraOk) {
+		this.flowLetteraOk = flowLetteraOk;
+	}
+	public String getFlowLetteraKo() {
+		return flowLetteraKo;
+	}
+	public void setFlowLetteraKo(String flowLetteraKo) {
+		this.flowLetteraKo = flowLetteraKo;
+	}
+	public String getFlowProgPerson() {
+		return flowProgPerson;
+	}
+	public void setFlowProgPerson(String flowProgPerson) {
+		this.flowProgPerson = flowProgPerson;
+	}
+	public String getFlowKnownHtFl() {
+		return flowKnownHtFl;
+	}
+	public void setFlowKnownHtFl(String flowKnownHtFl) {
+		this.flowKnownHtFl = flowKnownHtFl;
+	}
+	public String getFlowKeyFl() {
+		return flowKeyFl;
+	}
+	public void setFlowKeyFl(String flowKeyFl) {
+		this.flowKeyFl = flowKeyFl;
+	}
+	public String getFlowModalitaPassiva() {
+		return flowModalitaPassiva;
+	}
+	public void setFlowModalitaPassiva(String flowModalitaPassiva) {
+		this.flowModalitaPassiva = flowModalitaPassiva;
+	}
+	public String getFlowJobDesc() {
+		return flowJobDesc;
+	}
+	public void setFlowJobDesc(String flowJobDesc) {
+		this.flowJobDesc = flowJobDesc;
+	}
+	public String getFlowLibJobDesc() {
+		return flowLibJobDesc;
+	}
+	public void setFlowLibJobDesc(String flowLibJobDesc) {
+		this.flowLibJobDesc = flowLibJobDesc;
+	}
+	public String getFlowCancellaFil() {
+		return flowCancellaFil;
+	}
+	public void setFlowCancellaFil(String flowCancellaFil) {
+		this.flowCancellaFil = flowCancellaFil;
+	}
+	public String getFlowRisottomet() {
+		return flowRisottomet;
+	}
+	public void setFlowRisottomet(String flowRisottomet) {
+		this.flowRisottomet = flowRisottomet;
+	}
+	public String getFlowLunghezzaFlFlat() {
+		return flowLunghezzaFlFlat;
+	}
+	public void setFlowLunghezzaFlFlat(String flowLunghezzaFlFlat) {
+		this.flowLunghezzaFlFlat = flowLunghezzaFlFlat;
+	}
+	public String getFlowTipoTrasferimento() {
+		return flowTipoTrasferimento;
+	}
+	public void setFlowTipoTrasferimento(String flowTipoTrasferimento) {
+		this.flowTipoTrasferimento = flowTipoTrasferimento;
+	}
+	public String getFlowBypassQtemp() {
+		return flowBypassQtemp;
+	}
+	public void setFlowBypassQtemp(String flowBypassQtemp) {
+		this.flowBypassQtemp = flowBypassQtemp;
+	}
+	public String getFlowEsistenzaFile() {
+		return flowEsistenzaFile;
+	}
+	public void setFlowEsistenzaFile(String flowEsistenzaFile) {
+		this.flowEsistenzaFile = flowEsistenzaFile;
+	}
+	public String getFlowLetteraFlusso() {
+		return flowLetteraFlusso;
+	}
+	public void setFlowLetteraFlusso(String flowLetteraFlusso) {
+		this.flowLetteraFlusso = flowLetteraFlusso;
+	}
+	public String getFlowAggNomiCol() {
+		return flowAggNomiCol;
+	}
+	public void setFlowAggNomiCol(String flowAggNomiCol) {
+		this.flowAggNomiCol = flowAggNomiCol;
+	}
+	public String getFlowCreaVuoto() {
+		return flowCreaVuoto;
+	}
+	public void setFlowCreaVuoto(String flowCreaVuoto) {
+		this.flowCreaVuoto = flowCreaVuoto;
+	}
+	public String getFlowInternaz() {
+		return flowInternaz;
+	}
+	public void setFlowInternaz(String flowInternaz) {
+		this.flowInternaz = flowInternaz;
+	}
+	public String getFlowSostValNull() {
+		return flowSostValNull;
+	}
+	public void setFlowSostValNull(String flowSostValNull) {
+		this.flowSostValNull = flowSostValNull;
+	}
+	public String getFlowElimNomCol() {
+		return flowElimNomCol;
+	}
+	public void setFlowElimNomCol(String flowElimNomCol) {
+		this.flowElimNomCol = flowElimNomCol;
+	}
+	public String getFlowFlagOkVuoto() {
+		return flowFlagOkVuoto;
+	}
+	public void setFlowFlagOkVuoto(String flowFlagOkVuoto) {
+		this.flowFlagOkVuoto = flowFlagOkVuoto;
+	}
+	public String getFlowFtpSecure() {
+		return flowFtpSecure;
+	}
+	public void setFlowFtpSecure(String flowFtpSecure) {
+		this.flowFtpSecure = flowFtpSecure;
+	}
+	public String getFlowInteractiveType() {
+		return flowInteractiveType;
+	}
+	public void setFlowInteractiveType(String flowInteractiveType) {
+		this.flowInteractiveType = flowInteractiveType;
+	}
+	public String getFlowInteractiveProgram() {
+		return flowInteractiveProgram;
+	}
+	public void setFlowInteractiveProgram(String flowInteractiveProgram) {
+		this.flowInteractiveProgram = flowInteractiveProgram;
+	}
+	public String getFlowInteractiveResult() {
+		return flowInteractiveResult;
+	}
+	public void setFlowInteractiveResult(String flowInteractiveResult) {
+		this.flowInteractiveResult = flowInteractiveResult;
+	}
+	public String getFlowInteractiveCommand() {
+		return flowInteractiveCommand;
+	}
+	public void setFlowInteractiveCommand(String flowInteractiveCommand) {
+		this.flowInteractiveCommand = flowInteractiveCommand;
+	}
+	public String getFlowDelaySemaforo() {
+		return flowDelaySemaforo;
+	}
+	public void setFlowDelaySemaforo(String flowDelaySemaforo) {
+		this.flowDelaySemaforo = flowDelaySemaforo;
+	}
+	public String getFlowHashUnico() {
+		return flowHashUnico;
+	}
+	public void setFlowHashUnico(String flowHashUnico) {
+		this.flowHashUnico = flowHashUnico;
+	}
+	public String getFlowExportFlag() {
+		return flowExportFlag;
+	}
+	public void setFlowExportFlag(String flowExportFlag) {
+		this.flowExportFlag = flowExportFlag;
+	}
+	public String getFlowExportCode() {
+		return flowExportCode;
+	}
+	public void setFlowExportCode(String flowExportCode) {
+		this.flowExportCode = flowExportCode;
+	}
+	public String getFlowFetchSize() {
+		return flowFetchSize;
+	}
+	public void setFlowFetchSize(String flowFetchSize) {
+		this.flowFetchSize = flowFetchSize;
+	}
+	public String getFlowCharEmptySpace() {
+		return flowCharEmptySpace;
+	}
+	public void setFlowCharEmptySpace(String flowCharEmptySpace) {
+		this.flowCharEmptySpace = flowCharEmptySpace;
 	}
 
 }
