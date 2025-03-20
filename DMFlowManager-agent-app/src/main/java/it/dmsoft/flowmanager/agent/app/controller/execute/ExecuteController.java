@@ -8,5 +8,7 @@ public class ExecuteController {
 	
 	//L'invio mail potremmo pensare di farlo remoto (dal master) o locale dall'agent, in prima mbattuta implementerei solo dall'agent
 	
+	//possibilità di ovverride dei dati
 	
+	//storicizzazione o log dei dati di lancio
 }
