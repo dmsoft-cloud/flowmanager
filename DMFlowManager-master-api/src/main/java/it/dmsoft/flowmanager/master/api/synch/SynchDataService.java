@@ -3,6 +3,7 @@ package it.dmsoft.flowmanager.master.api.synch;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.common.model.AgentData;
@@ -14,6 +15,7 @@ import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
+import it.dmsoft.flowmanager.framework.rest.RestClientHelper;
 import it.dmsoft.flowmanager.master.be.entities.Agent;
 import it.dmsoft.flowmanager.master.be.entities.ConfigurationGroup;
 import it.dmsoft.flowmanager.master.be.entities.Email;
@@ -70,7 +72,15 @@ public class SynchDataService {
 	
 	public FullFlowsData synchFullFlowsData(AgentData agent, FullFlowsData flowsData) {
 		
-		return flowsData;
+		return RestClientHelper.getAgentRestClient(agent).post()
+				.uri(uriBuilder -> uriBuilder
+			      .path("/synchs/execute")
+			      .build())
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(agent)
+				.retrieve()
+				.body(FullFlowsData.class);
+				
 	}
 	
 	private FullFlowsData retrieveFullFlowsData() {
