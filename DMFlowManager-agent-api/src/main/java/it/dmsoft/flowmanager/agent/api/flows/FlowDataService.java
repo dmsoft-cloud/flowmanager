@@ -13,6 +13,7 @@ import it.dmsoft.flowmanager.agent.api.flows.mapper.FlowDataMapper;
 import it.dmsoft.flowmanager.agent.api.flows.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.common.model.FlowData;
+import it.dmsoft.flowmanager.common.model.FullFlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowsData;
 import it.dmsoft.flowmanager.common.model.GroupData;
 import it.dmsoft.flowmanager.common.model.InterfaceData;
@@ -43,7 +44,7 @@ public class FlowDataService {
 		return fullFlowsData;
 	}
 	
-	public ExecutionFlowData getExecutionFlowData(String flowId) {
+	public FullFlowData getFullFlowData(String flowId) {
 		if(flowsData == null) {
 			flowsData = loadFullFlowsData();
 		}
@@ -57,7 +58,16 @@ public class FlowDataService {
 		ModelData model = flowsData.getModels().stream().filter(x -> x.getId().equals(flow.getModel())).findAny().get();
 		OriginData origin = flowsData.getOrigins().stream().filter(x -> x.getId().equals(flow.getOrigin())).findAny().get();
 		
-		return flowDataMapper.convert(flow, group, emailOk, emailKo, _interface, model, origin);
+		FullFlowData fullFlowData = new FullFlowData(flow, group, emailOk, emailKo, _interface, model, origin);
+		return fullFlowData;
+	}
+	
+	public ExecutionFlowData getExecutionFlowData(String flowId) {
+		return getExecutionFlowData(getFullFlowData(flowId));
+	}
+	
+	public ExecutionFlowData getExecutionFlowData(FullFlowData fullFlowData) {
+		return flowDataMapper.convert(fullFlowData);
 	}
 	
 	

@@ -1,14 +1,11 @@
-package it.dmsoft.flowmanager.agent.app.controller.execute;
+package it.dmsoft.flowmanager.master.app.controller.execute;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.dmsoft.flowmanager.agent.api.execute.ExecuteService;
-import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
-import it.dmsoft.flowmanager.common.model.FullFlowData;
+import it.dmsoft.flowmanager.master.api.execute.ExecuteService;
 import jakarta.annotation.Resource;
 import jakarta.websocket.server.PathParam;
 
@@ -30,15 +27,7 @@ public class ExecuteController {
 	//storicizzazione o log dei dati di lancio
 	
 	@PostMapping("/synch")
-	public FlowExecutionOutcome synch(@PathParam(value = "flowId") String flowId, final @RequestBody FullFlowData fullFlowData) {
-		FullFlowData _fullFlowData = fullFlowData;
-		if (fullFlowData == null) {
-			_fullFlowData = new FullFlowData();
-			FlowData flowData = new FlowData();
-			flowData.setId(flowId);
-			_fullFlowData.setFlow(flowData);
-		}
-			
-		return executeService.synch(_fullFlowData);
+	public FlowExecutionOutcome synch(@PathParam(value = "flowId") String flowId) {
+		return executeService.synch(flowId, null);
 	}
 }
