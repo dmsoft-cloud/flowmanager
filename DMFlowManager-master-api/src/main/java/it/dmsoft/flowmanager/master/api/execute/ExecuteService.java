@@ -7,7 +7,6 @@ import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
-import it.dmsoft.flowmanager.common.model.FullFlowsData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.framework.rest.RestClientHelper;
 import it.dmsoft.flowmanager.master.be.entities.Agent;
