@@ -23,8 +23,7 @@ public class ExecuteService {
 
 	public FlowExecutionOutcome synch(String flowId, FullFlowData fullFlowData) {
 		FlowData flowData = flowService.getById(flowId);
-		//TODO Aggiungere reperimento agent in base al flusso
-		AgentData agent = null;
+		AgentData agent = flowData.getAgentId() != null ? agentService.getById(flowData.getAgentId()) : null;
 		
 		RestClient rc = agent != null ? RestClientHelper.getAgentRestClient(agent) : RestClientHelper.getDefaultAgentRestClient();
 		
