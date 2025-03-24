@@ -57,9 +57,7 @@ public class SynchDataService {
 			agents = Arrays.asList(AgentData.DEFAULT_AGENT);
 		}
 		
-		for (AgentData agent : agents) {
-			synchFullFlowsData(agent, flowsData);
-		}
+		agents.stream().forEach(x -> synchFullFlowsData(x, flowsData));
 		
 		return flowsData;
 	}
