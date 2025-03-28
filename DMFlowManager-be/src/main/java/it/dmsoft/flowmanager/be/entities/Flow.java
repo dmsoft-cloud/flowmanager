@@ -16,7 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Flow {
+public class Flow extends BaseEntity {
 
 	// NOME
 	// DESCRIZIONE

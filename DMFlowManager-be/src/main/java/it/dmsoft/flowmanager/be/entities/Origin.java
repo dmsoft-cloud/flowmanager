@@ -10,7 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Origin {
+public class Origin extends BaseEntity {
 
 	// IP
 	// PORTA

@@ -2,9 +2,10 @@ package it.dmsoft.flowmanager.api.email.model;
 
 import java.util.List;
 
+import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 
-public class EmailData {
+public class EmailData extends BaseModel {
 	
     private String id;
     private String subject;

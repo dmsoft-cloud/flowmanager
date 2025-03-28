@@ -18,7 +18,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 @Entity
-public class ConfigurationGroup {
+public class ConfigurationGroup extends BaseEntity {
 	
 	//id
 	//descrizione
@@ -37,20 +37,6 @@ public class ConfigurationGroup {
 	
 	@Column(length = 2000)
 	private String notes;
-	
-	@Column(length = 100, name = "creation_user")
-	private String creationUser ;
-
-	@CreationTimestamp
-	@Column(name = "creation_ts", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private LocalDateTime  creationTs;
-	
-	@Column(length = 100, name = "update_user", columnDefinition = "VARCHAR(100) DEFAULT 'AAA'" )
-	private String updateUser ;
-	
-	@UpdateTimestamp
-	@Column(name = "update_ts", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-	private LocalDateTime  updateTs; 
 	
 	
 	public String getId() {
@@ -85,57 +71,6 @@ public class ConfigurationGroup {
 		this.notes = notes;
 	}
 
-	public LocalDateTime getCreationTs() {
-        return creationTs;
-    }
-
-    public LocalDateTime getUpdateTs() {
-        return updateTs;
-    }
-    
-
-    public String getCreationUser() {
-		return creationUser;
-	}
-
-	public void setCreationUser(String creationUser) {
-		this.creationUser = creationUser;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	
-	@PrePersist
-    protected void onCreate() {
-        LocalDateTime now = LocalDateTime.now();
-        if (this.creationTs == null) {
-            this.creationTs = now;
-        }
-        if (this.updateTs == null) {
-            this.updateTs = now;
-        }
-        
-        if (this.creationUser == null) {
-        	this.creationUser ="SYSTEM";
-        	this.updateUser = "SYSTEM"; 
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updateTs = LocalDateTime.now();
-        
-        if (this.creationUser == null) {
-        	this.creationUser = creationUser;
-        	this.updateUser = "SYSTEM2"; 
-        }
-    }
 	
 
 }

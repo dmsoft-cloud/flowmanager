@@ -1,9 +1,10 @@
 package it.dmsoft.flowmanager.api.interfaces.model;
 
+import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.ConnectionType;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 
-public class InterfaceData {
+public class InterfaceData extends BaseModel {
 
 	// NOME
 	// DESCRIZIONE

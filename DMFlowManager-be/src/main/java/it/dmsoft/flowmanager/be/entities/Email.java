@@ -15,7 +15,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Email {
+public class Email extends BaseEntity {
 
 	@Id
 	@Column(name = "id", nullable = false, length = 20)

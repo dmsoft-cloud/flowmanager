@@ -16,7 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Model {
+public class Model extends BaseEntity {
 
 	// NOME
 	// DESCRIZIONE

@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.api.flow.model;
 
+import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Direction;
 import it.dmsoft.flowmanager.be.common.BaseEntity.FileFormat;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Locale;
@@ -10,7 +11,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Id;
 
-public class FlowData {
+public class FlowData extends BaseModel {
 
 	// NOME
 	// DESCRIZIONE

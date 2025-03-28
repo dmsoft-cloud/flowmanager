@@ -1,9 +1,10 @@
 package it.dmsoft.flowmanager.api.origin.model;
 
+import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.DbType;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 
-public class OriginData {
+public class OriginData extends BaseModel {
 
 	// IP
 	// PORTA

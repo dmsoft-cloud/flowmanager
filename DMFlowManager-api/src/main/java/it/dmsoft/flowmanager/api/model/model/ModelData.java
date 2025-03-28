@@ -1,12 +1,13 @@
 package it.dmsoft.flowmanager.api.model.model;
 
+import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Direction;
 import it.dmsoft.flowmanager.be.common.BaseEntity.FileFormat;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Locale;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Type;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 
-public class ModelData {
+public class ModelData extends BaseModel {
 
 	// NOME
 	// DESCRIZIONE

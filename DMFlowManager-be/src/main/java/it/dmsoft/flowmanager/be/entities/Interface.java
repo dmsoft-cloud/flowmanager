@@ -1,5 +1,10 @@
 package it.dmsoft.flowmanager.be.entities;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import it.dmsoft.flowmanager.be.common.BaseEntity.ConnectionType;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 import it.dmsoft.flowmanager.be.converter.ConnectionTypeConverter;
@@ -8,9 +13,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
-public class Interface {
+public class Interface extends BaseEntity {
 
 	// NOME
 	// DESCRIZIONE
@@ -65,7 +72,7 @@ public class Interface {
 	private YesNo enabled;
 	@Column(length = 2000)
 	private String note;
-
+	
 	public String getId() {
 		return id;
 	}

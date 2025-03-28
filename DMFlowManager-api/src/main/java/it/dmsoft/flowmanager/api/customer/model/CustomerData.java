@@ -1,6 +1,8 @@
 package it.dmsoft.flowmanager.api.customer.model;
 
-public class CustomerData {
+import it.dmsoft.flowmanager.api.base.BaseModel;
+
+public class CustomerData extends BaseModel {
 
 	private Long id;
 	private String firstName;
