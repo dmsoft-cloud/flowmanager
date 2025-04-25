@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.be.common;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class BaseEntity {
@@ -25,6 +26,11 @@ public class BaseEntity {
 			return this.code;
 		}
 		
+		@JsonCreator
+		public static YesNo fromCode(String code) {
+		    return getYesNo(code); // usa già CodeEnum.getCodeEnum
+		}
+		
 		public static YesNo getYesNo(String code) {
 			return CodeEnum.getCodeEnum(YesNo.class, code);
 		}
@@ -47,6 +53,11 @@ public class BaseEntity {
 			return this.code;
 		}
 		
+		@JsonCreator
+		public static Type fromCode(String code) {
+		    return getType(code); // usa già CodeEnum.getCodeEnum
+		}
+		
 		public static Type getType(String code) {
 			return CodeEnum.getCodeEnum(Type.class, code);
 		}
@@ -65,6 +76,11 @@ public class BaseEntity {
 		@JsonValue
 		public String getCode() {
 			return this.code;
+		}
+		
+		@JsonCreator
+		public static Direction fromCode(String code) {
+		    return getDirection(code); // usa già CodeEnum.getCodeEnum
 		}
 		
 		public static Direction getDirection(String code) {

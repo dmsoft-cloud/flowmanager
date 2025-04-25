@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.api.base.BaseService;
+import it.dmsoft.flowmanager.api.flow.DefaultFlowlService;
 import it.dmsoft.flowmanager.api.flow.model.FlowData;
+import it.dmsoft.flowmanager.api.flow.model.FlowDataWithDirection;
 import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 import it.dmsoft.flowmanager.be.entities.Flow;
+import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
 import jakarta.annotation.Resource;
 
 @RestController
@@ -22,7 +25,17 @@ import jakarta.annotation.Resource;
 public class FlowController {
 	
 	@Resource(name = "flowService")
-    private BaseService<Flow, FlowData, String> flowService;
+	private DefaultFlowlService flowService;
+    //private BaseService<Flow, FlowData, String> flowService;
+	
+    /**
+     * <p>Get all Flow data in the system with all fields plus direction from Model.</p>
+     * @return List<FlowDataWithDirection>
+     */
+    @GetMapping("/with-direction")
+    public List<FlowDataWithDirection> getFlowsWithDirection() {
+        return flowService.getAllFlowsWithDirection();
+    }
 
     /**
      * <p>Get all Flow data in the system.For production system you many want to use
@@ -32,6 +45,18 @@ public class FlowController {
     @GetMapping
     public List<FlowData> getFlows() {
         return flowService.getAll();
+    }
+    
+    //aggiunti per i filtri
+    @PostMapping
+    public List<FlowData> getFlows(@RequestBody(required = false) FlowFilterDTO filter) {
+        return (filter == null) ? flowService.getAll() : flowService.getFilteredFlows(filter);
+    }
+
+    //aggiunti per i filtri
+    @PostMapping("/with-direction")
+    public List<FlowDataWithDirection> getFlowsWithDirection(@RequestBody(required = false) FlowFilterDTO filter) {
+        return (filter == null) ? flowService.getAllFlowsWithDirection() : flowService.getFilteredFlowsWithDirection(filter);
     }
 
     /**
