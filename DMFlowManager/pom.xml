@@ -5,9 +5,9 @@
   <version>0.1.0</version>
   <packaging>pom</packaging>
   
-  <modules>
-    	<module>../DMFlowManager-app</module>
-    	<module>../DMFlowManager-api</module>
-    	<module>../DMFlowManager-be</module>
-  </modules>
+<!--  <modules>-->
+<!--    	<module>../DMFlowManager-app</module>-->
+<!--    	<module>../DMFlowManager-api</module>-->
+<!--    	<module>../DMFlowManager-be</module>-->
+<!--  </modules>-->
 </project>

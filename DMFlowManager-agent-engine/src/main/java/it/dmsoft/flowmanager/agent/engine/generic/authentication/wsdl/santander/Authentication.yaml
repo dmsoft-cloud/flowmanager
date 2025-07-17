@@ -1,0 +1,225 @@
+---
+swagger: "2.0"
+info:
+  x-ibm-name: authentication
+  title: Authentication
+  version: 1.0.0
+  description: ""
+schemes:
+- https
+host: api-gateway-t.santanderconsumer.it
+basePath: /auth
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  clientSecretHeader:
+    type: apiKey
+    description: ""
+    in: header
+    name: X-IBM-Client-Secret
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+    description: ""
+security:
+- clientIdHeader: []
+  clientSecretHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  phase: realized
+paths:
+  /login:
+    get:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/loginOutput'
+        401:
+          description: The required client identification has not been successfully
+            provided / User authentication failed or did not take place / The application
+            is not registered with the plan that is used
+        500:
+          description: The status of an API was switched from online to offline, making
+            the API unavailable across all Products in which it is contained
+      tags:
+      - Partner
+      operationId: authLogin
+  /caricamento:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/caricamentoOutput'
+        401:
+          description: Login failed, but you can retry
+        403:
+          description: Login failed too many times, can't retry
+      tags:
+      - Partner
+      operationId: authCaricamento
+      security: []
+      parameters:
+      - name: Input
+        required: false
+        in: body
+        schema:
+          $ref: '#/definitions/caricamentoInput'
+  /documenti:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/documentiOutput'
+        401:
+          description: Login failed, but you can retry
+        403:
+          description: Login failed too many times, can''t retry
+      tags:
+      - Partner
+      operationId: authDocumenti
+      parameters:
+      - name: Input
+        required: true
+        in: body
+        schema:
+          $ref: '#/definitions/documentiInput'
+      security: []
+  /caricamento/recall:
+    get:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/Ok'
+        401:
+          description: Login failed, but you can retry
+        403:
+          description: Login failed too many times, can't retry
+      tags:
+      - Partner
+      operationId: authCaricamentoRecall
+      security: []
+  /caricamento/controparte:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/caricamentoControparteOutput'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorObject'
+        401:
+          description: Login failed, but you can retry
+        500:
+          description: Interna Server Error
+      operationId: authCaricamentoControparte
+      parameters:
+      - name: caricamentoControparteInput
+        required: false
+        in: body
+        schema:
+          $ref: '#/definitions/caricamentoControparteInput'
+      security:
+      - []
+tags: []
+definitions:
+  documentiInput:
+    description: ""
+    type: object
+    properties:
+      authToken:
+        type: string
+      codiceFiscale:
+        type: string
+      captcha:
+        type: string
+      tipoControparte:
+        type: string
+    example: '{"authToken":"abc","codiceFiscale":"ass","captcha":"ciao","tipoControparte":"CO"}'
+  caricamentoOutput:
+    description: ""
+    type: object
+    properties:
+      prev_id:
+        type: string
+    example: '{"authToken":"abc","prev_id":"123"}'
+  documentiOutput:
+    description: ""
+    type: object
+    properties:
+      prev_id:
+        type: integer
+        format: int32
+      numPratica:
+        type: string
+    example: '{"prev_id":123456,"numPratica":"123456"}'
+  caricamentoInput:
+    properties:
+      authToken:
+        type: string
+    additionalProperties: false
+  Ok:
+    description: ""
+    type: object
+    properties:
+      success:
+        type: boolean
+      id_prev:
+        type: number
+      IdPratica:
+        type: number
+    example: '{"success":true,"id_prev":1234567,"IdPratica":1234567}'
+  caricamentoControparteOutput:
+    description: ""
+    type: object
+    properties:
+      prevId:
+        type: string
+      pratica:
+        type: string
+    example: '{"authToken":"abc","prevId":"1000000667753","pratica":"15001094"}'
+  caricamentoControparteInput:
+    properties:
+      tipoControparte:
+        type: string
+      token0:
+        type: string
+      cellulareCliente:
+        type: string
+      codiceFiscaleCliente:
+        type: string
+      smsCode:
+        type: string
+    additionalProperties: false
+  ErrorObject:
+    description: ""
+    type: object
+    properties:
+      success:
+        type: boolean
+      code:
+        type: string
+      description:
+        type: string
+    example: '{"success":false,"code":"201","description":"Dati non presenti"}'
+parameters:
+  Authorization:
+    name: Authorization
+    type: string
+    required: false
+    in: header
+    description: 'Authorization: Bearer <token>'
+x-ibm-endpoints:
+- endpointUrl: https://api-gateway-c.santanderconsumer.it/scb/ar
+  type:
+  - development
+...

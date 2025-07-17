@@ -1,0 +1,76 @@
+1. Autenticazione
+
+REQUEST
+Endpoint: https://logincoding.testfactory.copergmps:443/wam/json/authenticate?realm=accessointerno&authIndexType=service&authIndexValue=OIDCAPPService&canale=72&azienda=1030 
+Metod:POST
+Headers:
+“Content-Type”:”application/json”
+“X-OpenAM-Username”:”username utenza applicativa”
+“X-OpenAM-Password”:”password utenza applicativa”
+Body:{}
+
+RESPONSE BODY
+{
+“tokenId”:”AQSC5sadsa-QdsDASef…”
+“seccussUrl”:null
+}
+
+2. Token JWT
+
+Endpoint: https://logincoding.testfactory.copergmps:443/wam/oauth2/access_token 
+Metod:POST
+Headers:
+“Cookie”:”OpenIDIntranet=AQSC5sadsa-QdsDASef…”
+“Content-Type”:”application/x-www-form-urlencoded”
+Body:
+scope=openid profile
+client_id=gruppomps
+client_secret=vLHJVcaRZwVM8RUYsbMNVtb29ZBSNmqY
+auth_chain=OIDCAPPService
+username=username utenza applicativa
+password=password utenza applicativa
+grant_type=password
+
+Response OK
+
+http Status: 200
+Body:
+{
+    "scope": "openid profile",
+    "expires_in": 3599,
+    "token_type": "Bearer",
+    "refresh_token": "eyAidHlwIjogIkpXVCIsICJhbGciOiAiUlMyNTYiIH0.eyAidG9rZW5OYW1lIjogInJlZnJlc2hfdG9rZW4iLCAic3ViIjogIkFQUEhQV0VCQVBJIiwgInNjb3BlIjogWyAib3BlbmlkIiwgInByb2ZpbGUiIF0sICJhdXRoR3JhbnRJZCI6ICIyODI0NGE4MS0zZjJhLTRkNjgtOWQ4Ny04YzI3ZmNiMzRhYjgiLCAibmJmIjogMTYwNTU5OTE3NywgImlzcyI6ICJodHRwczovL2xvZ2luY29kaW5nLnRlc3RmYWN0b3J5LmNvcGVyZ21wczo0NDMvd2FtL29hdXRoMiIsICJleHBpcmVzX2luIjogNjA0ODAwMDAwLCAiaWF0IjogMTYwNTU5OTE3NywgImV4cCI6IDE2MDYyMDM5NzcsICJhdWRpdFRyYWNraW5nSWQiOiAiNjE4MTdkNjAtYWViZS00MDVhLWE1NTQtMThjNGZkOGQ1ODg0IiwgInJlYWxtIjogIi9hY2Nlc3NvaW50ZXJubyIsICJhdWQiOiAiZ3J1cHBvbXBzIiwgImp0aSI6ICJiZDM5YzQ2OS03OWNiLTRiM2EtOWE1Zi0xMjI0ZTI0MTIyYjUiLCAidG9rZW5fdHlwZSI6ICJCZWFyZXIiIH0.B-gRws9yvQ5hhxLRXDR7IlbLbkPRiaxj3YRX5ttr_DQkm3D_vcUTSoEw4xe2GCY1t-i3ROreHYstB_1xbErXP6SMqzcdGaTCzl9iJ2MXN5zFFWhrEKEEZlbPaekzZ5bfh6uZ_5SU4WpDvyzfw8mAcUyMw1PDArP9wjrxGDnCmovJthbehBNR958LZzLsqOBzTDii2adh4maBO7jRHe3r8PKUMwS1CqYmnBrXM9upoD6Dj7seE4a8AlRmok4CPqhvp7w6-kWdCd9uqxqUzf10PtLLbU7ePXcRKvuSDi5Qrmf_9kH4dUTUpvp-G_RjovRlRmtr89VEuyXDezcxSV3i4Q",
+    "id_token": "eyAidHlwIjogIkpXVCIsICJhbGciOiAiUlMyNTYiLCAia2lkIjogInpoQm9mYlp3K2prWlpqWHMyOGZHZnp4WmdNOD0iIH0.eyAidG9rZW5OYW1lIjogImlkX3Rva2VuIiwgImF6cCI6ICJncnVwcG9tcHMiLCAic3ViIjogIkFQUEhQV0VCQVBJIiwgImF0X2hhc2giOiAiak5oa1p1ZERSS0xkZzF0bjg0Uk14USIsICJzbVZlcnNpb25lIjogIiIsICJpc3MiOiAiaHR0cHM6Ly9sb2dpbmNvZGluZy50ZXN0ZmFjdG9yeS5jb3BlcmdtcHM6NDQzL3dhbS9vYXV0aDIiLCAic21Db250ZXh0ZGF0YSI6ICIiLCAib3JnLmZvcmdlcm9jay5vcGVuaWRjb25uZWN0Lm9wcyI6ICI0ODM1NGM5YS02MjhmLTRlMWUtYjU3Ny03NTY2M2E0N2UxNWUiLCAiZ2l2ZW5fbmFtZSI6ICJBUFBIUFdFQkFQSSIsICJpYXQiOiAxNjA1NTk5MTc3LCAiYXV0aF90aW1lIjogMTYwNTU5OTE3NywgInNtRG9taW5pbyI6ICIiLCAiZXhwIjogMTYwNTYwMjc3NywgInRva2VuVHlwZSI6ICJKV1RUb2tlbiIsICJhdWRpdFRyYWNraW5nSWQiOiAiOTY0MzYzMzQtN2UxZi00NTAzLWE4OTEtOWMwNjA0NGI5ZWU0LTU3OTEzIiwgInJlYWxtIjogIi9hY2Nlc3NvaW50ZXJubyIsICJub25jZSI6ICIiLCAic21Ub2tlbiI6ICIiLCAibmFtZSI6ICJBUFBIUFdFQkFQSSIsICJhdWQiOiAiZ3J1cHBvbXBzIiwgImZhbWlseV9uYW1lIjogIkFQUDAwMDA5MjUgU1cgSU5GUkFTVFJVVFQgRElQIiB9.Lcv6dEeaMjfJqgzFDWmGXmShiSUz-tUgpfVKKOAyQk1smdzaDdA3ywHcWoBFoSH1WiJOOWPEX7WshT212aHDQkf0dB10U984u2X4dE7yEuGNn7YaZo2lRWx69IwaR2osrSPu3YQ7Uw-lmvXh2kzwwtcqo-YXUAdtSkwXURsv7x7CT2QFvzKETf_ZS__J4Tdiu_TL3nnpp30uVELrOM9qdrYn-OmPjjkDHkOlKOuMAxKP2YgBym1JkajICiJ1XO1Qt9m7tdX6PKE5QVgYQNCp0BUlNoe_SX9F9pZQYdxTtaIH6ctA4LRnEaZkrCWr9uwn9aImHNw0iPvLJPEL_YhLDA",
+    "access_token": "eyAidHlwIjogIkpXVCIsICJhbGciOiAiUlMyNTYiIH0.eyAidG9rZW5OYW1lIjogImFjY2Vzc190b2tlbiIsICJzdWIiOiAiQVBQSFBXRUJBUEkiLCAic2NvcGUiOiBbICJvcGVuaWQiLCAicHJvZmlsZSIgXSwgImF1dGhHcmFudElkIjogIjI4MjQ0YTgxLTNmMmEtNGQ2OC05ZDg3LThjMjdmY2IzNGFiOCIsICJuYmYiOiAxNjA1NTk5MTc3LCAiaXNzIjogImh0dHBzOi8vbG9naW5jb2RpbmcudGVzdGZhY3RvcnkuY29wZXJnbXBzOjQ0My93YW0vb2F1dGgyIiwgImV4cGlyZXNfaW4iOiAzNjAwMDAwLCAiaWF0IjogMTYwNTU5OTE3NywgImV4cCI6IDE2MDU2MDI3NzcsICJhdWRpdFRyYWNraW5nSWQiOiAiZjY0YzRjYzAtMzJkZS00OWI0LTkzYzItNmMzNTdlMTVjNmIxIiwgInJlYWxtIjogIi9hY2Nlc3NvaW50ZXJubyIsICJhdWQiOiAiZ3J1cHBvbXBzIiwgImp0aSI6ICJjYjQwMWJhNi1kZGVjLTQ3ZmItYTk5NS0wYTljN2YxMjc4YjAiLCAidG9rZW5fdHlwZSI6ICJCZWFyZXIiIH0.F5tl1P0qDqJXs8YXtcaqdhUrLgLQXkB3GDDB_j0h1t-ovxYVxBjCY9zUH1_15i41Y3n-v6ny5HKEGHwSBtEtirkMZTeepSxaG2CFdXsM6bRfslIdbM09VCoRiM4cyt-4A0ay_hkb6Kc7UghAxOQRBnYD11x00oV_ykdbLhvQTu4kAwC3ofahDVhEiIYpd6H8XE9kv2gotUPvhAaZ7844JbAxpJuQcHk_Cxxr-9XHhd7r-X8Nf3Jxe8jtT78-2gr43C7HJm1Tk7viZPN4cERfqGwIMpv-oUM5RiQT7h0kJrrY49fDoEO2lvrAHrizGzOsju1GOpOKD--tr6WjfFw0sQ"
+}
+
+
+Response KO
+
+1.	http Status: 400
+Body:
+{
+    "error": "invalid_client",
+    "error_description": "Client authentication failed"
+}
+
+2.	http Status: 400
+Body:
+{
+    "error": "invalid_scope",
+    "error_description": "Unknown/invalid scope(s): [profil]"
+}
+
+3.	http Status: 400
+Body:
+{
+    "error": "invalid_grant",
+    "error_description": "The provided access grant is invalid, expired, or revoked."
+}
+
+4.	http Status: 400
+Body:
+{
+    "error": "server_error",
+    "error_description": "Internal Server Error"
+}

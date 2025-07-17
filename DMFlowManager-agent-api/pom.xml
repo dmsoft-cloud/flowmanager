@@ -33,6 +33,11 @@
 		</dependency>
 		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>
+			<artifactId>DMFlowManager-agent-engine</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>it.dmsoft.flowmanager</groupId>
 			<artifactId>DMFlowManager-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
