@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 
 
 public class ExportUtils {

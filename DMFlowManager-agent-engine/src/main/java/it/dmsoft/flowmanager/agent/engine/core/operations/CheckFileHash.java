@@ -1,24 +1,23 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffhashDAO;
+import it.dmsoft.flowmanager.agent.be.entities.FlowHash;
+import it.dmsoft.flowmanager.agent.be.repositories.FlowHashRepository;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
-import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;
-import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
+import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
+import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, Boolean> {
 	
 	private static final Logger logger = Logger.getLogger(CheckFileHash.class.getName());
+	
+	private FlowHashRepository flowHashRepository;
 
     @Override
     public void updateParameters() throws Exception {
@@ -30,11 +29,11 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
     	
     	logger.info("start execution of " + CheckFileHash.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.CHK_HASH);
+		FlowLogUtils.startDetail(OperationType.CHK_HASH);
         try {
 
             for (String file : operationParams.getFileNames()) {
-            	String fileName = otgffana.getFana_Folder() + Constants.PATH_DELIMITER + file;
+            	String fileName = executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + file;
             	
             	File f = new File(fileName);
             	
@@ -52,9 +51,9 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                 
                 logger.info("hash for " + fileName + "--> " + fileHash );
 
-                Integer hashId = OtgffhashDAO.existsHash(fileHash);
+                FlowHash flowHash = flowHashRepository.getReferenceById(fileHash);
 
-                if (hashId != null) {
+                if (flowHash != null) {
                     // Esegui il rename del file esistente, sovrascrivendo eventuali file duplicati
                     try {
                         File originalFile = new File(fileName);
@@ -75,15 +74,19 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                         throw e;
                     }
 
-                    throw new OperationException("Duplicato rilevato. ID: " + hashId);
+                    throw new OperationException("Duplicato rilevato. ID: " + flowHash.getHashId());
                 } else if (parameters.isWrite()){
                 	logger.info("writing hash for " + fileName + "--> " + fileHash );
-                    OtgffhashDAO.saveHash(fileHash, operationParams.getTransactionId(), otgffana.getFana_Id());
+                	flowHash = new FlowHash();
+                	flowHash.setHashFootprint(fileHash);
+                	flowHash.setHashId(executionFlowData.getFlowId());
+                	flowHash.setHashProgrLogt(operationParams.getTransactionId());
+                	flowHashRepository.save(flowHash);
                 }
             }
             
             logger.info("end execution of " + CheckFileHash.class.getName());
-			LogDb.end(OperationType.CHK_HASH);
+			FlowLogUtils.endDetail(OperationType.CHK_HASH);
 			
             return true;
         } catch (OperationException e) {

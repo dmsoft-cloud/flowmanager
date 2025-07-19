@@ -9,13 +9,13 @@ import java.util.Optional;
 import java.util.Set;
 
 import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 //QSH CMD('touch <fana_folder>/<fana_filenamesemaforo>')
@@ -29,7 +29,7 @@ public class CrtFile extends Operation<CreateFileParam>{
 		
 		logger.info("start execution of " + CrtFile.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.CREATE_FL);
+		FlowLogUtils.startDetail(OperationType.CREATE_FL);
 		
 		//verifico valore db2
 		Optional<String> dbTypeOpt = Optional.ofNullable(DbConstants.DB_TYPE);
@@ -71,7 +71,7 @@ public class CrtFile extends Operation<CreateFileParam>{
 		
 		
 		logger.info("end execution of " + CrtFile.class.getName());
-		LogDb.end(OperationType.CREATE_FL);
+		FlowLogUtils.endDetail(OperationType.CREATE_FL);
 	}
 
 }

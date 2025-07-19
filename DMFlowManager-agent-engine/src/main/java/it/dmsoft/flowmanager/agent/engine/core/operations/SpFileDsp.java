@@ -5,7 +5,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SpFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -18,7 +18,7 @@ public class SpFileDsp extends Operation<SpFileParam> {
 
 		logger.info("start execution of " + SpFileDsp.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SP_FL_DSP);
+		FlowLogUtils.startDetail(OperationType.SP_FL_DSP);
 
 		CallAs400 callAs400 = CallAs400.get(parameters);
 
@@ -159,7 +159,7 @@ public class SpFileDsp extends Operation<SpFileParam> {
 		callAs400.commandCall(sb.toString());
 
 		logger.info("end execution of " + SpFileDsp.class.getName());
-		LogDb.end(OperationType.SP_FL_DSP);
+		FlowLogUtils.endDetail(OperationType.SP_FL_DSP);
 	}
 
 }

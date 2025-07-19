@@ -13,22 +13,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import com.ibm.as400.access.AS400Text;
-import com.ibm.as400.access.ProgramParameter;
-
-import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
+import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -38,7 +33,7 @@ public class File2TableFixed extends DependentOperation<DbConversionParam>{
 	
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		
@@ -55,7 +50,7 @@ public class File2TableFixed extends DependentOperation<DbConversionParam>{
 		}
 		logger.info("start execution of " + File2TableFixed.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.FILE_2_DB);
+		FlowLogUtils.startDetail(OperationType.FILE_2_DB);
 		
 		
 		//utilizzato per gestire il file in modalità *add/*replace
@@ -95,15 +90,15 @@ public class File2TableFixed extends DependentOperation<DbConversionParam>{
 			
 			//se sono in modalità con terminatore fixed spacchetto la stringa in base alla lunghezza
 			if (parameters.getRecordDelimiter().equalsIgnoreCase(Constants.FIXED)) {
-				if(otgffana.getFana_Lunghezza_Fl_Flat().intValue()> 0) {
-					processFileByFixedLength(conn, insertSQL, file ,  otgffana.getFana_Lunghezza_Fl_Flat().intValue(),fieldLengths, cs, tableColumns );
+				if(executionFlowData.getFlowLunghezzaFlFlat().intValue()> 0) {
+					processFileByFixedLength(conn, insertSQL, file ,  executionFlowData.getFlowLunghezzaFlFlat().intValue(),fieldLengths, cs, tableColumns );
 				} else throw new OperationException("file flat = 0!!!!");
-			} else processFileByEndDelimiter(conn, insertSQL, file ,  otgffana.getFana_Lunghezza_Fl_Flat().intValue(),fieldLengths, cs, tableColumns );
+			} else processFileByEndDelimiter(conn, insertSQL, file ,  executionFlowData.getFlowLunghezzaFlFlat().intValue(),fieldLengths, cs, tableColumns );
 		
         }
 		
 		logger.info("end execution of " + File2TableFixed.class.getName());
-		LogDb.end(OperationType.FILE_2_DB);
+		FlowLogUtils.endDetail(OperationType.FILE_2_DB);
 		
 	}
 	

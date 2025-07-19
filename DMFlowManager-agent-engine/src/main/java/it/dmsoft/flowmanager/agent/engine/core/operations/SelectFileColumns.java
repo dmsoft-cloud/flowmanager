@@ -1,9 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations;
 
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,28 +10,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffhashDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.FileColumnsStruct;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.FileMetadata;
+import it.dmsoft.flowmanager.agent.be.entities.FileColumnsStruct;
+import it.dmsoft.flowmanager.agent.be.entities.FileMetadata;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
-import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SelectFileColumnsParam;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;
-import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
-import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExportUtils.ExportType;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
+import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 
 public class SelectFileColumns extends ConstraintDependentOperation<SelectFileColumnsParam, Boolean> {
 	
@@ -51,7 +41,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
     	
     	logger.info("start execution of " + SelectFileColumns.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SELECT_COL);
+		FlowLogUtils.startDetail(OperationType.SELECT_COL);
 
 		//serve a verificare se è modificato l'ordinamento delle colonne
 		Boolean reorderColumns= false;
@@ -74,12 +64,12 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
         	executeQryInsertNewColumns(conn);
         	executeQryRemoveColumns(conn);
         	
-        	String st = ExportType.fromString(otgffana.getFana_Export_Flag()).getQryExtractExportData(
+        	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryExtractExportData(
         			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
         	logger.info("check export file query:  " + st);
     		
     		PreparedStatement ps = conn.prepareStatement(st);
-    		ps.setString(1, otgffana.getFana_Export_Code());
+    		ps.setString(1, executionFlowData.getFlowExportCode());
     		ResultSet rs = ps.executeQuery();
 
     		while (rs.next()) { 
@@ -113,7 +103,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
             } else sortedItems = colList;
             if (counter > 0) {
             	// Recupera i metadati della tabella originale
-	            List<FileMetadata> availableFields = getTableFields(conn, otgffana.getFana_File(), otgffana.getFana_Libreria());
+	            List<FileMetadata> availableFields = getTableFields(conn, executionFlowData.getFlowFile(), executionFlowData.getFlowLibreria());
 	             
 	            // Riordina availableFields in base all'ordine di selectedFields
 	            List<FileMetadata> sortedAvailableFields = sortedItems.stream()
@@ -123,20 +113,20 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
 	                    .orElseThrow(() -> new IllegalArgumentException("Campo non trovato per selezione tabella temporanea: " + item.getDescription())))
 	                .collect(Collectors.toList());
 	            
-	            createNewTableAndTransferData(conn, parameters.getTargetTable(), parameters.getTargetSchema() , otgffana.getFana_File(),otgffana.getFana_Libreria() , sortedItems, sortedAvailableFields);
+	            createNewTableAndTransferData(conn, parameters.getTargetTable(), parameters.getTargetSchema() , executionFlowData.getFlowFile(),executionFlowData.getFlowLibreria() , sortedItems, sortedAvailableFields);
 	            
 	            
 	            /*
 	            logger.info("override original file using custom file!!!!! --> file: " + DbConstants.GF_CURLIB + Constants.DOT + targetTable);
-	            otgffana.setFana_File(targetTable);
-	            otgffana.setFana_Libreria(DbConstants.GF_CURLIB);
+	            executionFlowData.setFlowFile(targetTable);
+	            executionFlowData.setFlowLibreria(DbConstants.GF_CURLIB);
 	            */
 	            
             }
             
             
             logger.info("end execution of " + SelectFileColumns.class.getName());
-			LogDb.end(OperationType.SELECT_COL);
+			FlowLogUtils.endDetail(OperationType.SELECT_COL);
 			
             return true;
         } catch (OperationException e) {
@@ -154,24 +144,24 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
     }
     
     private void executeQryInsertNewColumns(Connection conn) throws SQLException {
-    	String st = ExportType.fromString(otgffana.getFana_Export_Flag()).getQryInsertNewColumns(
+    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryInsertNewColumns(
     			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
     	logger.info("check order columns query:  " + st);
     	PreparedStatement ps1 = conn.prepareStatement(st);
     	
-		ps1.setString(1, otgffana.getFana_Export_Code());
+		ps1.setString(1, executionFlowData.getFlowExportCode());
 		ps1.executeUpdate();
 		
 		ps1.close();
     }
     
     private void executeQryRemoveColumns(Connection conn) throws SQLException {
-    	String st = ExportType.fromString(otgffana.getFana_Export_Flag()).getQryRemoveColumns(
+    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryRemoveColumns(
     			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
     	
     	logger.info("delete columns query:  " + st); 
     	PreparedStatement ps2 = conn.prepareStatement(st);
-		ps2.setString(1, otgffana.getFana_Export_Code());
+		ps2.setString(1, executionFlowData.getFlowExportCode());
 		
 		ps2.executeUpdate();
 		

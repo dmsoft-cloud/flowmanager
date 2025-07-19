@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.CcschdtDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
+import it.dmsoft.flowmanager.agent.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.InteractiveType;
@@ -19,21 +19,28 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.TransferType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 public abstract class FlowManager {
 
 	private static Logger logger = Logger.getLogger(FlowManager.class);
 	
+	@PersistenceContext
+    protected EntityManager entityManager;
+	
+	protected ScheduleDateRepository scheduleDateRepository;
+	
 	/*
 	public static void main(String[] args) throws Exception {
-		Otgffana otgffana = new Otgffana();
-		otgffana.setFana_Direzione(Constants.OUTBOUND);
-		otgffana.setFana_Tip_Flusso(Constants.DB2);
+		ExecutionFlowData executionFlowData = new ExecutionFlowData();
+		executionFlowData.setFlowDirezione(Constants.OUTBOUND);
+		executionFlowData.setFlowTipFlusso(Constants.DB2);
 	
 		OperationParams operationParams = new OperationParams();
 		
 		for (Replacer replacer : Replacer.values()) {
-			System.out.println(replacer.getReplaceString(otgffana, operationParams));
+			System.out.println(replacer.getReplaceString(executionFlowData, operationParams));
 		}
 	}
 	*/
@@ -41,7 +48,7 @@ public abstract class FlowManager {
 	public enum Replacer {
 		DT(Constants.$DT) {
 			@Override
-			public String replaceString(String str, Otgffana otgffana, OperationParams operationParams)
+			public String replaceString(String str, ExecutionFlowData executionFlowData, OperationParams operationParams)
 					throws Exception {
 				
 				Pattern pattern = Pattern.compile(Constants.$DT_SEPARATOR_REGEXP);
@@ -51,7 +58,7 @@ public abstract class FlowManager {
 					return str.replace(matcher.group(), replaceDtString);
 				}
 				
-				return super.replaceString(str, otgffana, operationParams);
+				return super.replaceString(str, executionFlowData, operationParams);
 			}
 			
 			private String getReplaceDtString(String str, String formatCode, OperationParams operationParams) {
@@ -59,14 +66,14 @@ public abstract class FlowManager {
 			}
 			
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return operationParams.getExecutionDate().toString();
 			}
 		},
 		
 		DS(Constants.$DS) {	
 			@Override
-			public String replaceString(String str, Otgffana otgffana, OperationParams operationParams)
+			public String replaceString(String str, ExecutionFlowData executionFlowData, OperationParams operationParams)
 					throws Exception {
 				String ret = str;
 				
@@ -87,7 +94,7 @@ public abstract class FlowManager {
 					return getUpdatedDate(ret, operationParams);
 				}**/
 				
-				return super.replaceString(ret, otgffana, operationParams);
+				return super.replaceString(ret, executionFlowData, operationParams);
 			}
 			
 			private String getReplaceDsString(String str, String formatCode, OperationParams operationParams) {
@@ -105,7 +112,7 @@ public abstract class FlowManager {
 			}
 			
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return operationParams.getScheduleDate().toString();
 			}
 			
@@ -155,12 +162,12 @@ public abstract class FlowManager {
 		},
 		TS(Constants.$TS) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception{
-				if(Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception{
+				if(Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 					return FormatUtils.formatTimestamp();
-				} else if (Constants.INBOUND.equals(otgffana.getFana_Direzione()) 
-						&& (otgffana.getFana_Remote_File_Name().contains(Constants.$TS)
-							 || otgffana.getFana_File_Name().contains(Constants.$TS))) {
+				} else if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) 
+						&& (executionFlowData.getFlowRemoteFileName().contains(Constants.$TS)
+							 || executionFlowData.getFlowFileName().contains(Constants.$TS))) {
 					throw new ParameterException("Wildcard " + Constants.$TS + " specified for inbound transaction"); 
 				}
 				
@@ -169,66 +176,66 @@ public abstract class FlowManager {
 		},
 		D6(Constants.$D6) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return FormatUtils.date6(operationParams.getExecutionDate()).toString();
 			}
 		},
 		H2(Constants.$H2) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return StringUtils.leftPad(FormatUtils.actualTimeBigDec2().toString(), '0', 2);
 			}
 		},
 		H4(Constants.$H4) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return StringUtils.leftPad(FormatUtils.actualTimeBigDec4().toString(), '0', 4);
 			}
 		},
 		H6(Constants.$H6) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return StringUtils.leftPad(FormatUtils.actualTimeBigDec6().toString(), '0', 6);
 			}
 		},
 		FMP(Constants.$FMP) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatEndMonth(date, -1);
 			}
 		},
 		FMS(Constants.$FMS) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatEndMonth(date, +1);
 			}
 		},
 		FMC(Constants.$FMC) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatEndMonth(date, 0);
 			}
 		},
 		IMP(Constants.$IMP) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatStartMonth(date,-1);
 			}
 		},
 		IMS(Constants.$IMS) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatStartMonth(date, 1);
 			}
 		},
 		IMC(Constants.$IMC) {
 			@Override
-			protected String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				Date date =  FormatUtils.date(operationParams.getScheduleDate());
 				return FormatUtils.formatStartMonth(date, 0);
 			}
@@ -244,39 +251,39 @@ public abstract class FlowManager {
 			return this.code;
 		}
 		
-		public String replaceString(String str, Otgffana otgffana, OperationParams operationParams) throws Exception {
-			return str.replace(this.getCode(), this.getReplaceString(otgffana, operationParams));
+		public String replaceString(String str, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+			return str.replace(this.getCode(), this.getReplaceString(executionFlowData, operationParams));
 		}
 		
-		protected abstract String getReplaceString(Otgffana otgffana, OperationParams operationParams) throws Exception;
+		protected abstract String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
 		
-		public static String replace(String source, Otgffana otgffana, OperationParams operationParams) throws Exception {
+		public static String replace(String source, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 			String ret = source;
 			
 			for (Replacer replacer : Replacer.values()) {
-				ret = replacer.replaceString(ret, otgffana, operationParams);
+				ret = replacer.replaceString(ret, executionFlowData, operationParams);
 			}
 			
 			return ret;
 		}
 	}
 	
-	public void process(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		// ELABORAZIONI COMUNI ALLE DUE DIREZIONI
 
-		if (!Constants.SI.equals(otgffana.getFana_Stato())) {
-			throw new OperationException("Transaction " + otgffana.getFana_Id() + " not enabled");
+		if (!Constants.SI.equals(executionFlowData.getFlowStato())) {
+			throw new OperationException("Transaction " + executionFlowData.getFlowId() + " not enabled");
 		}
 
-		operationParams.setScheduleDate(CcschdtDAO.getSchedDate());
+		operationParams.setScheduleDate(scheduleDateRepository.findAll().get(0).getData());
 		
-		String replaceLocal = replaceFileNamePlaceholder(otgffana.getFana_File_Name(), otgffana, operationParams);
-		String replaceRemote = replaceFileNamePlaceholder(otgffana.getFana_Remote_File_Name(), otgffana, operationParams);
-		String replaceSemaphore = replaceFileNamePlaceholder(otgffana.getFana_Fl_Name_Semaforo(), otgffana, operationParams);
+		String replaceLocal = replaceFileNamePlaceholder(executionFlowData.getFlowFileName(), executionFlowData, operationParams);
+		String replaceRemote = replaceFileNamePlaceholder(executionFlowData.getFlowRemoteFileName(), executionFlowData, operationParams);
+		String replaceSemaphore = replaceFileNamePlaceholder(executionFlowData.getFlowFlNameSemaforo(), executionFlowData, operationParams);
 		
-		if (Constants.INBOUND.contentEquals(otgffana.getFana_Direzione()) 
-				&& StringUtils.isNullOrEmpty(otgffana.getFana_Remote_File_Name())
-				&& !Constants.THEMA_SPAZIO.equals(otgffana.getFana_Tipo_Trasferimento())) {
+		if (Constants.INBOUND.contentEquals(executionFlowData.getFlowDirezione()) 
+				&& StringUtils.isNullOrEmpty(executionFlowData.getFlowRemoteFileName())
+				&& !Constants.THEMA_SPAZIO.equals(executionFlowData.getFlowTipoTrasferimento())) {
 			replaceRemote = replaceLocal;
 			replaceLocal = "";			
 		}
@@ -288,58 +295,58 @@ public abstract class FlowManager {
 		
 	}
 	
-	private String replaceFileNamePlaceholder(String filename, Otgffana otgffana, OperationParams operationParams) throws Exception {
-		return Replacer.replace(filename, otgffana, operationParams);
+	private String replaceFileNamePlaceholder(String filename, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		return Replacer.replace(filename, executionFlowData, operationParams);
 	}
 
-	public void send(Otgffana otgffana) {
+	public void send(ExecutionFlowData executionFlowData) {
 		// TODO invio file tramite sftp
 
 		// ELABORAZIONI COMUNI ALLE DUE DIREZIONI
 	}
 
-	protected void handleFailure(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	protected void handleFailure(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		FlowBuilder inboundFlowBuilderMail = new FlowBuilder();
 		operationParams.setOutcome(Constants.KO);
 		
-		if (Constants.SI.equals(otgffana.getFana_Invia_Mail())) {
+		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {
 			logger.info("Sending mail for outcome KO");
-			inboundFlowBuilderMail.sendOutcomeMail(otgffana, operationParams);
+			inboundFlowBuilderMail.sendOutcomeMail(executionFlowData, operationParams);
 			inboundFlowBuilderMail.build().execute();
 
 		}
 	}
 	
-	protected void completeProcess(FlowBuilder flowBuilder, Otgffana otgffana, OperationParams operationParams) throws Exception {
+	protected void completeProcess(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		logger.info("Start complete process" );
 		operationParams.setOutcome(Constants.OK);
 		
-		if (Constants.SI.equals(otgffana.getFana_Invia_Mail())) {
+		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {
 			logger.info("Sending mail for outcome OK");
-			flowBuilder.sendOutcomeMail(otgffana, operationParams);
+			flowBuilder.sendOutcomeMail(executionFlowData, operationParams);
 		}
-		logger.info("valore campo interattivo: " +  otgffana.getFana_Interactive_Type());
-		switch (otgffana.getFana_Interactive_Type()) {
+		logger.info("valore campo interattivo: " +  executionFlowData.getFlowInteractiveType());
+		switch (executionFlowData.getFlowInteractiveType()) {
 		case "P":	
-			flowBuilder.interactiveProgram(otgffana, operationParams);
+			flowBuilder.interactiveProgram(executionFlowData, operationParams);
 			break;
 		case "C":
-			flowBuilder.interactiveCommand(otgffana, operationParams);
+			flowBuilder.interactiveCommand(executionFlowData, operationParams);
 			break;
 		default:
 			break;
 		}
 		
 		
-		if (!StringUtils.isNullOrEmpty(otgffana.getFana_Pgm_Controllo())) {
-			flowBuilder.controlProgram(otgffana, operationParams);
+		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowPgmControllo())) {
+			flowBuilder.controlProgram(executionFlowData, operationParams);
 		}		
 		
 		try {
 			flowBuilder.build().execute();
 		} catch (Exception e) {
 			logger.error("Error on complete process " + e.getMessage());
-			handleFailure(otgffana, operationParams);
+			handleFailure(executionFlowData, operationParams);
 			throw e;
 
 		}

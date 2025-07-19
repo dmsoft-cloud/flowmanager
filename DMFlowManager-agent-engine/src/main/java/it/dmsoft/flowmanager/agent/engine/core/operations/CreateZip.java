@@ -11,7 +11,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.ZipParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -25,7 +25,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 	//TODO IDEA DI SPOSTARE IL SETTAGGIO DEI PARAMETRI ALL'INTERNO DI OGNI OPERAZIONE (PRATICAMENTE I FLOW BUILDER SPARIREBEBRO)
 	@Override
 	public void updateParameters() throws Exception {		
-		if (Constants.INBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			setFiles(operationParams.getRemoteTrasmissionFiles());					
 		}		
 	}
@@ -36,7 +36,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 		
 		for (String fileName : operationParams.getTrasmissionFiles()) {
 			sourceFiles.add(fileName);
-			String destinationFile = otgffana.getFana_Folder();
+			String destinationFile = executionFlowData.getFlowFolder();
 			
 			if(ZipOperation.ZIP.equals(parameters.getOperation())) {
 				destinationFile += Constants.PATH_DELIMITER + StringUtils.removePath(fileName)
@@ -58,7 +58,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 			ResponseWrapper<ZipResponse> resp = null;
 			logger.info("start execution of " + CreateZip.class.getName());
 			logger.info("parameters: " + parameters.toString());
-			LogDb.start(OperationType.ZIP);
+			FlowLogUtils.startDetail(OperationType.ZIP);
 
 			for (int index = 0; index < parameters.getDestinationFiles().size(); index++) {
 				String destinationPath = parameters.getDestinationFiles().get(index);
@@ -78,7 +78,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 			}
 
 			logger.info("end execution of " + CreateZip.class.getName());
-			LogDb.end(OperationType.ZIP);
+			FlowLogUtils.endDetail(OperationType.ZIP);
 			
 			return resp;
 		} catch (OperationException e1) {
@@ -91,7 +91,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 
 	@Override
 	public void updateOperationParams(ResponseWrapper<ZipResponse> data) throws Exception {
-		if (Constants.INBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			operationParams.setBackupFiles(operationParams.getZipFiles());
 			List<String> deleteFiles = operationParams.getDeleteFiles() != null ? operationParams.getDeleteFiles() 
 					: new ArrayList<String>(operationParams.getZipFiles().size());

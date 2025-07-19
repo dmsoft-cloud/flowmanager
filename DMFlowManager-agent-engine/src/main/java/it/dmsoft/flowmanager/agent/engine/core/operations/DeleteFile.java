@@ -6,7 +6,7 @@ import java.io.IOException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DeleteFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class DeleteFile extends DependentOperation<DeleteFileParam> {
@@ -14,7 +14,7 @@ public class DeleteFile extends DependentOperation<DeleteFileParam> {
 	private static final Logger logger = Logger.getLogger(DeleteFile.class.getName());
 
 	private void deleteFile(String source) throws Exception {
-		LogDb.start(OperationType.DLT_FILE);
+		FlowLogUtils.startDetail(OperationType.DLT_FILE);
 		
 		File sourceFile= new File(source);
 		
@@ -25,7 +25,7 @@ public class DeleteFile extends DependentOperation<DeleteFileParam> {
 			logger.info("File not found : " + source);
 		}
 		
-		LogDb.end(OperationType.DLT_FILE);
+		FlowLogUtils.endDetail(OperationType.DLT_FILE);
 	}
 
 	@Override

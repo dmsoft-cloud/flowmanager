@@ -3,20 +3,16 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
-import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -32,7 +28,7 @@ public class ChkObj extends DependentOperation<ChkObjParam>{
 	public void executeOperation() throws Exception {
 		logger.info("start execution of " + ChkObj.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.CHECK_OBJ);
+		FlowLogUtils.startDetail(OperationType.CHECK_OBJ);
 		
 		/* vecchio metodo con uso chkobj
 		 * 
@@ -94,7 +90,7 @@ public class ChkObj extends DependentOperation<ChkObjParam>{
 		
 		logger.info("table exists: " + schema + Constants.DOT + table);
 		logger.info("end execution of " + ChkObj.class.getName());
-		LogDb.end(OperationType.CHECK_OBJ);	
+		FlowLogUtils.endDetail(OperationType.CHECK_OBJ);	
 	}
 
 }

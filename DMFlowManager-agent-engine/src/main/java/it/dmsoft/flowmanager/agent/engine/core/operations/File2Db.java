@@ -8,7 +8,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperatio
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -18,7 +18,7 @@ public class File2Db extends DependentOperation<DbConversionParam>{
 	
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		
@@ -36,7 +36,7 @@ public class File2Db extends DependentOperation<DbConversionParam>{
 		}
 		logger.info("start execution of " + File2Db.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.FILE_2_DB);
+		FlowLogUtils.startDetail(OperationType.FILE_2_DB);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		
@@ -124,7 +124,7 @@ public class File2Db extends DependentOperation<DbConversionParam>{
         }
 			
 		logger.info("end execution of " + File2Db.class.getName());
-		LogDb.end(OperationType.FILE_2_DB);
+		FlowLogUtils.endDetail(OperationType.FILE_2_DB);
 		
 	}
 

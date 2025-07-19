@@ -1,6 +1,5 @@
 package it.dmsoft.flowmanager.agent.engine.core.sqlServer;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,8 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;

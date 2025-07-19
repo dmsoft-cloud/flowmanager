@@ -123,6 +123,11 @@
 		    <artifactId>jt400</artifactId>
 		    <version>21.0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>it.dmsoft.flowmanager</groupId>
+			<artifactId>DMFlowManager-agent-be</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

@@ -1,31 +1,22 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
-
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ReadSpoolFilesParams;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -50,7 +41,7 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 		
 		logger.info("start execution of " + ReadSpoolFiles.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.READ_SPOOL);
+		FlowLogUtils.startDetail(OperationType.READ_SPOOL);
 		
 		String folder = parameters.getFolder();
 		List<SpoolFile> spoolFiles = new ArrayList<SpoolFile>();
@@ -121,7 +112,7 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 		
 		logger.info("end execution of " + ReadSpoolFiles.class.getName());
 		
-		LogDb.end(OperationType.READ_SPOOL);
+		FlowLogUtils.endDetail(OperationType.READ_SPOOL);
 	}
 	
 	private void addEnvVar(StringBuilder sb) throws Exception {

@@ -6,7 +6,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.InteractiveComm
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SubmitJobParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -20,7 +20,7 @@ public class InteractiveCommandCall extends Operation<InteractiveCommandCallPara
 	public void execute() throws Exception {
 		logger.info("start execution of " + InteractiveCommandCall.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.INT_CMD);
+		FlowLogUtils.startDetail(OperationType.INT_CMD);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 	
@@ -29,7 +29,7 @@ public class InteractiveCommandCall extends Operation<InteractiveCommandCallPara
 		callAs400.commandCall(parameters.getCommand());
 		
 		logger.info("end execution of " + InteractiveCommandCall.class.getName());
-		LogDb.end(OperationType.INT_CMD);
+		FlowLogUtils.endDetail(OperationType.INT_CMD);
 		
 	}
 }

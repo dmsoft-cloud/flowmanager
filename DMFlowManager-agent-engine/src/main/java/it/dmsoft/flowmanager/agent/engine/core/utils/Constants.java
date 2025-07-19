@@ -1,10 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
 import java.math.BigDecimal;
-import java.util.Optional;
-
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 
 public class Constants {
 	

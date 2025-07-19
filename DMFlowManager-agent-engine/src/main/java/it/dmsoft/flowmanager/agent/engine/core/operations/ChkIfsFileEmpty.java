@@ -9,7 +9,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDepende
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkIfsFileEmptyParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -19,7 +19,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 	
 	@Override
 	public void updateParameters() throws Exception {		
-		if (Constants.INBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			setFiles(operationParams.getRemoteTrasmissionFiles());					
 		}		
 	}
@@ -28,7 +28,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 		List<String> checkedFiles = new ArrayList<String>();
 		
 		for (String fileName : operationParams.getTrasmissionFiles()) {
-			String checkedFile = otgffana.getFana_Folder();			
+			String checkedFile = executionFlowData.getFlowFolder();			
 			
 			checkedFile += Constants.PATH_DELIMITER + StringUtils.removePath(fileName);
 			
@@ -47,7 +47,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 			Boolean resp = true;
 			logger.info("start execution of " + ChkIfsFileEmpty.class.getName());
 			logger.info("parameters: " + parameters.toString());
-			LogDb.start(OperationType.CK_IFS_EMP);
+			FlowLogUtils.startDetail(OperationType.CK_IFS_EMP);
 
 			for (int index = 0; index < parameters.getCheckedFiles().size(); index++) {
 				String destinationPath = parameters.getCheckedFiles().get(index);
@@ -69,7 +69,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 			}
 
 			logger.info("end execution of " + ChkIfsFileEmpty.class.getName());
-			LogDb.end(OperationType.CK_IFS_EMP);
+			FlowLogUtils.endDetail(OperationType.CK_IFS_EMP);
 			
 			return resp; 
 		} catch (OperationException e1) {
@@ -82,7 +82,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 
 	@Override
 	public void updateOperationParams(Boolean data) throws Exception {
-		if (Constants.INBOUND.equals(otgffana.getFana_Direzione()) && data.equals(true)) {
+		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && data.equals(true)) {
 			operationParams.setBypassConversion(true);
 			logger.info("BYPASS DB2 PHASE DUE TO EMPTY FILE  ");
 		}

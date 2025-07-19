@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ReadFileNamesParams;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -34,7 +34,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 		
 		logger.info("start execution of " + ReadFileNames.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.READ_NM_FL);
+		FlowLogUtils.startDetail(OperationType.READ_NM_FL);
 		
 		String fileName = parameters.getListFile();
 		String folder = parameters.getFolder();
@@ -141,7 +141,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 		
 		logger.info("end execution of " + ReadFileNames.class.getName());
 		
-		LogDb.end(OperationType.READ_NM_FL);
+		FlowLogUtils.endDetail(OperationType.READ_NM_FL);
 	}
 	
 	private void addEnvVar(StringBuilder sb) throws Exception {

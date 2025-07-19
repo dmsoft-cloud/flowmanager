@@ -4,7 +4,7 @@ import java.util.List;
 
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.TrasmissionParams;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -44,7 +44,7 @@ public abstract class ConstraintTrasmission<V> extends ConstraintOperation<Trasm
 	
 	private void handleError(Exception e) throws Exception{
 		logger.error("Error on trasmission execution:", e);
-		LogDb.end(OperationType.TRASM_KO);		
+		FlowLogUtils.endDetail(OperationType.TRASM_KO);		
 	}
 	
 	public void launchExceptionIfNoFileFound(List<?> downloadFiles) throws OperationException {

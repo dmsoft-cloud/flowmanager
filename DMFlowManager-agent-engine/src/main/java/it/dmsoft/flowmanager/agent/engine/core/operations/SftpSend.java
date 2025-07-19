@@ -4,7 +4,7 @@ import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Trasmission;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.sftp.manager.SendManager;
@@ -18,7 +18,7 @@ public class SftpSend extends Trasmission {
 	public void executeTrasmission() throws Exception {
 		logger.info("start execution of " + SftpSend.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SFTP_SND);
+		FlowLogUtils.startDetail(OperationType.SFTP_SND);
 		
 		// System.out.println(parameters);
 		// parameters.setKeyFile("ocssftp -i
@@ -47,7 +47,7 @@ public class SftpSend extends Trasmission {
 		}
 		
 		logger.info("end execution of " + SftpSend.class.getName());
-		LogDb.end(OperationType.SFTP_SND);
+		FlowLogUtils.endDetail(OperationType.SFTP_SND);
 
 	}
 

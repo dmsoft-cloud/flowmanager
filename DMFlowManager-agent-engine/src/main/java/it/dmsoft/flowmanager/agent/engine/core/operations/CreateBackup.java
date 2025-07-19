@@ -7,13 +7,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgfflogtDAO;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.BackupParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -34,12 +33,12 @@ public class CreateBackup extends DependentOperation<BackupParam> {
 
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		
 		List<String> backupFiles = new ArrayList<String>();
-		List<String> sourceFiles = !Constants.NO.equals(otgffana.getFana_Compression()) ? operationParams.getZipFiles() : operationParams.getTrasmissionFiles();		
+		List<String> sourceFiles = !Constants.NO.equals(executionFlowData.getFlowCompression()) ? operationParams.getZipFiles() : operationParams.getTrasmissionFiles();		
 		
 		for (String fileName : sourceFiles) {
 			backupFiles.add(StringUtils.removePath(fileName));
@@ -52,7 +51,7 @@ public class CreateBackup extends DependentOperation<BackupParam> {
 	public void executeOperation() throws Exception {
 		logger.info("start execution of " + CreateBackup.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.BACKUP);
+		FlowLogUtils.startDetail(OperationType.BACKUP);
 
 		for (String backFile : parameters.getBackupFiles()) {
 
@@ -88,13 +87,13 @@ public class CreateBackup extends DependentOperation<BackupParam> {
 			String destFile = sb.toString();
 
 			Files.copy(sourceFile.toPath(), new File(destFile).toPath(), StandardCopyOption.REPLACE_EXISTING);
-			OtgfflogtDAO.updateBackupPath(new BigDecimal(parameters.getTransactionId()), destFile);
+			FlowLogUtils.updateBackupPath(new BigDecimal(parameters.getTransactionId()), destFile);
 			logger.info("backup created in: " + destFile);
 			
 		}
 		
 		logger.info("end execution of " + CreateBackup.class.getName());
-		LogDb.end(OperationType.BACKUP);		
+		FlowLogUtils.endDetail(OperationType.BACKUP);		
 	}
 
 }

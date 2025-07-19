@@ -10,16 +10,12 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffanaDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.InvalidDBTypeException;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class DatabaseUtils {

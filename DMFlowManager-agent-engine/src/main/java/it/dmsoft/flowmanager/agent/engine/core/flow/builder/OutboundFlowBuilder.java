@@ -1,11 +1,10 @@
 package it.dmsoft.flowmanager.agent.engine.core.flow.builder;
 
 import java.util.Arrays;
-import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.manager.FlowManager.Replacer;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CheckFileHash;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkDbFileEmpty;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkObj;
@@ -30,18 +29,18 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 
 public class OutboundFlowBuilder extends FlowBuilder {
 
-	public FlowBuilder createFile(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder createFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
-		if (Constants.SI.equals(otgffana.getFana_Intergiry_Check())
-				&& !StringUtils.isNullOrEmpty(otgffana.getFana_Fl_Name_Semaforo())) {
+		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			
 			Operation<CreateFileParam> crtFile = new CrtFile();
 			CreateFileParam createFileParam = new CreateFileParam();
 
 			createFileParam.setFileName(operationParams.getSempahoreFile());
-			createFileParam.setFolder(otgffana.getFana_Folder());
+			createFileParam.setFolder(executionFlowData.getFlowFolder());
 
-			updateGenericAs400(otgffana, createFileParam);
+			updateGenericAs400(executionFlowData, createFileParam);
 			crtFile.setParameters(createFileParam);
 
 			flow.addOperation(crtFile);
@@ -50,18 +49,18 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		return this;
 	}
 
-	public FlowBuilder createIfsFile(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public FlowBuilder createIfsFile(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 	
 		if(operationParams.getFileNames()== null || operationParams.getFileNames().size() == 0) {
-			String replaceLocal = Replacer.replace(otgffana.getFana_File_Name(), otgffana, operationParams);
+			String replaceLocal = Replacer.replace(executionFlowData.getFlowFileName(), executionFlowData, operationParams);
 			Operation<CreateFileParam> crtFile = new CrtFile();
 			CreateFileParam createFileParam = new CreateFileParam();
 			operationParams.setFileNames(Arrays.asList(replaceLocal));
 			operationParams.setTrasmissionFiles(Arrays.asList(replaceLocal));
-			operationParams.setTrasmissionFolder(otgffana.getFana_Folder());
+			operationParams.setTrasmissionFolder(executionFlowData.getFlowFolder());
 			createFileParam.setFileName(replaceLocal);
-			createFileParam.setFolder(otgffana.getFana_Folder());
-			updateGenericAs400(otgffana, createFileParam);
+			createFileParam.setFolder(executionFlowData.getFlowFolder());
+			updateGenericAs400(executionFlowData, createFileParam);
 			crtFile.setParameters(createFileParam);
 	
 			flow.addOperation(crtFile);
@@ -70,17 +69,17 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder crtDb2FileIfNotExist(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder crtDb2FileIfNotExist(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		
 		CreateDbFileParam createDbFileParam = new CreateDbFileParam();
-		updateGenericAs400(otgffana, createDbFileParam);
-		createDbFileParam.setFile(otgffana.getFana_File());
-		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), otgffana.getFana_Libreria()));
-		createDbFileParam.setSrcFile(otgffana.getFana_File_Source());
-		createDbFileParam.setSrcLibreria(otgffana.getFana_Lib_Source());
-		createDbFileParam.setSrcMembro(otgffana.getFana_Membro_Source());
-		createDbFileParam.setCreaSeNonEsiste(Constants.SI.equals(otgffana.getFana_Crea_Vuoto()));
-		createDbFileParam.setRecordLength(otgffana.getFana_Lunghezza_Fl_Flat());
+		updateGenericAs400(executionFlowData, createDbFileParam);
+		createDbFileParam.setFile(executionFlowData.getFlowFile());
+		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), executionFlowData.getFlowLibreria()));
+		createDbFileParam.setSrcFile(executionFlowData.getFlowFileSource());
+		createDbFileParam.setSrcLibreria(executionFlowData.getFlowLibSource());
+		createDbFileParam.setSrcMembro(executionFlowData.getFlowMembroSource());
+		createDbFileParam.setCreaSeNonEsiste(Constants.SI.equals(executionFlowData.getFlowCreaVuoto()));
+		createDbFileParam.setRecordLength(executionFlowData.getFlowLunghezzaFlFlat());
 		
 		DependentOperation<ChkObjParam> chkObj = new ChkObj();
 		chkObj.setParameters(getChkObjParam(createDbFileParam));
@@ -95,7 +94,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		
 		if(operationParams.getSkipCpyFrmFile() == false) {
 			Operation<ChkDbFileEmptyParam> chOperation = new ChkDbFileEmpty();
-			chOperation.setParameters(getCheckDbFileEmptyParam(otgffana, operationParams));
+			chOperation.setParameters(getCheckDbFileEmptyParam(executionFlowData, operationParams));
 			try {
 				chOperation.execute();
 			}
@@ -116,24 +115,24 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		return chkObjParam; 
 	}
 	
-	private ChkDbFileEmptyParam getCheckDbFileEmptyParam(Otgffana otgffana, OperationParams operationParams) {
+	private ChkDbFileEmptyParam getCheckDbFileEmptyParam(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkDbFileEmptyParam chkDbFileEmptyParam = new ChkDbFileEmptyParam();
 		
-		updateGenericAs400(otgffana, chkDbFileEmptyParam);
-		chkDbFileEmptyParam.setFile(otgffana.getFana_File());
-		chkDbFileEmptyParam.setLibreria(otgffana.getFana_Libreria());
+		updateGenericAs400(executionFlowData, chkDbFileEmptyParam);
+		chkDbFileEmptyParam.setFile(executionFlowData.getFlowFile());
+		chkDbFileEmptyParam.setLibreria(executionFlowData.getFlowLibreria());
 		return chkDbFileEmptyParam;
 		
 	}
 	
-	public FlowBuilder checkHashFile(Otgffana otgffana, OperationParams operationParams, boolean write) throws Exception {
+	public FlowBuilder checkHashFile(ExecutionFlowData executionFlowData, OperationParams operationParams, boolean write) throws Exception {
         HashCheckParam hashCheckParam = new HashCheckParam();
         hashCheckParam.setFileNames(operationParams.getTrasmissionFiles());
         hashCheckParam.setWrite(write);
 
         ConstraintDependentOperation<HashCheckParam, Boolean> checkHashOperation = new CheckFileHash();
         checkHashOperation.setOperationParams(operationParams);
-        checkHashOperation.setOtgffana(otgffana);
+        checkHashOperation.setOtgffana(executionFlowData);
         checkHashOperation.setParameters(hashCheckParam);
 
         flow.addOperation(checkHashOperation);
@@ -141,7 +140,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
         return this;
     }
 	
-	public FlowBuilder selectFileColumns(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public FlowBuilder selectFileColumns(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
         SelectFileColumnsParam sfcParam = new SelectFileColumnsParam();
         sfcParam.setPgmLibrary(!StringUtils.isNullOrEmpty(PropertiesUtils.get(PropertiesConstants.SCHEMA_EXPORT_CONFIG_FILE)) ?
         				PropertiesUtils.get(PropertiesConstants.SCHEMA_EXPORT_CONFIG_FILE) : PropertiesUtils.get(Constants.PGM_LIBRARY_KEY) );
@@ -150,7 +149,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
         
         ConstraintDependentOperation<SelectFileColumnsParam, Boolean> sfc = new SelectFileColumns();
         sfc.setOperationParams(operationParams);
-        sfc.setOtgffana(otgffana);
+        sfc.setOtgffana(executionFlowData);
         sfc.setParameters(sfcParam);
 
         flow.addOperation(sfc);
@@ -158,14 +157,14 @@ public class OutboundFlowBuilder extends FlowBuilder {
         return this;
     }
 	
-	public FlowBuilder dropTmpExportTable(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public FlowBuilder dropTmpExportTable(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
         DropTmpExportTableParam dteParam = new DropTmpExportTableParam();
         dteParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? DbConstants.GF_CURLIB: operationParams.getTmpLibrary());
         dteParam.setTable("GF" + operationParams.getTransactionId());
         
         DependentOperation<DropTmpExportTableParam> dtet = new DropTmpExportTable();
         dtet.setOperationParams(operationParams);
-        dtet.setOtgffana(otgffana);
+        dtet.setOtgffana(executionFlowData);
         dtet.setParameters(dteParam);
 
         flow.addOperation(dtet);

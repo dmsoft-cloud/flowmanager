@@ -4,7 +4,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -17,7 +17,7 @@ public class CrtDbFileIfNotExist extends Operation<CreateDbFileParam> {
 		
 			logger.info("start execution of " + CrtDbFileIfNotExist.class.getName());
 			logger.info("parameters: " + parameters.toString());
-			LogDb.start(OperationType.CPY_2_DST);
+			FlowLogUtils.startDetail(OperationType.CPY_2_DST);
 			
 			Operation<ChkObjParam> chkObj = new ChkObj();
 			chkObj.setParameters(getChkObjParam(parameters));
@@ -32,7 +32,7 @@ public class CrtDbFileIfNotExist extends Operation<CreateDbFileParam> {
 			}
 			
 			logger.info("end execution of " + CrtDbFileIfNotExist.class.getName());
-			LogDb.end(OperationType.CPY_2_DST);
+			FlowLogUtils.endDetail(OperationType.CPY_2_DST);
 		
 	}
 	

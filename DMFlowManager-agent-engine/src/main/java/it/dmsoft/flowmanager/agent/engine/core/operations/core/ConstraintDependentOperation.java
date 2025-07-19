@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.core;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -10,7 +10,7 @@ public abstract class ConstraintDependentOperation<T, V> extends Operation<T>{
 	
 	protected OperationParams operationParams;
 	
-	protected Otgffana otgffana;
+	protected ExecutionFlowData executionFlowData;
 	
 	@Override
 	public void execute() throws Exception {
@@ -34,12 +34,12 @@ public abstract class ConstraintDependentOperation<T, V> extends Operation<T>{
 		this.operationParams = operationParams;
 	}
 
-	protected Otgffana getOtgffana() {
-		return otgffana;
+	protected ExecutionFlowData getOtgffana() {
+		return executionFlowData;
 	}
 
-	public void setOtgffana(Otgffana otgffana) {
-		this.otgffana = otgffana;
+	public void setOtgffana(ExecutionFlowData executionFlowData) {
+		this.executionFlowData = executionFlowData;
 	}
 	
 	public abstract void updateOperationParams(V data) throws Exception;

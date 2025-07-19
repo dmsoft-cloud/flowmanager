@@ -6,7 +6,7 @@ import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -22,7 +22,7 @@ public class CrtDbFile extends Operation<CreateDbFileParam>{
 		
 		logger.info("start execution of " + CrtDbFile.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.CREATE_DB);
+		FlowLogUtils.startDetail(OperationType.CREATE_DB);
 				
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		
@@ -68,7 +68,7 @@ public class CrtDbFile extends Operation<CreateDbFileParam>{
 		callAs400.commandCall(sb.toString());
 		
 		logger.info("end execution of " + CrtDbFile.class.getName());
-		LogDb.end(OperationType.CREATE_DB);
+		FlowLogUtils.endDetail(OperationType.CREATE_DB);
 	}
 
 }

@@ -5,7 +5,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SubmitJobParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -19,7 +19,7 @@ public class SubmitJob extends Operation<SubmitJobParam>{
 	public void execute() throws Exception {
 		logger.info("start execution of " + SubmitJob.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SBM_JOB);
+		FlowLogUtils.startDetail(OperationType.SBM_JOB);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		
@@ -46,7 +46,7 @@ public class SubmitJob extends Operation<SubmitJobParam>{
 		callAs400.commandCall(sb.toString());
 		
 		logger.info("end execution of " + SubmitJob.class.getName());
-		LogDb.end(OperationType.SBM_JOB);
+		FlowLogUtils.endDetail(OperationType.SBM_JOB);
 		
 	}
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.dmsoft.flowmanager.agent.api.flows.mapper.FlowDataMapper;
-import it.dmsoft.flowmanager.agent.api.flows.model.ExecutionFlowData;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowData;

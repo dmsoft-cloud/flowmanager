@@ -1,33 +1,26 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Optional;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.ConfigDto;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.MailParms;
-import it.dmsoft.flowmanager.agent.engine.core.exception.InvalidDBTypeException;
+import it.dmsoft.flowmanager.agent.be.entities.FlowConfig;
+import it.dmsoft.flowmanager.agent.be.entities.MailParms;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class ConfigUtils {	
 	
-	private static ConfigDto config;
+	private static FlowConfig config;
 	Logger logger = null;
 	
-	public static ConfigDto setConfig(String param) throws Exception {
+	public static FlowConfig setConfig(String param) throws Exception {
 
 			JSONParser parser = new JSONParser();
 	        JSONObject data = (JSONObject) parser.parse(param);
 
 
-	        config = new ConfigDto();
+	        config = new FlowConfig();
 	        config.setTransactionName((String)data.get(Constants.CONF_TRANSACTION_NAME));
 	        config.setTransactionId((String)data.get(Constants.CONF_TRANSACTION_ID));
 	        config.setLogPath((String)data.get(Constants.CONF_LOG_PATH));

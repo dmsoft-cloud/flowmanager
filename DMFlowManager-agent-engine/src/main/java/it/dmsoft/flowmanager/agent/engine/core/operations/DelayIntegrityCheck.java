@@ -10,7 +10,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DelayIntegrityCheckParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class DelayIntegrityCheck extends Operation<DelayIntegrityCheckParams>{
@@ -21,14 +21,14 @@ public class DelayIntegrityCheck extends Operation<DelayIntegrityCheckParams>{
 	public void execute() throws Exception {
 		logger.info("start execution of " + DelayIntegrityCheck.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.DLY_CHK);
+		FlowLogUtils.startDetail(OperationType.DLY_CHK);
 		
 		long delayInMillis = parameters.getDelaySecond().multiply(new BigDecimal(1000)).longValue();
 		logger.info("sleep " + delayInMillis + " milliseconds");
 		Thread.sleep(delayInMillis);
 		
 		logger.info("end execution of " + DelayIntegrityCheck.class.getName());
-		LogDb.end(OperationType.DLY_CHK);	
+		FlowLogUtils.endDetail(OperationType.DLY_CHK);	
 	}
 
 }

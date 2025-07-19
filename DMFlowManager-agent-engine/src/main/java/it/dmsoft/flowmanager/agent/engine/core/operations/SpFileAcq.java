@@ -9,7 +9,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.SpFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FileUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -22,7 +22,7 @@ public class SpFileAcq extends Operation<SpFileParam> {
 
 		logger.info("start execution of " + SpFileAcq.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SP_FL_ACQ);
+		FlowLogUtils.startDetail(OperationType.SP_FL_ACQ);
 
 		CallAs400 callAs400 = CallAs400.get(parameters);
 
@@ -184,7 +184,7 @@ public class SpFileAcq extends Operation<SpFileParam> {
 		launchExceptionIfNoFileFound(initialModified, finalModified);
 		
 		logger.info("end execution of " + SpFileAcq.class.getName());
-		LogDb.end(OperationType.SP_FL_ACQ);
+		FlowLogUtils.endDetail(OperationType.SP_FL_ACQ);
 	}
 	
 	private long getModifiedTime(String filePath) {

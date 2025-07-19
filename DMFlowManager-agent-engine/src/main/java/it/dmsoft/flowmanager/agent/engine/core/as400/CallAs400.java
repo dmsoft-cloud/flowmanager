@@ -15,7 +15,6 @@ import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400Exception;
 import com.ibm.as400.access.AS400Message;
 import com.ibm.as400.access.AS400SecurityException;
-import com.ibm.as400.access.AS400Text;
 import com.ibm.as400.access.CommandCall;
 import com.ibm.as400.access.ErrorCompletingRequestException;
 import com.ibm.as400.access.JobDescription;
@@ -27,7 +26,7 @@ import com.ibm.as400.access.ProgramParameter;
 import com.ibm.as400.access.RequestNotSupportedException;
 import com.ibm.as400.access.SecureAS400;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.AS400ObjectNotFoundException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericAS400Param;
@@ -83,8 +82,8 @@ public class CallAs400 {
 	}
 
 	/*
-	 * private CallAs400(Otgffana otgffana) throws Exception {
-	 * this(otgffana.getFana_Job_Desc(), otgffana.getFana_Lib_Job_Desc()); }
+	 * private CallAs400(ExecutionFlowData executionFlowData) throws Exception {
+	 * this(executionFlowData.getFlowJobDesc(), executionFlowData.getFlowLibJobDesc()); }
 	 * 
 	 * 
 	 * private CallAs400(String jobdName) throws Exception { this(jobdName,

@@ -8,7 +8,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintTrasmis
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.sftp.manager.ReceiveManager;
@@ -24,7 +24,7 @@ public class SftpReceiver extends ConstraintTrasmission<ResponseWrapper<SftpResp
 	public ResponseWrapper<SftpResponse> executeTrasmission() throws Exception {
 		logger.info("start execution of " + SftpReceiver.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.SFTP_RCV);
+		FlowLogUtils.startDetail(OperationType.SFTP_RCV);
 		
 		logger.info("loggerExt => " + logger + "\n" + " localPath => " + parameters.getLocal_Folder() + "/"
 				+ parameters.getLocal_File_Name() + "\n" + " remotePath => " + parameters.getRemote_Folder() + "\n"
@@ -71,7 +71,7 @@ public class SftpReceiver extends ConstraintTrasmission<ResponseWrapper<SftpResp
 		}
 
 		logger.info("end execution of " + SftpReceiver.class.getName());
-		LogDb.end(OperationType.SFTP_RCV);
+		FlowLogUtils.endDetail(OperationType.SFTP_RCV);
 		
 		return resp;
 	}

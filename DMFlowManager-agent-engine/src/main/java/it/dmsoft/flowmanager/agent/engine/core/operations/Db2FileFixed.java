@@ -7,7 +7,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDepende
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -19,7 +19,7 @@ public class Db2FileFixed extends ConstraintDependentOperation<DbConversionParam
 	public Boolean executeOperation() throws Exception {
 		logger.info("start execution of " + Db2FileFixed.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.DB_2_FIXED);
+		FlowLogUtils.startDetail(OperationType.DB_2_FIXED);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		
@@ -75,7 +75,7 @@ public class Db2FileFixed extends ConstraintDependentOperation<DbConversionParam
 		callAs400.commandCall(sb.toString());	
 		
 		logger.info("end execution of " + Db2FileFixed.class.getName());
-		LogDb.end(OperationType.DB_2_FIXED);
+		FlowLogUtils.endDetail(OperationType.DB_2_FIXED);
 		return true;
 		
 	}

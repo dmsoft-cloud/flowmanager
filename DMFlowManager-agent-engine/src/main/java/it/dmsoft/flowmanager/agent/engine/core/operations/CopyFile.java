@@ -6,7 +6,7 @@ import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CopyFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -35,7 +35,7 @@ public class CopyFile extends DependentOperation<CopyFileParam>{
 			return;
 		}
 		
-		LogDb.start(OperationType.COPY_FILE);
+		FlowLogUtils.startDetail(OperationType.COPY_FILE);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		
@@ -72,7 +72,7 @@ public class CopyFile extends DependentOperation<CopyFileParam>{
 		callAs400.commandCall(sb.toString());
 		
 		logger.info("end execution of " + CopyFile.class.getName());
-		LogDb.end(OperationType.COPY_FILE);
+		FlowLogUtils.endDetail(OperationType.COPY_FILE);
 		
 	}
 }

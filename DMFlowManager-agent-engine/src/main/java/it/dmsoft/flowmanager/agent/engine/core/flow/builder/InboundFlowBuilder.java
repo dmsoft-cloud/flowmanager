@@ -3,9 +3,7 @@ package it.dmsoft.flowmanager.agent.engine.core.flow.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffhashDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
-import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CheckFileHash;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkIfsFileEmpty;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CopyFile;
@@ -20,22 +18,21 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFilePar
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
 
 public class InboundFlowBuilder extends FlowBuilder{
 
-	/*public InboundFlowBuilder db2File(Otgffana otgffana) {
+	/*public InboundFlowBuilder db2File(ExecutionFlowData executionFlowData) {
 		return this;
 	}*/
 	
-	public FlowBuilder conversionToDestFile(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		return super.conversionToDestFile(otgffana, operationParams, Constants.SI.equals(otgffana.getFana_Bypass_Qtemp()));
+	public FlowBuilder conversionToDestFile(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		return super.conversionToDestFile(executionFlowData, operationParams, Constants.SI.equals(executionFlowData.getFlowBypassQtemp()));
 	}
 	
-	public FlowBuilder createDbFileQtemp(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder createDbFileQtemp(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
 		
-		CreateDbFileParam createDbFileParam = getCreateDbFileParam(otgffana, operationParams);
+		CreateDbFileParam createDbFileParam = getCreateDbFileParam(executionFlowData, operationParams);
 		
 		createDbFileParam.setLibreria(Constants.QTEMP);
 		crtDbFile.setParameters(createDbFileParam);
@@ -44,29 +41,29 @@ public class InboundFlowBuilder extends FlowBuilder{
 		return this;
 	}
 	
-	public FlowBuilder fromQtempToDestinationFileOperation(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder fromQtempToDestinationFileOperation(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		Operation<CreateDbFileParam> fromQtempToDestinationFile = new CrtDbFileIfNotExist();
 	
-		fromQtempToDestinationFile.setParameters(getCreateDbFileParam(otgffana, operationParams));
+		fromQtempToDestinationFile.setParameters(getCreateDbFileParam(executionFlowData, operationParams));
 		
 		flow.addOperation(fromQtempToDestinationFile);
 
 		return this;
 	}
 	
-	public FlowBuilder cpyFile(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder cpyFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		
 		DependentOperation<CopyFileParam> copyFile = new CopyFile();
 		
 		CopyFileParam copyFileParam= new CopyFileParam();
 		
-		updateGenericAs400(otgffana, copyFileParam);
+		updateGenericAs400(executionFlowData, copyFileParam);
 		copyFileParam.setFromLibrary(Constants.QTEMP);
-		copyFileParam.setFromFile(otgffana.getFana_File());
-		copyFileParam.setToLibrary(otgffana.getFana_Libreria());
-		copyFileParam.setToFile(otgffana.getFana_File());
-		copyFileParam.setMbrOpt(otgffana.getFana_Mod_Acquisizione());		
+		copyFileParam.setFromFile(executionFlowData.getFlowFile());
+		copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
+		copyFileParam.setToFile(executionFlowData.getFlowFile());
+		copyFileParam.setMbrOpt(executionFlowData.getFlowModAcquisizione());		
 		
 		copyFile.setOperationParams(operationParams);
 		
@@ -77,16 +74,16 @@ public class InboundFlowBuilder extends FlowBuilder{
 		return this;
 	}
 	
-	public FlowBuilder checkIfsFileEmpty(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder checkIfsFileEmpty(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkIfsFileEmptyParam chkIfsFileEmptyParam = new ChkIfsFileEmptyParam();	
 		
-		updateGenericAs400(otgffana, chkIfsFileEmptyParam);
+		updateGenericAs400(executionFlowData, chkIfsFileEmptyParam);
 		
 		List<String> checkedFiles = new ArrayList<String>();
 
 		
 		for (String fileName : operationParams.getFileNames()) {
-			checkedFiles.add(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + fileName);
+			checkedFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + fileName);
 		}
 		
 		chkIfsFileEmptyParam.setCheckedFiles(checkedFiles);
@@ -94,7 +91,7 @@ public class InboundFlowBuilder extends FlowBuilder{
 		
 		ConstraintDependentOperation<ChkIfsFileEmptyParam, Boolean> chIfsOperation = new ChkIfsFileEmpty();
 		chIfsOperation.setOperationParams(operationParams);
-		chIfsOperation.setOtgffana(otgffana);
+		chIfsOperation.setOtgffana(executionFlowData);
 		chIfsOperation.setParameters(chkIfsFileEmptyParam);
 		
 		flow.addOperation(chIfsOperation);
@@ -103,14 +100,14 @@ public class InboundFlowBuilder extends FlowBuilder{
 		
 	}
 	
-	public FlowBuilder checkHashFile(Otgffana otgffana, OperationParams operationParams, boolean write) throws Exception {
+	public FlowBuilder checkHashFile(ExecutionFlowData executionFlowData, OperationParams operationParams, boolean write) throws Exception {
         HashCheckParam hashCheckParam = new HashCheckParam();
         hashCheckParam.setFileNames(operationParams.getTrasmissionFiles());
         hashCheckParam.setWrite(write);
         
         ConstraintDependentOperation<HashCheckParam, Boolean> checkHashOperation = new CheckFileHash();
         checkHashOperation.setOperationParams(operationParams);
-        checkHashOperation.setOtgffana(otgffana);
+        checkHashOperation.setOtgffana(executionFlowData);
         checkHashOperation.setParameters(hashCheckParam);
 
         flow.addOperation(checkHashOperation);

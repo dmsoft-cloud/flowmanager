@@ -5,7 +5,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Trasmission;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.ftp.manager.FtpSendManager;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpResponse;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
@@ -19,7 +19,7 @@ public class FtpSend extends Trasmission {
 	public void executeTrasmission() throws Exception {
 		logger.info("start execution of " + FtpSend.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.FTP_SND);
+		FlowLogUtils.startDetail(OperationType.FTP_SND);
 		
 		boolean passiveMode;
 		boolean ftpSecure;
@@ -59,7 +59,7 @@ public class FtpSend extends Trasmission {
 		}
 
 		logger.info("end execution of " + FtpSend.class.getName());
-		LogDb.end(OperationType.FTP_SND);
+		FlowLogUtils.endDetail(OperationType.FTP_SND);
 		
 	}
 

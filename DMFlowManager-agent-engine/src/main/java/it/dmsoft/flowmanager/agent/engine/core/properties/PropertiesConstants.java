@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.properties;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 

@@ -9,7 +9,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintTrasmis
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.ftp.manager.FtpReceiveManager;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpFileDescription;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpResponse;
@@ -24,7 +24,7 @@ public class FtpReceiver extends ConstraintTrasmission<ResponseWrapper<FtpRespon
 	public ResponseWrapper<FtpResponse> executeTrasmission() throws Exception {
 		logger.info("start execution of " + FtpReceiver.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.FTP_RCV);
+		FlowLogUtils.startDetail(OperationType.FTP_RCV);
 		
 		boolean passiveMode;
 		boolean ftpSecure;
@@ -80,7 +80,7 @@ public class FtpReceiver extends ConstraintTrasmission<ResponseWrapper<FtpRespon
 			throw new Exception("Error on ftp receiver invocation: ", e);
 		}
 		
-		LogDb.end(OperationType.FTP_RCV);
+		FlowLogUtils.endDetail(OperationType.FTP_RCV);
 		logger.info("end execution of " + FtpReceiver.class.getName());
 
 		return resp;

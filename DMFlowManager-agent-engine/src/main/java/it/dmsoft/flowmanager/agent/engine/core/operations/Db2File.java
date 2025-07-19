@@ -7,7 +7,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDepende
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -20,7 +20,7 @@ public class Db2File extends ConstraintDependentOperation<DbConversionParam, Boo
 		
 		logger.info("start execution of " + Db2File.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.DB_2_FILE);
+		FlowLogUtils.startDetail(OperationType.DB_2_FILE);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		StringBuilder sb = new StringBuilder();
@@ -103,7 +103,7 @@ public class Db2File extends ConstraintDependentOperation<DbConversionParam, Boo
 		callAs400.commandCall(sb.toString());		
 		
 		logger.info("end execution of " + Db2File.class.getName());
-		LogDb.end(OperationType.DB_2_FILE);
+		FlowLogUtils.endDetail(OperationType.DB_2_FILE);
 		
 		return true;
 	}

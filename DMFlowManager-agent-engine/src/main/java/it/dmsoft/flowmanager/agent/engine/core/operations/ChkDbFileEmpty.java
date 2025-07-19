@@ -5,15 +5,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkDbFileEmptyParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -25,7 +24,7 @@ public class ChkDbFileEmpty extends Operation<ChkDbFileEmptyParam>{
 	public void execute() throws Exception {
 		logger.info("start execution of " + ChkDbFileEmpty.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.CHK_EMPTY);
+		FlowLogUtils.startDetail(OperationType.CHK_EMPTY);
 		
 		String library = StringUtils.isNullOrEmpty(parameters.getLibreria()) ? "" : parameters.getLibreria() + Constants.DOT;
 		String query = "SELECT count(*) FROM " 
@@ -46,7 +45,7 @@ public class ChkDbFileEmpty extends Operation<ChkDbFileEmptyParam>{
 		
 		
 		logger.info("end execution of " + ChkDbFileEmpty.class.getName());
-		LogDb.end(OperationType.CHK_EMPTY);	
+		FlowLogUtils.endDetail(OperationType.CHK_EMPTY);	
 	}
 
 }

@@ -9,7 +9,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.InteractiveProgramCallParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -23,7 +23,7 @@ public class InteractiveProgramCall extends Operation<InteractiveProgramCallPara
 	public void execute() throws Exception {
 		logger.info("start execution of " + InteractiveProgramCall.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.INT_PGM);
+		FlowLogUtils.startDetail(OperationType.INT_PGM);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 		//istanzio la programcall
@@ -51,7 +51,7 @@ public class InteractiveProgramCall extends Operation<InteractiveProgramCallPara
 			throw new Exception("Program call throw an error");
 		}
 		logger.info("end execution of " + InteractiveProgramCall.class.getName());
-		LogDb.end(OperationType.INT_PGM);
+		FlowLogUtils.endDetail(OperationType.INT_PGM);
 		
 	}
 }

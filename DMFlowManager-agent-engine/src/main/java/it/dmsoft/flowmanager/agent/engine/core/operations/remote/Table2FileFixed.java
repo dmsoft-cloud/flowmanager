@@ -12,10 +12,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.Optional;
 
-
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
-
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
@@ -23,7 +21,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.ConvertionUtils.EndOfLine;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ConvertionUtils.FieldFillType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -35,7 +33,7 @@ public class Table2FileFixed extends ConstraintDependentOperation<DbConversionPa
 	public Boolean executeOperation() throws Exception {
 		logger.info("start execution of " + Table2FileFixed.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.TB_2_FIXED);
+		FlowLogUtils.startDetail(OperationType.TB_2_FIXED);
 		
 		//utilizzato per gestire il file in modalità *add/*replace
 		boolean appendMode = parameters.getMemberOptionAddReplace().equals("*ADD") ? true : false;
@@ -57,7 +55,7 @@ public class Table2FileFixed extends ConstraintDependentOperation<DbConversionPa
 		PreparedStatement  stmt = conn.prepareStatement(sb.toString());
 		
 		//imposto la dimensione del fecth per il buffer di lettura
-		BigDecimal fetchSize = Optional.ofNullable(otgffana.getFana_Fetch_Size())
+		BigDecimal fetchSize = Optional.ofNullable(executionFlowData.getFlowFetchSize())
                 .orElse(BigDecimal.valueOf(1000));
 		stmt.setFetchSize(fetchSize.intValue()); 
 		
@@ -162,7 +160,7 @@ public class Table2FileFixed extends ConstraintDependentOperation<DbConversionPa
 	
 		
 		logger.info("end execution of " + Table2FileFixed.class.getName());
-		LogDb.end(OperationType.TB_2_FIXED);
+		FlowLogUtils.endDetail(OperationType.TB_2_FIXED);
 		return true;
 		
 	}

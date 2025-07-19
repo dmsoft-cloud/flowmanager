@@ -11,7 +11,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SendMailParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
 public class ReadOtgffempa extends Operation<SendMailParam> {
@@ -23,7 +23,7 @@ public class ReadOtgffempa extends Operation<SendMailParam> {
 
 		logger.info("start execution of " + ReadOtgffempa.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.READ_MAIL);
+		FlowLogUtils.startDetail(OperationType.READ_MAIL);
 		
 		CallAs400 callAs400 = CallAs400.get(parameters);
 
@@ -76,7 +76,7 @@ public class ReadOtgffempa extends Operation<SendMailParam> {
 		parameters.setSecure(secure);
 
 		logger.info("end execution of " + ReadOtgffempa.class.getName());
-		LogDb.end(OperationType.READ_MAIL);
+		FlowLogUtils.endDetail(OperationType.READ_MAIL);
 	}
 
 }

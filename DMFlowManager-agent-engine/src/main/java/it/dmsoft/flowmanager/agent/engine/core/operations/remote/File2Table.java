@@ -3,23 +3,19 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.remote;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
@@ -27,7 +23,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -37,7 +33,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 	
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {
+		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		
@@ -56,7 +52,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 		}
 		logger.info("start execution of " + File2Table.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.FILE_2_TB);
+		FlowLogUtils.startDetail(OperationType.FILE_2_TB);
 		
 		/*
 		
@@ -156,7 +152,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
         }
         
 		logger.info("end execution of " + File2Table.class.getName());
-		LogDb.end(OperationType.FILE_2_TB);
+		FlowLogUtils.endDetail(OperationType.FILE_2_TB);
 		
 	}
 	

@@ -1,25 +1,19 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.remote;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Optional;
 
-import ch.qos.logback.core.filter.Filter;
-import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
-import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
@@ -28,7 +22,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.ConvertionUtils.FieldFillTy
 import it.dmsoft.flowmanager.agent.engine.core.utils.ConvertionUtils.RmvBlank;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
-import it.dmsoft.flowmanager.agent.engine.core.utils.LogDb;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -41,7 +35,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 		
 		logger.info("start execution of " + Table2File.class.getName());
 		logger.info("parameters: " + parameters.toString());
-		LogDb.start(OperationType.TB_2_FILE);
+		FlowLogUtils.startDetail(OperationType.TB_2_FILE);
 
 		
 		//utilizzato per gestire il file in modalità *add/*replace
@@ -64,7 +58,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 		PreparedStatement  stmt = conn.prepareStatement(sb.toString());
 		
 		//imposto la dimensione del fecth per il buffer di lettura		
-		BigDecimal fetchSize = Optional.ofNullable(otgffana.getFana_Fetch_Size())
+		BigDecimal fetchSize = Optional.ofNullable(executionFlowData.getFlowFetchSize())
                 .orElse(BigDecimal.valueOf(1000));
 		stmt.setFetchSize(fetchSize.intValue());
 		
@@ -176,7 +170,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
             	
             	//non scrivo il campo se a stringa è vuota ed è impostato a S il campo FANA_CHAR_EMPTY_SPACE
             	if (!((columnType == Types.CHAR || columnType == Types.VARCHAR)
-            			&& Optional.ofNullable(otgffana.getFana_char_empty_space()).filter("S"::equals).isPresent()
+            			&& Optional.ofNullable(executionFlowData.getFlowcharemptyspace()).filter("S"::equals).isPresent()
             			&& "".equals(value.trim())
             			)) {
             		bos.write(value.getBytes(cs));            		
@@ -199,7 +193,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 			
 		
 		logger.info("end execution of " + Table2File.class.getName());
-		LogDb.end(OperationType.TB_2_FILE);
+		FlowLogUtils.endDetail(OperationType.TB_2_FILE);
 		
 		return true;
 	}

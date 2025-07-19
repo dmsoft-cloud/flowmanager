@@ -13,21 +13,14 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffanacfDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffanaspDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffmailDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffmdestDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffprogDAO;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.MailParms;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffana;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffanacf;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffanasp;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffmail;
-import it.dmsoft.flowmanager.agent.engine.core.db.dto.Otgffmdest;
+import it.dmsoft.flowmanager.agent.be.entities.Email;
+import it.dmsoft.flowmanager.agent.be.entities.MailParms;
+import it.dmsoft.flowmanager.agent.be.entities.Recipient;
+import it.dmsoft.flowmanager.agent.be.repositories.EmailRepository;
+import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.Flow;
-import it.dmsoft.flowmanager.agent.engine.core.operations.CftFileSnd;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkDbFileEmpty;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkObj;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CopyFile;
@@ -58,7 +51,6 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintOperati
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.BackupParam;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.CftFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkDbFileEmptyParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CopyFileParam;
@@ -85,8 +77,8 @@ import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ConfigUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.MailReceiverType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.TransferType;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowIdNumeratorUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpResponse;
@@ -94,10 +86,19 @@ import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrappe
 import it.dmsoft.flowmanager.agent.engine.mailclient.utility.Allegato;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
+import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 
 public class FlowBuilder {
 
 	protected Flow flow;
+	
+	@PersistenceContext
+    protected EntityManager entityManager;
+	
+	protected EmailRepository emailRepository;
 
 	public FlowBuilder() {
 		this.flow = new Flow();
@@ -107,7 +108,7 @@ public class FlowBuilder {
 		return flow;
 	}
 	
-	public FlowBuilder readFileNames(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public FlowBuilder readFileNames(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 
 		Operation<ReadFileNamesParams> readNameFiles = new ReadFileNames();
 
@@ -118,16 +119,16 @@ public class FlowBuilder {
 		readNameFilesParams.setDefaultShell(PropertiesUtils.get(PropertiesConstants.DEFAULT_SHELL));
 		
 		
-		String folder = otgffana.getFana_Folder();
+		String folder = executionFlowData.getFlowFolder();
 		readNameFilesParams.setFolder(folder);
 		
 		readNameFilesParams.setListFileFolder(operationParams.getListFileFolder());
 		
 		readNameFilesParams.setListFile(operationParams.getListFile());
 		readNameFilesParams.setOperationParams(operationParams);
-		readNameFilesParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(otgffana.getFana_Esistenza_File()));
+		readNameFilesParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
 		
-		updateGenericAs400(otgffana, readNameFilesParams);
+		updateGenericAs400(executionFlowData, readNameFilesParams);
 
 		readNameFiles.setParameters(readNameFilesParams);
 
@@ -136,7 +137,7 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder readSpoolFiles(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	public FlowBuilder readSpoolFiles(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 
 		Operation<ReadSpoolFilesParams> readSpoolFiles = new ReadSpoolFiles();
 
@@ -144,12 +145,12 @@ public class FlowBuilder {
 		
 		readSpoolFilesParams.setDefaultShell(PropertiesUtils.get(PropertiesConstants.DEFAULT_SHELL));		
 		
-		String folder = otgffana.getFana_Folder();
+		String folder = executionFlowData.getFlowFolder();
 		readSpoolFilesParams.setFolder(folder);
 		
 		readSpoolFilesParams.setOperationParams(operationParams);
 		
-		updateGenericAs400(otgffana, readSpoolFilesParams);
+		updateGenericAs400(executionFlowData, readSpoolFilesParams);
 
 		readSpoolFiles.setParameters(readSpoolFilesParams);
 
@@ -158,14 +159,14 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder controlProgram(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder controlProgram(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		Operation<SubmitJobParam> submitJob = new SubmitJob();
 
 		SubmitJobParam submitJobParams = new SubmitJobParam();
 
-		submitJobParams.setCommand(otgffana.getFana_Pgm_Controllo());
-		updateGenericAs400(otgffana, submitJobParams);
+		submitJobParams.setCommand(executionFlowData.getFlowPgmControllo());
+		updateGenericAs400(executionFlowData, submitJobParams);
 
 		submitJob.setParameters(submitJobParams);
 
@@ -174,14 +175,14 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder interactiveCommand(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder interactiveCommand(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		Operation<InteractiveCommandCallParam> intCmd = new InteractiveCommandCall();
 
 		InteractiveCommandCallParam intCmdParams = new InteractiveCommandCallParam();
 
-		intCmdParams.setCommand(otgffana.getFana_Interactive_Command());
-		updateGenericAs400(otgffana, intCmdParams);
+		intCmdParams.setCommand(executionFlowData.getFlowInteractiveCommand());
+		updateGenericAs400(executionFlowData, intCmdParams);
 
 		intCmd.setParameters(intCmdParams);
 
@@ -190,15 +191,15 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder interactiveProgram(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder interactiveProgram(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		Operation<InteractiveProgramCallParam> intPgm = new InteractiveProgramCall();
 
 		InteractiveProgramCallParam intPgmParams = new InteractiveProgramCallParam();
 
-		intPgmParams.setPgm(otgffana.getFana_Interactive_Program());
-		intPgmParams.setResult(otgffana.getFana_Interactive_Result());
-		updateGenericAs400(otgffana, intPgmParams);
+		intPgmParams.setPgm(executionFlowData.getFlowInteractiveProgram());
+		intPgmParams.setResult(executionFlowData.getFlowInteractiveResult());
+		updateGenericAs400(executionFlowData, intPgmParams);
 
 		intPgm.setParameters(intPgmParams);
 
@@ -207,15 +208,15 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder sendOutcomeMail(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		if (Constants.SI.equals(otgffana.getFana_Invia_Mail())) {		
-			String letterCode = Constants.OK.equals(operationParams.getOutcome()) ? otgffana.getFana_Lettera_Ok() : otgffana.getFana_Lettera_Ko();
-			flow.addOperations(sendMail(otgffana, operationParams, letterCode, null));
+	public FlowBuilder sendOutcomeMail(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {		
+			String letterCode = Constants.OK.equals(operationParams.getOutcome()) ? executionFlowData.getFlowLetteraOk() : executionFlowData.getFlowLetteraKo();
+			flow.addOperations(sendMail(executionFlowData, operationParams, letterCode, null));
 		}
 		return this;
 	}
 	
-	private static List<Operation<?>> sendMail(Otgffana otgffana, OperationParams operationParams, String letterCode, List<String> attachmentFiles) throws SQLException, Exception {
+	private List<Operation<?>> sendMail(ExecutionFlowData executionFlowData, OperationParams operationParams, String letterCode, List<String> attachmentFiles) throws SQLException, Exception {
 
 		if (StringUtils.isNullOrEmpty(letterCode)) {
 			return new ArrayList<Operation<?>>();
@@ -231,16 +232,14 @@ public class FlowBuilder {
 		
 		SendMailParam sendMailParam = new SendMailParam();
 
-		updateGenericAs400(otgffana, sendMailParam);
+		updateGenericAs400(executionFlowData, sendMailParam);
 
-		Otgffmail otgffmail = null;
-		List<Otgffmdest> otgffmdestList = null;
+		Email mail = null;
 
-		otgffmail = OtgffmailDAO.read(letterCode);
-		if (otgffmail == null) {
+		mail = emailRepository.getReferenceById(letterCode);
+		if (mail == null) {
 			throw new ParameterException("Mail " + letterCode + " not  found");
 		}
-		otgffmdestList = OtgffmdestDAO.read(letterCode);
 
 		if (operationParams.getOverrideMailDests() != null && !operationParams.getOverrideMailDests().isEmpty()) {
 			for (String dest : operationParams.getOverrideMailDests()) {
@@ -248,16 +247,16 @@ public class FlowBuilder {
 			}
 		} 
 		else {
-		   for (Otgffmdest otgffmdest : otgffmdestList) {
+		   for (Recipient recipient : mail.getRecipients()) {
 		
-			String dest = otgffmdest.getMdest_Destinatario();
-			String destType = otgffmdest.getMdest_Tipo_Dest();
+			String dest = recipient.getEmailAddress();
+			RecipientType recType = recipient.getType();
 			
-			if (StringUtils.isNullOrEmpty(destType) || MailReceiverType.RECEIVER.getCode().equals(destType)) {
+			if (recType == null || RecipientType.TO.equals(recType)) {
 				tos.add(dest);
-			} else if (MailReceiverType.CARBON_COPY.getCode().equals(destType)) {
+			} else if (RecipientType.CC.equals(recType)) {
 				ccs.add(dest);
-			} else if (MailReceiverType.BLIND_CARBON_COPY.getCode().equals(destType)) {
+			} else if (RecipientType.BCC.equals(recType)) {
 				bccs.add(dest);
 			}
 		  }
@@ -268,10 +267,10 @@ public class FlowBuilder {
 			for (String attachmentFile : attachmentFiles) {
 				Allegato allegato = new Allegato();
 				allegato.setContentId(StringUtils.removePath(attachmentFile));
-				if (Constants.SI.equals(otgffana.getFana_Compression()) || Constants.SPEDIZIONE.equals(otgffana.getFana_Compression())) {
-					allegato.setPath(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + attachmentFile + Constants.ZIP_EXTENSION);
+				if (Constants.SI.equals(executionFlowData.getFlowCompression()) || Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
+					allegato.setPath(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + attachmentFile + Constants.ZIP_EXTENSION);
 				}
-				else allegato.setPath(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + attachmentFile);
+				else allegato.setPath(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + attachmentFile);
 				
 				attachments.add(allegato);
 			}
@@ -285,12 +284,12 @@ public class FlowBuilder {
 		sendMailParam.setTos(tos);
 		sendMailParam.setCcs(ccs);
 		sendMailParam.setBccs(bccs);
-		sendMailParam.setSubject(otgffmail.getMail_Oggetto() + Constants.SPACE + otgffana.getFana_Id() 
+		sendMailParam.setSubject(mail.getSubject() + Constants.SPACE + executionFlowData.getFlowId() 
 						+ Constants.SPACE + operationParams.getTransactionId() + Constants.SPACE + operationParams.getExecutionDate());
 		sendMailParam.setAllegati(attachments);
 		sendMailParam.setTimeout(Constants.MAIL_TIMEOUT);
-		sendMailParam.setBody(otgffmail.getMail_Testo());
-		sendMailParam.setTestoHtml(false);
+		sendMailParam.setBody(mail.getBodyHtml());
+		sendMailParam.setTestoHtml(true);
 		
 		sendMailParam.setPgmLibrary(PropertiesUtils.get(Constants.PGM_LIBRARY_KEY));
 		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(Constants.SI::equals).isPresent()) {
@@ -319,10 +318,10 @@ public class FlowBuilder {
 		return retList;
 	}
 
-	public FlowBuilder zipOperation(Otgffana otgffana, OperationParams operationParams, ZipOperation zipOperation) throws ParameterException {
+	public FlowBuilder zipOperation(ExecutionFlowData executionFlowData, OperationParams operationParams, ZipOperation zipOperation) throws ParameterException {
 
-		if (!StringUtils.isNullOrEmpty(otgffana.getFana_Direzione())) {
-			Operation<ZipParam> createZipOperation = zipOperation.get(otgffana, operationParams);
+		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowDirezione())) {
+			Operation<ZipParam> createZipOperation = zipOperation.get(executionFlowData, operationParams);
 			flow.addOperation(createZipOperation);
 		} else {
 			throw new ParameterException("Direzione non valorizzata"); 
@@ -331,23 +330,23 @@ public class FlowBuilder {
 		return this;
 	}
 
-	public FlowBuilder deleteSources(List<String> sources, Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder deleteSources(List<String> sources, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		DependentOperation<DeleteFileParam> deleteOperation = new DeleteFile();
 		DeleteFileParam deleteFileParam = new DeleteFileParam();
 		deleteFileParam.setSources(sources);
 
 		deleteOperation.setParameters(deleteFileParam);
-		deleteOperation.setOtgffana(otgffana);
+		deleteOperation.setOtgffana(executionFlowData);
 		deleteOperation.setOperationParams(operationParams);
 		flow.addOperation(deleteOperation);
 
 		return this;
 	}
 
-	protected static void updateGenericAs400(Otgffana otgffana, GenericAS400Param genericAS400Param) {
-		genericAS400Param.setJobd(otgffana.getFana_Job_Desc());
-		genericAS400Param.setJobdLibrary(otgffana.getFana_Lib_Job_Desc());
+	protected static void updateGenericAs400(ExecutionFlowData executionFlowData, GenericAS400Param genericAS400Param) {
+		genericAS400Param.setJobd(executionFlowData.getFlowJobDesc());
+		genericAS400Param.setJobdLibrary(executionFlowData.getFlowLibJobDesc());
 		try {
 			genericAS400Param.setUser(PropertiesUtils.get(Constants.USER));
 			genericAS400Param.setPassword(PropertiesUtils.get(Constants.PASSWORD));
@@ -358,7 +357,7 @@ public class FlowBuilder {
 		
 	}
 
-	public FlowBuilder createBackup(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder createBackup(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 		DependentOperation<BackupParam> createBackup = new CreateBackup();
 		BackupParam backupParam = new BackupParam();
@@ -367,27 +366,27 @@ public class FlowBuilder {
 		Date date = new Date();
 
 		backupParam.setPath(operationParams.getPathBackup());
-		backupParam.setTransactionName(otgffana.getFana_Id());
+		backupParam.setTransactionName(executionFlowData.getFlowId());
 		backupParam.setTransactionId(operationParams.getTransactionId().toString());
 		backupParam.setAnno(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
 		backupParam.setData(dateFormat.format(date).toString());
 		backupParam
-				.setBackupFolder(StringUtils.setDefault(operationParams.getBackupFolder(), otgffana.getFana_Folder()));
+				.setBackupFolder(StringUtils.setDefault(operationParams.getBackupFolder(), executionFlowData.getFlowFolder()));
 
 		backupParam.setBackupFiles(operationParams.getBackupFiles() != null ? operationParams.getBackupFiles()
 				: operationParams.getFileNames());
 		// backupParam.setBackupFiles(StringUtils.setDefault(operationParams.getBackupFile(),
-		// otgffana.getFana_File_Name()));
+		// executionFlowData.getFlowFileName()));
 
 		createBackup.setParameters(backupParam);
-		createBackup.setOtgffana(otgffana);
+		createBackup.setOtgffana(executionFlowData);
 		createBackup.setOperationParams(operationParams);
 		flow.addOperation(createBackup);
 
 		return this;
 	}
 
-	protected FlowBuilder conversionToDestFile(Otgffana otgffana, OperationParams operationParams, boolean bypassQtemp) throws Exception {
+	protected FlowBuilder conversionToDestFile(ExecutionFlowData executionFlowData, OperationParams operationParams, boolean bypassQtemp) throws Exception {
 		String library = operationParams.getLibrary();
 		
 		if(!bypassQtemp) {
@@ -395,11 +394,11 @@ public class FlowBuilder {
 		}
 		
 		if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
-			operationParams.setLibrary(otgffana.getFana_Libreria());
+			operationParams.setLibrary(executionFlowData.getFlowLibreria());
 		}
 		
-		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(otgffana.getFana_Formato())
-				.get(otgffana , operationParams);
+		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(executionFlowData.getFlowFormato())
+				.get(executionFlowData , operationParams);
 		
 		operationParams.setLibrary(library);
 		flow.addOperations(conversionOperations);
@@ -407,9 +406,9 @@ public class FlowBuilder {
 		
 	}
 	
-	public FlowBuilder conversion(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(otgffana.getFana_Formato())
-				.get(otgffana, operationParams);
+	public FlowBuilder conversion(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(executionFlowData.getFlowFormato())
+				.get(executionFlowData, operationParams);
 		flow.addOperations(conversionOperations);
 		return this;
 	}
@@ -419,15 +418,15 @@ public class FlowBuilder {
 		ZIP("ZIP") {
 
 			@Override
-			public Operation<ZipParam> get(Otgffana otgffana, OperationParams operationParams) {
+			public Operation<ZipParam> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
 				ConstraintDependentOperation<ZipParam, ResponseWrapper<ZipResponse>> db2CreateZip = new CreateZip();
 
 				ZipParam dbZipParam = new ZipParam();
 
 				/*
-				 * dbZipParam.setDestinations( otgffana.getFana_Folder() + "/" +
-				 * otgffana.getFana_File_Name() + Constants.ZIP_EXTENSION);
+				 * dbZipParam.setDestinations( executionFlowData.getFlowFolder() + "/" +
+				 * executionFlowData.getFlowFileName() + Constants.ZIP_EXTENSION);
 				 */
 
 				dbZipParam.setOperation(this);
@@ -436,8 +435,8 @@ public class FlowBuilder {
 				List<String> destinationFiles = new ArrayList<String>();
 				
 				for (String fileName : operationParams.getFileNames()) {
-					sourceFiles.add(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + fileName);
-					destinationFiles.add(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + fileName
+					sourceFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + fileName);
+					destinationFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + fileName
 							+ Constants.ZIP_EXTENSION);
 				}
 
@@ -445,21 +444,21 @@ public class FlowBuilder {
 				dbZipParam.setDestinationFiles(destinationFiles);
 
 				db2CreateZip.setOperationParams(operationParams);
-				db2CreateZip.setOtgffana(otgffana);
+				db2CreateZip.setOtgffana(executionFlowData);
 				db2CreateZip.setParameters(dbZipParam);
 
-				if (Constants.SI.equals(otgffana.getFana_Compression())
-						|| Constants.SPEDIZIONE.equals(otgffana.getFana_Compression())) {
+				if (Constants.SI.equals(executionFlowData.getFlowCompression())
+						|| Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
 					List<String> backupFileNames = new ArrayList<String>();
 					for (String fileName : operationParams.getFileNames()) {
 						backupFileNames.add(fileName + Constants.ZIP_EXTENSION);
 
 					}
 					operationParams.setBackupFiles(backupFileNames);
-					operationParams.setBackupFolder(otgffana.getFana_Folder());
+					operationParams.setBackupFolder(executionFlowData.getFlowFolder());
 
-					if (Constants.SPEDIZIONE.equals(otgffana.getFana_Compression())) {
-						operationParams.setTrasmissionFolder(otgffana.getFana_Folder());
+					if (Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
+						operationParams.setTrasmissionFolder(executionFlowData.getFlowFolder());
 						operationParams.setTrasmissionFiles(addZipPostfix(operationParams.getTrasmissionFiles()));
 						//operationParams.setFileNames(addZipPostfix(operationParams.getFileNames()));
 					}
@@ -474,29 +473,29 @@ public class FlowBuilder {
 		UNZIP("UNZIP") {
 
 			@Override
-			public Operation<ZipParam> get(Otgffana otgffana, OperationParams operationParams) {
+			public Operation<ZipParam> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				ConstraintDependentOperation<ZipParam, ResponseWrapper<ZipResponse>> db2CreateZip = new CreateZip();
 
 				ZipParam dbZipParam = new ZipParam();
 
-				dbZipParam.setDestinationFiles(Arrays.asList(otgffana.getFana_Folder()));
+				dbZipParam.setDestinationFiles(Arrays.asList(executionFlowData.getFlowFolder()));
 				dbZipParam.setOperation(this);
 				
 				List<String> sourceFiles = new ArrayList<String>(operationParams.getTrasmissionFiles().size());
 				
 				for (String trasmissionFileName : operationParams.getTrasmissionFiles()) {
-					sourceFiles.add(otgffana.getFana_Folder() + "/" + trasmissionFileName);
+					sourceFiles.add(executionFlowData.getFlowFolder() + "/" + trasmissionFileName);
 				}
 				dbZipParam.setSourceFiles(sourceFiles);
 
 				db2CreateZip.setOperationParams(operationParams);
-				db2CreateZip.setOtgffana(otgffana);
+				db2CreateZip.setOtgffana(executionFlowData);
 				db2CreateZip.setParameters(dbZipParam);
 
-				if (!Constants.NO.equals(otgffana.getFana_Compression())) {
+				if (!Constants.NO.equals(executionFlowData.getFlowCompression())) {
 
-					operationParams.setBackupFiles(Arrays.asList(otgffana.getFana_File_Name()));
-					operationParams.setBackupFolder(otgffana.getFana_Folder());
+					operationParams.setBackupFiles(Arrays.asList(executionFlowData.getFlowFileName()));
+					operationParams.setBackupFolder(executionFlowData.getFlowFolder());
 
 				}
 
@@ -515,7 +514,7 @@ public class FlowBuilder {
 			return code;
 		}
 
-		public abstract Operation<ZipParam> get(Otgffana otgffana, OperationParams operationParams);
+		public abstract Operation<ZipParam> get(ExecutionFlowData executionFlowData, OperationParams operationParams);
 		
 		protected List<String> addZipPostfix(List<String> fileNames) {
 			List<String> retList = new ArrayList<String>(fileNames.size());
@@ -532,7 +531,7 @@ public class FlowBuilder {
 
 		I {
 			@Override
-			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, Otgffana otgffana, OperationParams operationParams) {
+			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				DependentOperation<DbConversionParam> file2Db ;
 				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
 					file2Db = ConversionOperation.CSV.equals(conversionOperation) ? new File2Table() : new File2TableFixed();
@@ -544,46 +543,46 @@ public class FlowBuilder {
 				
 				//DependentOperation<DbConversionParam> file2Db2 = ConversionOperation.CSV.equals(conversionOperation) ? new File2Db() : new File2Db2Fixed();
 				file2Db.setParameters(dbConversionParam);
-				file2Db.setOtgffana(otgffana);
+				file2Db.setOtgffana(executionFlowData);
 				file2Db.setOperationParams(operationParams);
 				return file2Db;
 			}
 		},
 		O {
 			@Override
-			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, Otgffana otgffana, OperationParams operationParams) {
+			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				//TODO VALUTARE DI ESTENDERE A FILE2DBFIXED ANCHE PER I FLUSSI FIXED NON SU THEMA
-				String transferTypeCode = otgffana.getFana_Tipo_Trasferimento();
+				String transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
 				
-				boolean doCpytostmf = (TransferType.THEMA_SPAZIO.getCode().equals(transferTypeCode) || Constants.FIXED.contentEquals(otgffana.getFana_Delim_Record()))
-											&& ConversionOperation.FIXED.name().equals(otgffana.getFana_Formato());
+				boolean doCpytostmf = (TransferType.THEMA_SPAZIO.getCode().equals(transferTypeCode) || Constants.FIXED.contentEquals(executionFlowData.getFlowDelimRecord()))
+											&& ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato());
 				
 
 				ConstraintDependentOperation<DbConversionParam, Boolean> db2File;
 				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
-					db2File = ConversionOperation.FIXED.name().equals(otgffana.getFana_Formato()) ? new Table2FileFixed() : new Table2File();
+					db2File = ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato()) ? new Table2FileFixed() : new Table2File();
 					
 				} else {
 					db2File = doCpytostmf ? new Db2FileFixed() : new Db2File();
 					
 				}	
 				db2File.setOperationParams(operationParams);
-				db2File.setOtgffana(otgffana);
+				db2File.setOtgffana(executionFlowData);
 				db2File.setParameters(dbConversionParam);
 				return db2File;
 			}
 		};
 
-		public abstract Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, Otgffana otgffana, OperationParams operationParams);
+		public abstract Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams);
 	}
 
 	public enum ConversionOperation {
 
 		CSV {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				
-				CreateDbFileParam createDbFileParam = getCreateDbFileParam(otgffana, operationParams);
+				CreateDbFileParam createDbFileParam = getCreateDbFileParam(executionFlowData, operationParams);
 				
 				Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
 				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
@@ -595,37 +594,37 @@ public class FlowBuilder {
 				crtDbFile.setParameters(createDbFileParam);
 
 				DbConversionParam dbConversionParam = new DbConversionParam();
-				updateGenericAs400(otgffana, dbConversionParam);
+				updateGenericAs400(executionFlowData, dbConversionParam);
 				dbConversionParam.setLibrary(StringUtils.setDefault(operationParams.getLibrary(), Constants.LIBL));
-				dbConversionParam.setFile(otgffana.getFana_File());
-				dbConversionParam.setMember(otgffana.getFana_Membro());
+				dbConversionParam.setFile(executionFlowData.getFlowFile());
+				dbConversionParam.setMember(executionFlowData.getFlowMembro());
 				
 
 				// TODO Vedere se gestire data
-				dbConversionParam.setFolderIfs(otgffana.getFana_Folder());
+				dbConversionParam.setFolderIfs(executionFlowData.getFlowFolder());
 				dbConversionParam.setFileNameIfs(operationParams.getFileNames().get(0));
-				dbConversionParam.setRecordDelimiter(otgffana.getFana_Delim_Record());
-				dbConversionParam.setFieldDelimiter(otgffana.getFana_Delim_Campo());
-				dbConversionParam.setStringDelimiter(otgffana.getFana_Delim_Stringa());
-				dbConversionParam.setCodepage(otgffana.getFana_Codepage());
+				dbConversionParam.setRecordDelimiter(executionFlowData.getFlowDelimRecord());
+				dbConversionParam.setFieldDelimiter(executionFlowData.getFlowDelimCampo());
+				dbConversionParam.setStringDelimiter(executionFlowData.getFlowDelimStringa());
+				dbConversionParam.setCodepage(executionFlowData.getFlowCodepage());
 				dbConversionParam.setMemberOptionAddReplace(operationParams.getMemberOptionAddReplace());
-				dbConversionParam.setRemoveBlanks(otgffana.getFana_Rimoz_Spazi());
-				dbConversionParam.setFromCcsid(otgffana.getFana_From_Ccsid());
-				dbConversionParam.setColumnName(otgffana.getFana_Agg_Nomi_Col());
-				dbConversionParam.setFieldFilling(otgffana.getFana_Riemp_Campo());
-				dbConversionParam.setReplaceNullVal(otgffana.getFana_Sost_Val_Null());
-				dbConversionParam.setRemoveColName(otgffana.getFana_Elim_Nom_Col());
+				dbConversionParam.setRemoveBlanks(executionFlowData.getFlowRimozSpazi());
+				dbConversionParam.setFromCcsid(executionFlowData.getFlowFromCcsid());
+				dbConversionParam.setColumnName(executionFlowData.getFlowAggNomiCol());
+				dbConversionParam.setFieldFilling(executionFlowData.getFlowRiempCampo());
+				dbConversionParam.setReplaceNullVal(executionFlowData.getFlowSostValNull());
+				dbConversionParam.setRemoveColName(executionFlowData.getFlowElimNomCol());
 				
 				//Controllo CSV format IT
 				String csvFormat = PropertiesUtils.get(Constants.CSV_FORMAT);
 				
-				if(!StringUtils.isNullOrEmpty(otgffana.getFana_Internaz())) {
-					if(Constants.CSV_FORMAT_IT.equals(otgffana.getFana_Internaz())) {
-						if(Constants.COMMA.equals(otgffana.getFana_Delim_Campo())) 
+				if(!StringUtils.isNullOrEmpty(executionFlowData.getFlowInternaz())) {
+					if(Constants.CSV_FORMAT_IT.equals(executionFlowData.getFlowInternaz())) {
+						if(Constants.COMMA.equals(executionFlowData.getFlowDelimCampo())) 
 							throw new ParameterException("String delimiter can't be , if csv format of Fana_Internaz is IT");
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
-					if(Constants.CSV_FORMAT_NO.equals(otgffana.getFana_Internaz())
+					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
 						&& Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
@@ -639,10 +638,10 @@ public class FlowBuilder {
 				}
 					
 				
-				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.valueOf(otgffana.getFana_Direzione()).get(this, dbConversionParam, otgffana, operationParams);
+				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
 				List<Operation<?>> ret = new ArrayList<Operation<?>>();
 				
-				if(!Constants.OUTBOUND.equals(otgffana.getFana_Direzione()) && !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent())
+				if(!Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent())
 				{
 					ret.add(crtDbFile);
 				}
@@ -655,48 +654,48 @@ public class FlowBuilder {
 		},
 		FIXED {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
+			public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 
 				DbConversionParam dbConversionParam = new DbConversionParam();
-				updateGenericAs400(otgffana, dbConversionParam);
+				updateGenericAs400(executionFlowData, dbConversionParam);
 
 				dbConversionParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 				//se è remote allora la libreria non è qtemp ma lo schema principale se non è specificata nelle proprerties una libreria temporanea
 				if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {				
-					dbConversionParam.setLibrary(otgffana.getFana_Libreria());
+					dbConversionParam.setLibrary(executionFlowData.getFlowLibreria());
 				}
 								
-				dbConversionParam.setFile(otgffana.getFana_File());
-				dbConversionParam.setMember(otgffana.getFana_Membro());
+				dbConversionParam.setFile(executionFlowData.getFlowFile());
+				dbConversionParam.setMember(executionFlowData.getFlowMembro());
 				
 				
 				
 				// TODO Vedere se gestire data
-				dbConversionParam.setFolderIfs(otgffana.getFana_Folder());
+				dbConversionParam.setFolderIfs(executionFlowData.getFlowFolder());
 				dbConversionParam.setFileNameIfs(operationParams.getFileNames().get(0));
 				// dbConversionParam.setFrom_Ccsid("*FILE");
-				dbConversionParam.setRecordDelimiter(otgffana.getFana_Delim_Record());
-				dbConversionParam.setStringDelimiter(otgffana.getFana_Delim_Stringa());
-				dbConversionParam.setCodepage(otgffana.getFana_Codepage());
+				dbConversionParam.setRecordDelimiter(executionFlowData.getFlowDelimRecord());
+				dbConversionParam.setStringDelimiter(executionFlowData.getFlowDelimStringa());
+				dbConversionParam.setCodepage(executionFlowData.getFlowCodepage());
 				dbConversionParam.setMemberOptionAddReplace(operationParams.getMemberOptionAddReplace());
-				dbConversionParam.setFromCcsid(otgffana.getFana_From_Ccsid());
-				dbConversionParam.setColumnName(otgffana.getFana_Agg_Nomi_Col());
-				dbConversionParam.setFieldFilling(otgffana.getFana_Riemp_Campo());
-				dbConversionParam.setReplaceNullVal(otgffana.getFana_Sost_Val_Null());
-				dbConversionParam.setRemoveColName(otgffana.getFana_Elim_Nom_Col());
+				dbConversionParam.setFromCcsid(executionFlowData.getFlowFromCcsid());
+				dbConversionParam.setColumnName(executionFlowData.getFlowAggNomiCol());
+				dbConversionParam.setFieldFilling(executionFlowData.getFlowRiempCampo());
+				dbConversionParam.setReplaceNullVal(executionFlowData.getFlowSostValNull());
+				dbConversionParam.setRemoveColName(executionFlowData.getFlowElimNomCol());
 				
-				if(Constants.FIXED.equals(otgffana.getFana_Delim_Record())) {
+				if(Constants.FIXED.equals(executionFlowData.getFlowDelimRecord())) {
 					dbConversionParam.setTabexpn(Constants.NO_AS400);
 				}
 				
 				//aggiunto per gestire la conversione db anche per i fixed
-				if(!StringUtils.isNullOrEmpty(otgffana.getFana_Internaz())) {
-					if(Constants.CSV_FORMAT_IT.equals(otgffana.getFana_Internaz())) {
-						if(Constants.COMMA.equals(otgffana.getFana_Delim_Campo())) 
+				if(!StringUtils.isNullOrEmpty(executionFlowData.getFlowInternaz())) {
+					if(Constants.CSV_FORMAT_IT.equals(executionFlowData.getFlowInternaz())) {
+						if(Constants.COMMA.equals(executionFlowData.getFlowDelimCampo())) 
 							throw new ParameterException("String delimiter can't be , if csv format of Fana_Internaz is IT");
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
-					if(Constants.CSV_FORMAT_NO.equals(otgffana.getFana_Internaz())
+					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
 							&& Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
@@ -709,16 +708,16 @@ public class FlowBuilder {
 				
 				CreateDbFileParam createDbFileParam = new CreateDbFileParam();
 				createDbFileParam.setLibreria(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
-				createDbFileParam.setFile(otgffana.getFana_File());
-				createDbFileParam.setRecordLength(otgffana.getFana_Lunghezza_Fl_Flat());
+				createDbFileParam.setFile(executionFlowData.getFlowFile());
+				createDbFileParam.setRecordLength(executionFlowData.getFlowLunghezzaFlFlat());
 				
 				DependentOperation<CopyFileParam> copyFile = new CopyFile();
 				
 				CopyFileParam copyFileParam= new CopyFileParam();
 				
-				updateGenericAs400(otgffana, copyFileParam);
+				updateGenericAs400(executionFlowData, copyFileParam);
 				
-				copyFileParam.setMbrOpt(otgffana.getFana_Mod_Acquisizione());
+				copyFileParam.setMbrOpt(executionFlowData.getFlowModAcquisizione());
 				
 				copyFileParam.setFormatOption(Constants.NOCHECK);
 				
@@ -727,29 +726,29 @@ public class FlowBuilder {
 				
 				//se non è remote creo il file temporaneo con crtpf e poi lo popolerò con cpyf
 				if(!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {				
-					ret.add(getCreateDbFile(otgffana, createDbFileParam));
+					ret.add(getCreateDbFile(executionFlowData, createDbFileParam));
 				}
 				
 				
-				copyFileParam.setFromFile(otgffana.getFana_File());
-				copyFileParam.setToFile(otgffana.getFana_File());
+				copyFileParam.setFromFile(executionFlowData.getFlowFile());
+				copyFileParam.setToFile(executionFlowData.getFlowFile());
 				
-				if (Constants.INBOUND.equals(otgffana.getFana_Direzione())) {
+				if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 					copyFileParam.setFromLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
-					copyFileParam.setToLibrary(otgffana.getFana_Libreria());
+					copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
 					
-					ret.add(ConversionDirection.valueOf(otgffana.getFana_Direzione()).get(this, dbConversionParam, otgffana, operationParams));
+					ret.add(ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
 					if (!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent())
 							ret.add(copyFile);
-				} else if (Constants.OUTBOUND.equals(otgffana.getFana_Direzione())) {	
-					copyFileParam.setFromLibrary(otgffana.getFana_Libreria());					
+				} else if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
+					copyFileParam.setFromLibrary(executionFlowData.getFlowLibreria());					
 					copyFileParam.setToLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					
 					if(!operationParams.getSkipCpyFrmFile() && !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
 						ret.add(copyFile);
 					}
 					
-					ret.add(ConversionDirection.valueOf(otgffana.getFana_Direzione()).get(this, dbConversionParam, otgffana, operationParams));
+					ret.add(ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
 				}
 				
 				return ret;
@@ -758,7 +757,7 @@ public class FlowBuilder {
 			
 		};
 
-		public abstract List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception;
+		public abstract List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
 
 		
 	}
@@ -839,10 +838,10 @@ public class FlowBuilder {
 		SFTP {
 
 			@Override
-			public Operation<TrasmissionParams> get(Otgffana otgffana, OperationParams operationParams) {
-				TrasmissionParams trasmissionParams = getSftpParams(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), otgffana, operationParams);
+			public Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+				TrasmissionParams trasmissionParams = getSftpParams(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), executionFlowData, operationParams);
 				trasmissionParams.setLaunchErrorIfNoFileFound(true);
-				return getSftp(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), otgffana, operationParams, trasmissionParams);
+				return getSftp(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), executionFlowData, operationParams, trasmissionParams);
 			}
 
 		},
@@ -850,46 +849,46 @@ public class FlowBuilder {
 		FTP {
 
 			@Override
-			public Operation<TrasmissionParams> get(Otgffana otgffana, OperationParams operationParams) {
-				TrasmissionParams trasmissionParams = getFtpParams(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), otgffana, operationParams);
+			public Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+				TrasmissionParams trasmissionParams = getFtpParams(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), executionFlowData, operationParams);
 				trasmissionParams.setLaunchErrorIfNoFileFound(true);
-				return getFtp(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), otgffana, operationParams, trasmissionParams);
+				return getFtp(operationParams.getSempahoreFile(), operationParams.getSempahoreFile(), executionFlowData, operationParams, trasmissionParams);
 			}
 
 		};
 
-		public abstract Operation<TrasmissionParams> get(Otgffana otgffana, OperationParams operationParams);
+		public abstract Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams);
 	}
 
 	public enum TransferTypeOperation {
 		THEMA(TransferType.THEMA_SPAZIO) {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
-				return getThemaSpazio(otgffana, operationParams);
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+				return getThemaSpazio(executionFlowData, operationParams);
 			}
 		},
 		
 		CFT(TransferType.CFT) {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
-				return cftSend(otgffana, operationParams);
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+				return cftSend(executionFlowData, operationParams);
 			}
 		},
 		
 		MAIL(TransferType.MAIL) {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
-				return sendMail(otgffana, operationParams, otgffana.getFana_Lettera_Flusso(), operationParams.getFileNames());
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+				return flowBuilder.sendMail(executionFlowData, operationParams, executionFlowData.getFlowLetteraFlusso(), operationParams.getFileNames());
 			}
 		},
 		
 		TRASMISSION(TransferType.TRANSMISSION) {
 			@Override
-			public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception {
-				if (StringUtils.isNullOrEmpty(otgffana.getFana_Tipologia_Conn())) {
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+				if (StringUtils.isNullOrEmpty(executionFlowData.getFlowTipologiaConn())) {
 					return new ArrayList<Operation<?>>();
 				} else {
-					return TrasmissionOperation.valueOf(otgffana.getFana_Tipologia_Conn()).get(otgffana, operationParams);
+					return TrasmissionOperation.valueOf(executionFlowData.getFlowTipologiaConn()).get(executionFlowData, operationParams);
 				}
 			}
 		};
@@ -904,7 +903,7 @@ public class FlowBuilder {
 			return transferType;
 		}
 		
-		public abstract List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) throws Exception;
+		public abstract List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
 		
 		public static TransferTypeOperation getTransferTypeOperation(TransferType transferType) {
 			for (TransferTypeOperation transferTypeOperation : TransferTypeOperation.values()) {
@@ -923,8 +922,8 @@ public class FlowBuilder {
 		SFTP {
 
 			@Override
-			public Operation<?> get(String remotefileName, String trasmissionFile, Otgffana otgffana, OperationParams operationParams) {
-				return getSftp(remotefileName, trasmissionFile, otgffana, operationParams);
+			public Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams) {
+				return getSftp(remotefileName, trasmissionFile, executionFlowData, operationParams);
 			}
 
 		},
@@ -932,78 +931,78 @@ public class FlowBuilder {
 		FTP {
 
 			@Override
-			protected Operation<?> get(String remotefileName, String trasmissionFile, Otgffana otgffana, OperationParams operationParams) {
-				return getFtp(remotefileName, trasmissionFile, otgffana, operationParams);
+			protected Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams) {
+				return getFtp(remotefileName, trasmissionFile, executionFlowData, operationParams);
 			}
 
 		};
 
-		public List<Operation<?>> get(Otgffana otgffana, OperationParams operationParams) {
+		public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 			List<Operation<?>> trasmOperation = new ArrayList<Operation<?>>();
 			
 			for (int i = 0; i < operationParams.getTrasmissionFiles().size(); i++) {
 				int remoteTrasmissionFileIndex = operationParams.getRemoteTrasmissionFiles().size() == 1 ? 0 : i; 
 				String remoteTrasmissionFile = operationParams.getRemoteTrasmissionFiles().get(remoteTrasmissionFileIndex);
-				trasmOperation.add(this.get(remoteTrasmissionFile, operationParams.getTrasmissionFiles().get(i), otgffana, operationParams));
+				trasmOperation.add(this.get(remoteTrasmissionFile, operationParams.getTrasmissionFiles().get(i), executionFlowData, operationParams));
 			}
 			
 			return trasmOperation;
 		}
 		
-		protected abstract Operation<?> get(String remotefileName, String trasmissionFile, Otgffana otgffana, OperationParams operationParams);
+		protected abstract Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams);
 
 	}
 	
-	private static Operation<CreateDbFileParam> getCreateDbFile(Otgffana otgffana, CreateDbFileParam createDbFileParam) {
+	private static Operation<CreateDbFileParam> getCreateDbFile(ExecutionFlowData executionFlowData, CreateDbFileParam createDbFileParam) {
 		Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
-		updateGenericAs400(otgffana, createDbFileParam);
+		updateGenericAs400(executionFlowData, createDbFileParam);
 		crtDbFile.setParameters(createDbFileParam);		
 		return crtDbFile;
 	}
 	
-	public FlowBuilder createDbFile(Otgffana otgffana, OperationParams operationParams) {
-		flow.addOperation(getCreateDbFile(otgffana, getCreateDbFileParam(otgffana, operationParams)));
+	public FlowBuilder createDbFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+		flow.addOperation(getCreateDbFile(executionFlowData, getCreateDbFileParam(executionFlowData, operationParams)));
 
 		return this;
 	}
 	
-	protected static CreateDbFileParam getCreateDbFileParam(Otgffana otgffana, OperationParams operationParams) {
+	protected static CreateDbFileParam getCreateDbFileParam(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		CreateDbFileParam createDbFileParam = new CreateDbFileParam();
 
-		updateGenericAs400(otgffana, createDbFileParam);
-		createDbFileParam.setFile(otgffana.getFana_File());
-		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), otgffana.getFana_Libreria()));
-		createDbFileParam.setSrcFile(otgffana.getFana_File_Source());
-		createDbFileParam.setSrcLibreria(otgffana.getFana_Lib_Source());
-		createDbFileParam.setSrcMembro(otgffana.getFana_Membro_Source());
+		updateGenericAs400(executionFlowData, createDbFileParam);
+		createDbFileParam.setFile(executionFlowData.getFlowFile());
+		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), executionFlowData.getFlowLibreria()));
+		createDbFileParam.setSrcFile(executionFlowData.getFlowFileSource());
+		createDbFileParam.setSrcLibreria(executionFlowData.getFlowLibSource());
+		createDbFileParam.setSrcMembro(executionFlowData.getFlowMembroSource());
 		
 		return createDbFileParam;
 	}
 
 
-	public FlowBuilder trasmit(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		if (Constants.INBOUND.equals(otgffana.getFana_Direzione())) {
-			addSemaphore(otgffana, operationParams);
-			addDelayIntegrityCheck(otgffana, operationParams);
-			addTrasmit(otgffana, operationParams);
+	public FlowBuilder trasmit(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+			addSemaphore(executionFlowData, operationParams);
+			addDelayIntegrityCheck(executionFlowData, operationParams);
+			addTrasmit(executionFlowData, operationParams);
 		} else {
-			addTrasmit(otgffana, operationParams);
-			addDelayIntegrityCheck(otgffana, operationParams);
-			addSemaphore(otgffana, operationParams);
+			addTrasmit(executionFlowData, operationParams);
+			addDelayIntegrityCheck(executionFlowData, operationParams);
+			addSemaphore(executionFlowData, operationParams);
 		}
 		
 		return this;
 	}
 	
-	private void addDelayIntegrityCheck(Otgffana otgffana, OperationParams operationParams) {
-		if (Constants.SI.equals(otgffana.getFana_Intergiry_Check())
-				&& !StringUtils.isNullOrEmpty(otgffana.getFana_Fl_Name_Semaforo()) &&
-					TransferType.TRANSMISSION.getCode().equals(otgffana.getFana_Tipo_Trasferimento()) &&
-					BigDecimal.ZERO.compareTo(otgffana.getFana_Delay_Semaforo()) != 0) {
+	private void addDelayIntegrityCheck(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
+					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento()) &&
+					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
 			
 			DelayIntegrityCheckParams delayParams = new DelayIntegrityCheckParams();
-			updateGenericAs400(otgffana, delayParams);
-			delayParams.setDelaySecond(otgffana.getFana_Delay_Semaforo());
+			updateGenericAs400(executionFlowData, delayParams);
+			delayParams.setDelaySecond(executionFlowData.getFlowDelaySemaforo());
 			Operation<DelayIntegrityCheckParams> dleayOperation = new DelayIntegrityCheck();
 			dleayOperation.setParameters(delayParams);
 			
@@ -1011,20 +1010,21 @@ public class FlowBuilder {
 		}
 	}
 	
-	private void addTrasmit(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		String transferTypeCode = otgffana.getFana_Tipo_Trasferimento();
+	private void addTrasmit(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		String transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
 		
 		TransferType transferType = TransferType.getTransferType(transferTypeCode);
 		TransferTypeOperation transferTypeOperation = TransferTypeOperation.getTransferTypeOperation(transferType);
 		
-		List<Operation<?>> trasmissionOperations = transferTypeOperation.get(otgffana, operationParams);
+		List<Operation<?>> trasmissionOperations = transferTypeOperation.get(this, executionFlowData, operationParams);
 		flow.addOperations(trasmissionOperations);
 	}
 	
-	private static SpFileParam getThemaSpazioParam(String trasmissionFile, Otgffana otgffana, Otgffanasp otgffanasp) {
+	/*
+	private static SpFileParam getThemaSpazioParam(String trasmissionFile, ExecutionFlowData executionFlowData, Otgffanasp otgffanasp) {
 		SpFileParam fileParam = new SpFileParam();
 		
-		updateGenericAs400(otgffana, fileParam);
+		updateGenericAs400(executionFlowData, fileParam);
 		fileParam.setCcsid(otgffanasp.getOtgfanasp_Ccsid());
 		fileParam.setCorrid(otgffanasp.getOtgfanasp_Corrid());
 		fileParam.setDbfenc(otgffanasp.getOtgfanasp_Dbfenc());
@@ -1037,147 +1037,148 @@ public class FlowBuilder {
 		fileParam.setSpuserid(otgffanasp.getOtgfanasp_Spuserid());
 		
 		if (Constants.SI.equals(otgffanasp.getOtgfanasp_Direct_From_Db())) {
-			fileParam.setFile((StringUtils.isNullOrEmpty(otgffana.getFana_Libreria()) ? "" : otgffana.getFana_Libreria() + Constants.PATH_DELIMITER)
-					+ otgffana.getFana_File());
-			fileParam.setMbr(StringUtils.isNullOrEmpty(otgffana.getFana_Membro()) ? Constants.FIRST : otgffana.getFana_Membro());
+			fileParam.setFile((StringUtils.isNullOrEmpty(executionFlowData.getFlowLibreria()) ? "" : executionFlowData.getFlowLibreria() + Constants.PATH_DELIMITER)
+					+ executionFlowData.getFlowFile());
+			fileParam.setMbr(StringUtils.isNullOrEmpty(executionFlowData.getFlowMembro()) ? Constants.FIRST : executionFlowData.getFlowMembro());
 			fileParam.setDbfenc(otgffanasp.getOtgfanasp_StmEnc());
 		} else {
-			fileParam.setStmf(otgffana.getFana_Folder() + Constants.PATH_DELIMITER + trasmissionFile);
+			fileParam.setStmf(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + trasmissionFile);
 			fileParam.setStmdb(otgffanasp.getOtgfanasp_Stmdb());
 			fileParam.setStmenc(otgffanasp.getOtgfanasp_StmEnc());
 		}
 		
 		fileParam.setStmeor(otgffanasp.getOtgfanasp_Stmeor());
 		fileParam.setStmtype(otgffanasp.getOtgfanasp_Stmtype());		
-		fileParam.setStmrecl(otgffana.getFana_Lunghezza_Fl_Flat().toString());
+		fileParam.setStmrecl(executionFlowData.getFlowLunghezzaFlFlat().toString());
 		fileParam.setStmfopt(otgffanasp.getOtgfanasp_Rep_Add());
 		fileParam.setUsrcls(otgffanasp.getOtgfanasp_Usrcls());		
 		fileParam.setSpfentry(otgffanasp.getOtgfanasp_Acq_Fl_Let());
 		
-		fileParam.setLaunchErrorIfNoFileFound(Constants.GESTOREFLUSSI.equals(otgffana.getFana_Esistenza_File()));
-
+		fileParam.setLaunchErrorIfNoFileFound(Constants.GESTOREFLUSSI.equals(executionFlowData.getFlowEsistenzaFile()));
+		
 		return fileParam;
 	}
+	*/
 
-	private void addSemaphore(Otgffana otgffana, OperationParams operationParams) {
-		if (Constants.SI.equals(otgffana.getFana_Intergiry_Check())
-				&& !StringUtils.isNullOrEmpty(otgffana.getFana_Fl_Name_Semaforo()) &&
-					TransferType.TRANSMISSION.getCode().equals(otgffana.getFana_Tipo_Trasferimento())) {
+	private void addSemaphore(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
+					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento())) {
 			
 			Operation<TrasmissionParams> trasmissionOperation = SemaphoreOperation
-					.valueOf(otgffana.getFana_Tipologia_Conn()).get(otgffana, operationParams);
+					.valueOf(executionFlowData.getFlowTipologiaConn()).get(executionFlowData, operationParams);
 			flow.addOperation(trasmissionOperation);
 		}
 	}
 
-	private static TrasmissionParams getFtpParams(String remoteFileName, String fileName, Otgffana otgffana,
+	private static TrasmissionParams getFtpParams(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams) {
 		TrasmissionParams dbTrasmissionParams = new TrasmissionParams();
 
-		dbTrasmissionParams.setHost(otgffana.getFana_Host());
-		dbTrasmissionParams.setPort(otgffana.getFana_Port());
+		dbTrasmissionParams.setHost(executionFlowData.getFlowHost());
+		dbTrasmissionParams.setPort(executionFlowData.getFlowPort());
 		dbTrasmissionParams.setLocal_Folder(
-				StringUtils.setDefault(operationParams.getTrasmissionFolder(), otgffana.getFana_Folder()));
+				StringUtils.setDefault(operationParams.getTrasmissionFolder(), executionFlowData.getFlowFolder()));
 		dbTrasmissionParams.setLocal_File_Name(fileName);
-		dbTrasmissionParams.setRemote_Folder(otgffana.getFana_Remote_Folder());
+		dbTrasmissionParams.setRemote_Folder(executionFlowData.getFlowRemoteFolder());
 		dbTrasmissionParams.setRemote_File_Name(remoteFileName);
-		dbTrasmissionParams.setUser(otgffana.getFana_Utente());
-		dbTrasmissionParams.setPassword(otgffana.getFana_Password());
-		dbTrasmissionParams.setKnown_Hosts_File(otgffana.getFana_Known_Ht_Fl());
-		dbTrasmissionParams.setKeyFile(otgffana.getFana_Key_Fl());
-		dbTrasmissionParams.setPassive_mode(otgffana.getFana_Modalita_Passiva());
-		dbTrasmissionParams.setRetryCount(otgffana.getFana_Num_Tenta_Ricez());
-		dbTrasmissionParams.setRetryIntervall(otgffana.getFana_Intervallo_Retry());
-		dbTrasmissionParams.setFtp_secure(otgffana.getFana_Ftp_Secure());
-		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(otgffana.getFana_Esistenza_File()));
+		dbTrasmissionParams.setUser(executionFlowData.getFlowUtente());
+		dbTrasmissionParams.setPassword(executionFlowData.getFlowPassword());
+		dbTrasmissionParams.setKnown_Hosts_File(executionFlowData.getFlowKnownHtFl());
+		dbTrasmissionParams.setKeyFile(executionFlowData.getFlowKeyFl());
+		dbTrasmissionParams.setPassive_mode(executionFlowData.getFlowModalitaPassiva());
+		dbTrasmissionParams.setRetryCount(executionFlowData.getFlowNumTentaRicez());
+		dbTrasmissionParams.setRetryIntervall(executionFlowData.getFlowIntervalloRetry());
+		dbTrasmissionParams.setFtp_secure(executionFlowData.getFlowFtpSecure());
+		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
 
-		if(Constants.INBOUND.equals(otgffana.getFana_Direzione()) && Constants.SI.equals(otgffana.getFana_Cancella_File())) {
+		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 		
 		return dbTrasmissionParams;
 	}
 	
-	private static Operation<TrasmissionParams> getFtp(String remoteFileName, String fileName, Otgffana otgffana,
+	private static Operation<TrasmissionParams> getFtp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams) {
-		TrasmissionParams trasmissionParams = getFtpParams(remoteFileName, fileName, otgffana, operationParams);
-		return getFtp(remoteFileName, fileName, otgffana, operationParams, trasmissionParams);
+		TrasmissionParams trasmissionParams = getFtpParams(remoteFileName, fileName, executionFlowData, operationParams);
+		return getFtp(remoteFileName, fileName, executionFlowData, operationParams, trasmissionParams);
 	}
 	
-	private static Operation<TrasmissionParams> getFtp(String remoteFileName, String fileName, Otgffana otgffana,
+	private static Operation<TrasmissionParams> getFtp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams, TrasmissionParams trasmissionParams) {
-		return FtpDirection.valueOf(otgffana.getFana_Direzione()).get(trasmissionParams, operationParams);
+		return FtpDirection.valueOf(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
 	}
 
-	private static TrasmissionParams getSftpParams(String remoteFileName, String fileName, Otgffana otgffana,
+	private static TrasmissionParams getSftpParams(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams) {
 		TrasmissionParams dbTrasmissionParams = new TrasmissionParams();
 
-		dbTrasmissionParams.setHost(otgffana.getFana_Utente() + Constants.AT + otgffana.getFana_Host());
-		dbTrasmissionParams.setPort(otgffana.getFana_Port());
-		dbTrasmissionParams.setRemote_Folder(otgffana.getFana_Remote_Folder());
+		dbTrasmissionParams.setHost(executionFlowData.getFlowUtente() + Constants.AT + executionFlowData.getFlowHost());
+		dbTrasmissionParams.setPort(executionFlowData.getFlowPort());
+		dbTrasmissionParams.setRemote_Folder(executionFlowData.getFlowRemoteFolder());
 		dbTrasmissionParams.setRemote_File_Name(remoteFileName);
-		dbTrasmissionParams.setUser(otgffana.getFana_Utente());
+		dbTrasmissionParams.setUser(executionFlowData.getFlowUtente());
 
-		if (!StringUtils.isNullOrEmpty(otgffana.getFana_Known_Ht_Fl())) {
-			dbTrasmissionParams.setKnown_Hosts_File(otgffana.getFana_Known_Ht_Fl());
-			dbTrasmissionParams.setKeyFile(otgffana.getFana_Key_Fl());
-			dbTrasmissionParams.setHostKeyAlias(otgffana.getFana_Utente_Sftp());
-		} else if (!StringUtils.isNullOrEmpty(otgffana.getFana_Utente_Sftp())) {
+		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowKnownHtFl())) {
+			dbTrasmissionParams.setKnown_Hosts_File(executionFlowData.getFlowKnownHtFl());
+			dbTrasmissionParams.setKeyFile(executionFlowData.getFlowKeyFl());
+			dbTrasmissionParams.setHostKeyAlias(executionFlowData.getFlowUtenteSftp());
+		} else if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowUtenteSftp())) {
 			dbTrasmissionParams.setKnown_Hosts_File(Constants.HOME + Constants.PATH_DELIMITER
-					+ otgffana.getFana_Utente_Sftp() + Constants.PATH_DELIMITER + Constants.KNOWN_HOSTS_FILE);
-			dbTrasmissionParams.setKeyFile(Constants.HOME + Constants.PATH_DELIMITER + otgffana.getFana_Utente_Sftp()
+					+ executionFlowData.getFlowUtenteSftp() + Constants.PATH_DELIMITER + Constants.KNOWN_HOSTS_FILE);
+			dbTrasmissionParams.setKeyFile(Constants.HOME + Constants.PATH_DELIMITER + executionFlowData.getFlowUtenteSftp()
 					+ Constants.PATH_DELIMITER + Constants.KEY_FILE);
 		}
 		
 
-		dbTrasmissionParams.setUser_Sftp(otgffana.getFana_Utente_Sftp());
+		dbTrasmissionParams.setUser_Sftp(executionFlowData.getFlowUtenteSftp());
 
-		dbTrasmissionParams.setPassword(otgffana.getFana_Password());
+		dbTrasmissionParams.setPassword(executionFlowData.getFlowPassword());
 
 		dbTrasmissionParams.setLocal_Folder(
-				StringUtils.setDefault(operationParams.getTrasmissionFolder(), otgffana.getFana_Folder()));
+				StringUtils.setDefault(operationParams.getTrasmissionFolder(), executionFlowData.getFlowFolder()));
 		dbTrasmissionParams.setLocal_File_Name(fileName);
-		dbTrasmissionParams.setRetryCount(otgffana.getFana_Num_Tenta_Ricez());
-		dbTrasmissionParams.setRetryIntervall(otgffana.getFana_Intervallo_Retry());
-		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(otgffana.getFana_Esistenza_File()));
+		dbTrasmissionParams.setRetryCount(executionFlowData.getFlowNumTentaRicez());
+		dbTrasmissionParams.setRetryIntervall(executionFlowData.getFlowIntervalloRetry());
+		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
 		
-		if(Constants.INBOUND.equals(otgffana.getFana_Direzione()) && Constants.SI.equals(otgffana.getFana_Cancella_File())) {
+		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 
 		return dbTrasmissionParams;
 	}
 	
-	private static Operation<TrasmissionParams> getSftp(String remoteFileName, String fileName, Otgffana otgffana,
+	private static Operation<TrasmissionParams> getSftp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams) {
-		TrasmissionParams trasmissionParams = getSftpParams(remoteFileName, fileName, otgffana, operationParams);
-		return getSftp(remoteFileName, fileName, otgffana, operationParams, trasmissionParams);
+		TrasmissionParams trasmissionParams = getSftpParams(remoteFileName, fileName, executionFlowData, operationParams);
+		return getSftp(remoteFileName, fileName, executionFlowData, operationParams, trasmissionParams);
 	}
 	
-	private static Operation<TrasmissionParams> getSftp(String remoteFileName, String fileName, Otgffana otgffana,
+	private static Operation<TrasmissionParams> getSftp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams, TrasmissionParams trasmissionParams) {
-		return SftpDirection.valueOf(otgffana.getFana_Direzione()).get(trasmissionParams, operationParams);
+		return SftpDirection.valueOf(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
 	}
 	
-	private static List<Operation<?>> getThemaSpazio(Otgffana otgffana, OperationParams operationParams) throws Exception {
+	private static List<Operation<?>> getThemaSpazio(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		List<Operation<?>> spazioOperations = new ArrayList<Operation<?>>(operationParams.getTrasmissionFiles().size());
-		Otgffanasp otgffanasp = OtgffanaspDAO.read(otgffana.getFana_Id());
+		/*Otgffanasp otgffanasp = OtgffanaspDAO.read(executionFlowData.getFlowId());
 		
 		operationParams.setBypassConversion(Constants.SI.equals(otgffanasp.getOtgfanasp_Direct_From_Db()));
 		
 		for (String trasmissionFile : operationParams.getTrasmissionFiles()) {
-			SpFileParam fileParam = getThemaSpazioParam(trasmissionFile, otgffana, otgffanasp);
-			spazioOperations.add(SpFileDirection.valueOf(otgffana.getFana_Direzione()).get(fileParam));
+			SpFileParam fileParam = getThemaSpazioParam(trasmissionFile, executionFlowData, otgffanasp);
+			spazioOperations.add(SpFileDirection.valueOf(executionFlowData.getFlowDirezione()).get(fileParam));
 		}
-		
+		*/
 		return spazioOperations;
 	}
 	
-	public static List<Operation<?>> cftSend(Otgffana otgffana, OperationParams operationParams) throws Exception {
-	    CftFileParam cftFileParam = new CftFileParam();
-	    Otgffanacf otgffanacf = OtgffanacfDAO.read(otgffana.getFana_Id());
-	    updateGenericAs400(otgffana, cftFileParam);
+	public static List<Operation<?>> cftSend(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+	    /*CftFileParam cftFileParam = new CftFileParam();
+	    Otgffanacf otgffanacf = OtgffanacfDAO.read(executionFlowData.getFlowId());
+	    updateGenericAs400(executionFlowData, cftFileParam);
 	    cftFileParam.setId(otgffanacf.getOtgfanacf_Id());
 	    cftFileParam.setPartner(otgffanacf.getOtgfanacf_Part());
 	    cftFileParam.setIdf(otgffanacf.getOtgfanacf_Idf());
@@ -1187,32 +1188,32 @@ public class FlowBuilder {
 	    cftFileParam.setExecE(otgffanacf.getOtgfanacf_Exece());
 	    cftFileParam.setnFname(otgffanacf.getOtgfanacf_Nfname());
 	    cftFileParam.setArchiFname(otgffanacf.getOtgfanacf_Archifname());
-	    cftFileParam.setLaunchErrorIfNoFileFound(Constants.GESTOREFLUSSI.equals(otgffana.getFana_Esistenza_File()));
+	    cftFileParam.setLaunchErrorIfNoFileFound(Constants.GESTOREFLUSSI.equals(executionFlowData.getFlowEsistenzaFile()));
 	    cftFileParam.setTransactionId(operationParams.getTransactionId());
 	    
 	    Operation<CftFileParam> cftSendOperation = new CftFileSnd();
 	    cftSendOperation.setParameters(cftFileParam);
-
+		*/
 	    // Ritorna come lista
 	    List<Operation<?>> operations = new ArrayList<>();
-	    operations.add(cftSendOperation);
+	    //operations.add(cftSendOperation);
 
 	    return operations;
 	}
 	
-	public FlowBuilder addDbProgressiveSequenceId(Otgffana otgffana, OperationParams operationParams) throws Exception {
-		if (Constants.DB2.equals(otgffana.getFana_Tip_Flusso())) {
+	public FlowBuilder addDbProgressiveSequenceId(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+		if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso())) {
 			//operationParams.setTrasmissionFiles(Arrays.asList(replaceLocal));
 			//operationParams.setFileNames
 			String fileName = operationParams.getFileNames().get(0);
 			if(fileName.matches(Constants.REGEXP_WILDCARD + Constants.$PR__REGEXP + Constants.REGEXP_WILDCARD)) {
-				BigDecimal startProgr = OtgffprogDAO.getNextProgressive(otgffana.getFana_Id(), FormatUtils.date(operationParams.getExecutionDate()), 
-						BigDecimal.valueOf(operationParams.getFileNames().size()));
+				BigDecimal startProgr = FlowIdNumeratorUtils.getNextId(executionFlowData.getFlowId(), FormatUtils.date(operationParams.getExecutionDate()), 
+						BigDecimal.valueOf(operationParams.getFileNames().size()), entityManager);
 				
 				fileName = getProgressiveWildcard(fileName, 0, startProgr, getProgressiveWildCardFillSize(fileName));
 				operationParams.setFileNames(Arrays.asList(fileName));
 				
-				if (!StringUtils.isNullOrEmpty(otgffana.getFana_Tip_Flusso())) {
+				if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowTipFlusso())) {
 					operationParams.setTrasmissionFiles(Arrays.asList(fileName));
 				} 
 			}
@@ -1222,8 +1223,8 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder addProgressiveSequenceId(Otgffana otgffana, OperationParams operationParams) {
-		BigDecimal fillSize = getProgressiveWildCardFillSize(otgffana.getFana_Remote_File_Name());
+	public FlowBuilder addProgressiveSequenceId(ExecutionFlowData executionFlowData, OperationParams operationParams) {
+		BigDecimal fillSize = getProgressiveWildCardFillSize(executionFlowData.getFlowRemoteFileName());
 		if(fillSize == null) {
 			return this;
 		}
@@ -1243,12 +1244,12 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	public FlowBuilder checkDb2Obj(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder checkDb2Obj(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkObjParam chkObjParam = new ChkObjParam();
-		updateGenericAs400(otgffana, chkObjParam);
-		chkObjParam.setObj(otgffana.getFana_File());
-		chkObjParam.setLibreria(otgffana.getFana_Libreria());
-		chkObjParam.setMbr(otgffana.getFana_Membro());
+		updateGenericAs400(executionFlowData, chkObjParam);
+		chkObjParam.setObj(executionFlowData.getFlowFile());
+		chkObjParam.setLibreria(executionFlowData.getFlowLibreria());
+		chkObjParam.setMbr(executionFlowData.getFlowMembro());
 		
 		DependentOperation<ChkObjParam> chOperation = new ChkObj();
 		chOperation.setParameters(chkObjParam);
@@ -1260,12 +1261,12 @@ public class FlowBuilder {
 		
 	}
 	
-	public FlowBuilder checkDbFileEmpty(Otgffana otgffana, OperationParams operationParams) {
+	public FlowBuilder checkDbFileEmpty(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkDbFileEmptyParam chkDbFileEmptyParam = new ChkDbFileEmptyParam();
 		
-		updateGenericAs400(otgffana, chkDbFileEmptyParam);
-		chkDbFileEmptyParam.setFile(otgffana.getFana_File());
-		chkDbFileEmptyParam.setLibreria(otgffana.getFana_Libreria());
+		updateGenericAs400(executionFlowData, chkDbFileEmptyParam);
+		chkDbFileEmptyParam.setFile(executionFlowData.getFlowFile());
+		chkDbFileEmptyParam.setLibreria(executionFlowData.getFlowLibreria());
 		
 		Operation<ChkDbFileEmptyParam> chOperation = new ChkDbFileEmpty();
 		chOperation.setParameters(chkDbFileEmptyParam);
