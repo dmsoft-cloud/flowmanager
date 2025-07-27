@@ -2,10 +2,16 @@ package it.dmsoft.flowmanager.agent.be.entities;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
 public class ScheduleDate {
 
+	@Id
+	@Column(length = 8)
 	private BigDecimal dataDa;
 	
+	@Column(length = 8)
 	private BigDecimal data;
 
 	public BigDecimal getDataDa() {

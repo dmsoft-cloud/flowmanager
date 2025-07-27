@@ -2,6 +2,9 @@ package it.dmsoft.flowmanager.agent.be.entities;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
 public class FlowHash {
 	public static enum OtgffhashCoulmn {
 
@@ -10,16 +13,19 @@ public class FlowHash {
 		OTGFHASH_FOOTPRINT
 	}
 
-	
-	private String hashFootprint;
-	private BigDecimal hashProgr_Logt;
+	@Id
+	@Column(length = 20)
 	private String hashId;
+	@Column(length = 64)
+	private String hashFootprint;
+	@Column(length = 12)
+	private BigDecimal hashProgrLogt;
 	
 	public BigDecimal getHashProgrLogt() {
-		return hashProgr_Logt;
+		return hashProgrLogt;
 	}
-	public void setHashProgrLogt(BigDecimal hashProgr_Logt) {
-		this.hashProgr_Logt = hashProgr_Logt;
+	public void setHashProgrLogt(BigDecimal hashProgrLogt) {
+		this.hashProgrLogt = hashProgrLogt;
 	}
 	public String getHashId() {
 		return hashId;
@@ -36,7 +42,7 @@ public class FlowHash {
 	
 	@Override
 	public String toString() {
-		return "Otgffhash [hashProgr_Logt=" + hashProgr_Logt + ", hashId=" + hashId
+		return "Otgffhash [hashProgr_Logt=" + hashProgrLogt + ", hashId=" + hashId
 				+ ", hashFootprint=" + hashFootprint + "]";
 	}
 

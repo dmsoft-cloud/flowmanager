@@ -1,5 +1,7 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
+import java.math.BigDecimal;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -8,6 +10,7 @@ import it.dmsoft.flowmanager.agent.be.entities.MailParms;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class ConfigUtils {	
 	
@@ -47,11 +50,11 @@ public class ConfigUtils {
 	public static MailParms getMailConfig() throws Exception {
 		
 		MailParms mp = new MailParms();
-		mp.setSmtp_host(PropertiesUtils.get(PropertiesConstants.SMTP_HOST));
-		mp.setSmtp_port(PropertiesUtils.get(PropertiesConstants.SMTP_PORT));
-		mp.setSmtp_user(PropertiesUtils.get(PropertiesConstants.SMTP_USER));
-		mp.setSmtp_password(PropertiesUtils.get(PropertiesConstants.SMTP_PASSWORD));
-		mp.setSmtp_secure(PropertiesUtils.get(PropertiesConstants.SMTP_SECURE));
+		mp.setSmtpHost(PropertiesUtils.get(PropertiesConstants.SMTP_HOST));
+		mp.setSmtpPort(new BigDecimal(PropertiesUtils.get(PropertiesConstants.SMTP_PORT)));
+		mp.setSmtpUser(PropertiesUtils.get(PropertiesConstants.SMTP_USER));
+		mp.setSmtpPassword(PropertiesUtils.get(PropertiesConstants.SMTP_PASSWORD));
+		mp.setSmtpSecure(YesNo.getYesNo(PropertiesUtils.get(PropertiesConstants.SMTP_SECURE)));
 		return mp ;
 	}
 	

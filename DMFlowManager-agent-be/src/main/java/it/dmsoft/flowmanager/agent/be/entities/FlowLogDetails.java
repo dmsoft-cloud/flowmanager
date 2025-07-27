@@ -3,6 +3,10 @@ package it.dmsoft.flowmanager.agent.be.entities;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import it.dmsoft.flowmanager.common.domain.Domains.Status;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
 public class FlowLogDetails {
 	public static enum OtgfflogdCoulmn {
 		
@@ -16,65 +20,61 @@ public class FlowLogDetails {
 	}
 	
 
-	public BigDecimal  otgflogd_Progr_Log;
-	public BigDecimal  otgflogd_Progr_Fase;
-	public String  	   otgflogd_Fase;
-	public Timestamp   otgflogd_Ts;
-	public String      otgflogd_Esito;
-	public String      otgflogd_Note;
-	
+	@Id
+	@Column(length = 12)
+	public BigDecimal logProgrLog;
+	@Column(length = 3)
+	public BigDecimal logProgrFase;
+	@Column(length = 10)
+	public String logFase;
+	public Timestamp logTs;
+	@Column(length = 2)
+	public Status logEsito;
+	@Column(length = 255)
+	public String logNote;
 	
 	public BigDecimal getLogDetProgrLog() {
-		return otgflogd_Progr_Log;
+		return logProgrLog;
 	}
-	public void setLogDetProgrLog(BigDecimal otgflogd_Progr_Log) {
-		this.otgflogd_Progr_Log = otgflogd_Progr_Log;
+	public void setLogDetProgrLog(BigDecimal logProgrLog) {
+		this.logProgrLog = logProgrLog;
 	}
 	public BigDecimal getLogDetProgrFase() {
-		return otgflogd_Progr_Fase;
+		return logProgrFase;
 	}
-	public void setLogDetProgrFase(BigDecimal otgflogd_Progr_Fase) {
-		this.otgflogd_Progr_Fase = otgflogd_Progr_Fase;
+	public void setLogDetProgrFase(BigDecimal logProgrFase) {
+		this.logProgrFase = logProgrFase;
 	}
 	public String getLogDetFase() {
-		return otgflogd_Fase;
+		return logFase;
 	}
-	public void setLogDetFase(String otgflogd_Fase) {
-		this.otgflogd_Fase = otgflogd_Fase;
+	public void setLogDetFase(String logFase) {
+		this.logFase = logFase;
 	}
 	public 	Timestamp getLogDetTs() {
-		return otgflogd_Ts;
+		return logTs;
 	}
-	public void setLogDetTs(Timestamp otgflogd_Ts) {
-		this.otgflogd_Ts = otgflogd_Ts;
+	public void setLogDetTs(Timestamp logTs) {
+		this.logTs = logTs;
 	}
-	public String getLogDetEsito() {
-		return otgflogd_Esito;
+	public Status getLogDetEsito() {
+		return logEsito;
 	}
-	public void setLogDetEsito(String otgflogd_Esito) {
-		this.otgflogd_Esito = otgflogd_Esito;
+	public void setLogDetEsito(Status logEsito) {
+		this.logEsito = logEsito;
 	}
 	public String getLogDetNote() {
-		return otgflogd_Note;
+		return logNote;
 	}
-	public void setLogDetNote(String otgflogd_Note) {
-		this.otgflogd_Note = otgflogd_Note;
+	public void setLogDetNote(String logNote) {
+		this.logNote = logNote;
 	}
 	
 	@Override
 	public String toString() {
-		return "Otgfflogd [otgflogd_Progr_Log=" + otgflogd_Progr_Log + ", otgflogd_Progr_Fase=" + otgflogd_Progr_Fase
-				+ ", otgflogd_Fase=" + otgflogd_Fase + ", otgflogd_Ts=" + otgflogd_Ts + ", otgflogd_Esito="
-				+ otgflogd_Esito + ", otgflogd_Note=" + otgflogd_Note + "]";
+		return "Otgfflogd [logProgrLog=" + logProgrLog + ", logProgrFase=" + logProgrFase
+				+ ", logFase=" + logFase + ", logTs=" + logTs + ", logEsito="
+				+ logEsito + ", logNote=" + logNote + "]";
 	}
 	
-	
-	
-	
-	
-
-	
-	
-	
-
 }

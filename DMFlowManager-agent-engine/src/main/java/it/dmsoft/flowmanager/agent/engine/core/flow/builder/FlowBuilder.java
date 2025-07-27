@@ -87,6 +87,7 @@ import it.dmsoft.flowmanager.agent.engine.mailclient.utility.Allegato;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
 import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -295,15 +296,12 @@ public class FlowBuilder {
 		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(Constants.SI::equals).isPresent()) {
 		if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {	
 			MailParms mp = ConfigUtils.getMailConfig();
-			sendMailParam.setSmtpUsername(mp.getSmtp_user());
-			sendMailParam.setSmtpPassword(mp.getSmtp_password());
+			sendMailParam.setSmtpUsername(mp.getSmtpUser());
+			sendMailParam.setSmtpPassword(mp.getSmtpPassword());
 			
-			sendMailParam.setPort(new BigDecimal(Optional.ofNullable(mp.getSmtp_port()).orElse("25")));
-			sendMailParam.setHostName(mp.getSmtp_host());
-			sendMailParam.setSecure( Optional.ofNullable(mp.getSmtp_secure())
-		            .map(String::trim) 
-		            .filter(Constants.SI::equals) 
-		            .isPresent());
+			sendMailParam.setPort(Optional.ofNullable(mp.getSmtpPort()).orElse(BigDecimal.valueOf(25)));
+			sendMailParam.setHostName(mp.getSmtpHost());
+			sendMailParam.setSecure(Optional.ofNullable(mp.getSmtpSecure()).orElse(YesNo.NO).getBool());
 		}
 		
 		sendMail.setParameters(sendMailParam);

@@ -3,6 +3,15 @@ package it.dmsoft.flowmanager.agent.be.entities;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
+import it.dmsoft.flowmanager.common.domain.Domains.Status;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
 public class FlowLog {
 	public static enum OtgfflogtCoulmn {
 
@@ -24,142 +33,141 @@ public class FlowLog {
 	}
 
 	//Auto increment
+	@Id
+	@Column(length = 12)
 	private BigDecimal logProgrLog;
-
+	@Column(length = 20)
 	private String logId;
-
 	private Timestamp logTsInizio;
-
 	private Timestamp logTsFine;
-
+	@Column(length = 2)
 	private String logEsito;
-
+	@Column(length = 64)
 	private String logUtente;
-
+	@Column(length = 64)
 	private String logPassword;
-
+	@Column(length = 10)
 	private String logCodInterfaccia;
-
-	private String logStato;
-
-	private String logTipFlusso;
-
-	private String logDirezione;
-
+	@Column(length = 2)
+	private Status logStato;
+	@Column(length = 10)
+	private Type logTipFlusso;
+	@Column(length = 1)
+	private Direction logDirezione;
+	@Column(length = 10)
 	private String logLibreria;
-
+	@Column(length = 10)
 	private String logFile;
-
+	@Column(length = 10)
 	private String logMembro;
-
+	@Column(length = 10)
 	private String logLibSource;
-
+	@Column(length = 10)
 	private String logFileSource;
-
+	@Column(length = 10)
 	private String logMembroSource;
-
+	@Column(length = 255)
 	private String logFolder;
-
+	@Column(length = 255)
 	private String logFileName;
-
-	private String logFormato;
-
+	@Column(length = 5)
+	private FileFormat logFormato;
+	@Column(length = 6)
 	private String logDelimRecord;
-
+	@Column(length = 4)
 	private String logDelimCampo;
-
+	@Column(length = 5)
 	private BigDecimal logCodepage;
-
+	@Column(length = 7)
 	private String logModAcquiszione;
-
+	@Column(length = 132)
 	private String logPgmControllo;
-
-	private String logTipologiaConn;
-
+	@Column(length = 5)
+	private ConnectionType logTipologiaConn;
+	@Column(length = 255)
 	private String logHost;
-
+	@Column(length = 5)
 	private BigDecimal logPort;
-
+	@Column(length = 255)
 	private String logRemoteFolder;
-
+	@Column(length = 255)
 	private String logRemoteFileName;
-
+	@Column(length = 64)
 	private String logUtenteSftp;
-
-	private String logIntegrityCheck;
-
-	private String logFlNameSemaforo;
-
+	@Column(length = 1)
+	private YesNo logIntegrityCheck;
+	@Column(length = 1)
+	private YesNo logFlNameSemaforo;
+	@Column(length = 3)
 	private BigDecimal logNumTentaRicez;
-
+	@Column(length = 5)
 	private BigDecimal logIntervalloRetry;
-
+	@Column(length = 5)
 	private BigDecimal logRetention;
-
-	private String logCompression;
-
+	@Column(length = 1)
+	private YesNo logCompression;
+	@Column(length = 255)
 	private String logBackup;
-
-	private String logInviaMail;
-
+	@Column(length = 1)
+	private YesNo logInviaMail;
+	@Column(length = 4)
 	private String logLetteraOk;
-
+	@Column(length = 4)
 	private String logLetteraKo;
-
+	@Column(length = 255)
 	private String logLogFile;
-
+	@Column(length = 200)
 	private String logErroreDesc;
-
+	@Column(length = 10)
 	private String logJobAs;
-
+	@Column(length = 10)
 	private String logUserAs;
-
+	@Column(length = 10)
 	private String logJobNbrAs;
-
-	private String logTipoTrasferimento;
-
-	private String logBypassQtemp;
-
+	@Column(length = 1)
+	private ConnectionType logTipoTrasferimento;
+	@Column(length = 1)
+	private YesNo logBypassQtemp;
+	@Column(length = 255)
 	private String logJavaHome;
 	
 	//aggiunta campi mancanti
-	
-	private String logEsistenzaFile;
-	
+	@Column(length = 1)
+	private YesNo logEsistenzaFile;
+	@Column(length = 5)
 	private String logLetteraFlusso;
-	
-	private String logCreaVuoto;
-	
+	@Column(length = 1)
+	private YesNo logCreaVuoto;
+	@Column(length = 2)
 	private String logInternaz;
-	
+	@Column(length = 7)
 	private String logSostValNull;
-	
-	private String logElimNomCol;
-	
-	private String logFlagOkVuoto;
-	
-	private String logFtpSecure;
-	
+	@Column(length = 1)
+	private YesNo logElimNomCol;
+	@Column(length = 1)
+	private YesNo logFlagOkVuoto;
+	@Column(length = 1)
+	private YesNo logFtpSecure;
+	@Column(length = 1)
 	private String logInteractiveType;
-	
+	@Column(length = 64)
 	private String logInteractiveProgram;
-	
+	@Column(length = 1)
 	private String logInteractiveResult;
-	
+	@Column(length = 300)
 	private String logInteractiveCommand;
-	
+	@Column(length = 3)
 	private BigDecimal logDelaySemaforo;	
-	
-	
-	private String logHashUnico;
-	
-	private String logExportFlag;
-	
+	@Column(length = 1)
+	private YesNo logHashUnico;
+	@Column(length = 1)
+	private YesNo logExportFlag;
+	@Column(length = 10)
 	private String logExportCode;
-	
+	@Column(length = 6)
 	private BigDecimal logFetchSize;
-	
-	private String logCharEmptySpace;
+	@Column(length = 1)
+	private YesNo logCharEmptySpace;
 
 	public BigDecimal getLogProgrLog() {
 		return logProgrLog;
@@ -225,27 +233,27 @@ public class FlowLog {
 		this.logCodInterfaccia = logCodInterfaccia;
 	}
 
-	public String getLogStato() {
+	public Status getLogStato() {
 		return logStato;
 	}
 
-	public void setLogStato(String logStato) {
+	public void setLogStato(Status logStato) {
 		this.logStato = logStato;
 	}
 
-	public String getLogTipFlusso() {
+	public Type getLogTipFlusso() {
 		return logTipFlusso;
 	}
 
-	public void setLogTipFlusso(String logTipFlusso) {
+	public void setLogTipFlusso(Type logTipFlusso) {
 		this.logTipFlusso = logTipFlusso;
 	}
 
-	public String getLogDirezione() {
+	public Direction getLogDirezione() {
 		return logDirezione;
 	}
 
-	public void setLogDirezione(String logDirezione) {
+	public void setLogDirezione(Direction logDirezione) {
 		this.logDirezione = logDirezione;
 	}
 
@@ -313,14 +321,6 @@ public class FlowLog {
 		this.logFileName = logFileName;
 	}
 
-	public String getLogFormato() {
-		return logFormato;
-	}
-
-	public void setLogFormato(String logFormato) {
-		this.logFormato = logFormato;
-	}
-
 	public String getLogDelimRecord() {
 		return logDelimRecord;
 	}
@@ -359,14 +359,6 @@ public class FlowLog {
 
 	public void setLogPgmControllo(String logPgmControllo) {
 		this.logPgmControllo = logPgmControllo;
-	}
-
-	public String getLogTipologiaConn() {
-		return logTipologiaConn;
-	}
-
-	public void setLogTipologiaConn(String logTipologiaConn) {
-		this.logTipologiaConn = logTipologiaConn;
 	}
 
 	public String getLogHost() {
@@ -409,22 +401,6 @@ public class FlowLog {
 		this.logUtenteSftp = logUtenteSftp;
 	}
 
-	public String getLogIntegrityCheck() {
-		return logIntegrityCheck;
-	}
-
-	public void setLogIntegrityCheck(String logIntegrityCheck) {
-		this.logIntegrityCheck = logIntegrityCheck;
-	}
-
-	public String getLogFlNameSemaforo() {
-		return logFlNameSemaforo;
-	}
-
-	public void setLogFlNameSemaforo(String logFlNameSemaforo) {
-		this.logFlNameSemaforo = logFlNameSemaforo;
-	}
-
 	public BigDecimal getLogNumTentaRicez() {
 		return logNumTentaRicez;
 	}
@@ -449,28 +425,12 @@ public class FlowLog {
 		this.logRetention = logRetention;
 	}
 
-	public String getLogCompression() {
-		return logCompression;
-	}
-
-	public void setLogCompression(String logCompression) {
-		this.logCompression = logCompression;
-	}
-
 	public String getLogBackup() {
 		return logBackup;
 	}
 
 	public void setLogBackup(String logBackup) {
 		this.logBackup = logBackup;
-	}
-
-	public String getLogInviaMail() {
-		return logInviaMail;
-	}
-
-	public void setLogInviaMail(String logInviaMail) {
-		this.logInviaMail = logInviaMail;
 	}
 
 	public String getLogLetteraOk() {
@@ -529,22 +489,6 @@ public class FlowLog {
 		this.logJobNbrAs = logJobNbrAs;
 	}
 
-	public String getLogTipoTrasferimento() {
-		return logTipoTrasferimento;
-	}
-
-	public void setLogTipoTrasferimento(String logTipoTrasferimento) {
-		this.logTipoTrasferimento = logTipoTrasferimento;
-	}
-
-	public String getLogBypassQtemp() {
-		return logBypassQtemp;
-	}
-
-	public void setLogBypassQtemp(String logBypassQtemp) {
-		this.logBypassQtemp = logBypassQtemp;
-	}
-
 	public String getLogJavaHome() {
 		return logJavaHome;
 	}
@@ -553,30 +497,12 @@ public class FlowLog {
 		this.logJavaHome = logJavaHome;
 	}
 
-	
-	
-	public String getLogEsistenzaFile() {
-		return logEsistenzaFile;
-	}
-
-	public void setLogEsistenzaFile(String logEsistenzaFile) {
-		this.logEsistenzaFile = logEsistenzaFile;
-	}
-
 	public String getLogLetteraFlusso() {
 		return logLetteraFlusso;
 	}
 
 	public void setLogLetteraFlusso(String logLetteraFlusso) {
 		this.logLetteraFlusso = logLetteraFlusso;
-	}
-
-	public String getLogCreaVuoto() {
-		return logCreaVuoto;
-	}
-
-	public void setLogCreaVuoto(String logCreaVuoto) {
-		this.logCreaVuoto = logCreaVuoto;
 	}
 
 	public String getLogInternaz() {
@@ -593,30 +519,6 @@ public class FlowLog {
 
 	public void setLogSostValNull(String logSostValNull) {
 		this.logSostValNull = logSostValNull;
-	}
-
-	public String getLogElimNomCol() {
-		return logElimNomCol;
-	}
-
-	public void setLogElimNomCol(String logElimNomCol) {
-		this.logElimNomCol = logElimNomCol;
-	}
-
-	public String getLogFlagOkVuoto() {
-		return logFlagOkVuoto;
-	}
-
-	public void setLogFlagOkVuoto(String logFlagOkVuoto) {
-		this.logFlagOkVuoto = logFlagOkVuoto;
-	}
-
-	public String getLogFtpSecure() {
-		return logFtpSecure;
-	}
-
-	public void setLogFtpSecure(String logFtpSecure) {
-		this.logFtpSecure = logFtpSecure;
 	}
 
 	public String getLogInteractiveType() {
@@ -659,22 +561,6 @@ public class FlowLog {
 		this.logDelaySemaforo = logDelaySemaforo;
 	}
 
-	public String getLogHashUnico() {
-		return logHashUnico;
-	}
-
-	public void setLogHashUnico(String logHashUnico) {
-		this.logHashUnico = logHashUnico;
-	}	
-
-	public String getLogExportFlag() {
-		return logExportFlag;
-	}
-
-	public void setLogExportFlag(String logExportFlag) {
-		this.logExportFlag = logExportFlag;
-	}
-
 	public String getLogExportCode() {
 		return logExportCode;
 	}
@@ -691,13 +577,131 @@ public class FlowLog {
 		this.logFetchSize = logFetchSize;
 	}
 
+	public FileFormat getLogFormato() {
+		return logFormato;
+	}
 
+	public void setLogFormato(FileFormat logFormato) {
+		this.logFormato = logFormato;
+	}
 
-	public String getLogCharEmptySpace() {
+	public ConnectionType getLogTipologiaConn() {
+		return logTipologiaConn;
+	}
+
+	public void setLogTipologiaConn(ConnectionType logTipologiaConn) {
+		this.logTipologiaConn = logTipologiaConn;
+	}
+
+	public YesNo getLogIntegrityCheck() {
+		return logIntegrityCheck;
+	}
+
+	public void setLogIntegrityCheck(YesNo logIntegrityCheck) {
+		this.logIntegrityCheck = logIntegrityCheck;
+	}
+
+	public YesNo getLogFlNameSemaforo() {
+		return logFlNameSemaforo;
+	}
+
+	public void setLogFlNameSemaforo(YesNo logFlNameSemaforo) {
+		this.logFlNameSemaforo = logFlNameSemaforo;
+	}
+
+	public YesNo getLogCompression() {
+		return logCompression;
+	}
+
+	public void setLogCompression(YesNo logCompression) {
+		this.logCompression = logCompression;
+	}
+
+	public YesNo getLogInviaMail() {
+		return logInviaMail;
+	}
+
+	public void setLogInviaMail(YesNo logInviaMail) {
+		this.logInviaMail = logInviaMail;
+	}
+
+	public ConnectionType getLogTipoTrasferimento() {
+		return logTipoTrasferimento;
+	}
+
+	public void setLogTipoTrasferimento(ConnectionType logTipoTrasferimento) {
+		this.logTipoTrasferimento = logTipoTrasferimento;
+	}
+
+	public YesNo getLogBypassQtemp() {
+		return logBypassQtemp;
+	}
+
+	public void setLogBypassQtemp(YesNo logBypassQtemp) {
+		this.logBypassQtemp = logBypassQtemp;
+	}
+
+	public YesNo getLogEsistenzaFile() {
+		return logEsistenzaFile;
+	}
+
+	public void setLogEsistenzaFile(YesNo logEsistenzaFile) {
+		this.logEsistenzaFile = logEsistenzaFile;
+	}
+
+	public YesNo getLogCreaVuoto() {
+		return logCreaVuoto;
+	}
+
+	public void setLogCreaVuoto(YesNo logCreaVuoto) {
+		this.logCreaVuoto = logCreaVuoto;
+	}
+
+	public YesNo getLogElimNomCol() {
+		return logElimNomCol;
+	}
+
+	public void setLogElimNomCol(YesNo logElimNomCol) {
+		this.logElimNomCol = logElimNomCol;
+	}
+
+	public YesNo getLogFlagOkVuoto() {
+		return logFlagOkVuoto;
+	}
+
+	public void setLogFlagOkVuoto(YesNo logFlagOkVuoto) {
+		this.logFlagOkVuoto = logFlagOkVuoto;
+	}
+
+	public YesNo getLogFtpSecure() {
+		return logFtpSecure;
+	}
+
+	public void setLogFtpSecure(YesNo logFtpSecure) {
+		this.logFtpSecure = logFtpSecure;
+	}
+
+	public YesNo getLogHashUnico() {
+		return logHashUnico;
+	}
+
+	public void setLogHashUnico(YesNo logHashUnico) {
+		this.logHashUnico = logHashUnico;
+	}
+
+	public YesNo getLogExportFlag() {
+		return logExportFlag;
+	}
+
+	public void setLogExportFlag(YesNo logExportFlag) {
+		this.logExportFlag = logExportFlag;
+	}
+
+	public YesNo getLogCharEmptySpace() {
 		return logCharEmptySpace;
 	}
 
-	public void setLogCharEmptySpace(String logCharEmptySpace) {
+	public void setLogCharEmptySpace(YesNo logCharEmptySpace) {
 		this.logCharEmptySpace = logCharEmptySpace;
 	}
 

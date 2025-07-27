@@ -1,49 +1,61 @@
 package it.dmsoft.flowmanager.agent.be.entities;
 
+import java.math.BigDecimal;
+
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+
 public class MailParms {
 
-	private String smtp_host;
-	private String smtp_user;
-	private String smtp_password;
-	private String smtp_secure;
-	private String smtp_port;
+	@Id
+	@Column(length = 128)
+	private String smtphost;
+	@Column(length = 64)
+	private String smtpuser;
+	@Column(length = 64)
+	private String smtppassword;
+	@Column(length = 1)
+	private YesNo smtpsecure;
+	@Column(length = 5)
+	private BigDecimal smtpport;
 	
-	public String getSmtp_host() {
-		return smtp_host;
+	public String getSmtpHost() {
+		return smtphost;
 	}
-	public void setSmtp_host(String smtp_host) {
-		this.smtp_host = smtp_host;
+	public void setSmtpHost(String smtphost) {
+		this.smtphost = smtphost;
 	}
-	public String getSmtp_user() {
-		return smtp_user;
+	public String getSmtpUser() {
+		return smtpuser;
 	}
-	public void setSmtp_user(String smtp_user) {
-		this.smtp_user = smtp_user;
+	public void setSmtpUser(String smtpuser) {
+		this.smtpuser = smtpuser;
 	}
-	public String getSmtp_password() {
-		return smtp_password;
+	public String getSmtpPassword() {
+		return smtppassword;
 	}
-	public void setSmtp_password(String smtp_password) {
-		this.smtp_password = smtp_password;
+	public void setSmtpPassword(String smtppassword) {
+		this.smtppassword = smtppassword;
 	}
-	public String getSmtp_secure() {
-		return smtp_secure;
+	public YesNo getSmtpSecure() {
+		return smtpsecure;
 	}
-	public void setSmtp_secure(String smtp_secure) {
-		this.smtp_secure = smtp_secure;
+	public void setSmtpSecure(YesNo smtpsecure) {
+		this.smtpsecure = smtpsecure;
 	}
 	
-	public String getSmtp_port() {
-		return smtp_port;
+	public BigDecimal getSmtpPort() {
+		return smtpport;
 	}
-	public void setSmtp_port(String smtp_port) {
-		this.smtp_port = smtp_port;
+	public void setSmtpPort(BigDecimal smtpport) {
+		this.smtpport = smtpport;
 	}
 	
 	@Override
 	public String toString() {
-		return "MailParms [smtp_host=" + smtp_host + ", smtp_user=" + smtp_user + ", smtp_password=" + smtp_password
-				+ ", smtp_secure=" + smtp_secure + ", smtp_port=" + smtp_port + "]";
+		return "MailParms [smtphost=" + smtphost + ", smtpuser=" + smtpuser + ", smtppassword=" + smtppassword
+				+ ", smtpsecure=" + smtpsecure + ", smtpport=" + smtpport + "]";
 	}
 	
 	

@@ -11,18 +11,25 @@ public static final String Y = "S";
 	
 	public enum YesNo implements CodeEnum {
 		
-		YES(Y),
-		NO(N);
+		YES(Y, true),
+		NO(N, false);
 		
 		private String code;
 		
-		private YesNo(String code) {
+		private boolean bool;
+		
+		private YesNo(String code, boolean bool) {
 			this.code = code;
+			this.bool = bool;
 		}
 		
 		@JsonValue
 		public String getCode() {
 			return this.code;
+		}
+		
+		public boolean getBool() {
+			return this.bool;
 		}
 		
 		public static YesNo getYesNo(String code) {
@@ -173,6 +180,26 @@ public static final String Y = "S";
  		
  		public static RecipientType geRecipientType(String code) {
  			return CodeEnum.getCodeEnum(RecipientType.class, code);
+ 		}
+ 	}
+    
+    public enum Status implements CodeEnum {
+ 		OK("OK"),
+ 		KO("TO");
+ 		
+ 		private String code;
+ 		
+ 		private Status(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static Status getStatus(String code) {
+ 			return CodeEnum.getCodeEnum(Status.class, code);
  		}
  	}
     

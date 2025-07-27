@@ -3,11 +3,15 @@ package it.dmsoft.flowmanager.agent.be.entities;
 import java.math.BigDecimal;
 
 import it.dmsoft.flowmanager.agent.be.keys.FlowIdNumeratorId;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 
 public class FlowIdNumerator {
 	
+	@EmbeddedId
 	private FlowIdNumeratorId flowIdNumeratorId;
 	
+	@Column(length = 12)
 	private BigDecimal idProgressive;
 	
 	public BigDecimal getIdProgressive() {

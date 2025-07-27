@@ -15,6 +15,7 @@ import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
+import it.dmsoft.flowmanager.common.domain.Domains.Status;
 
 @Service("logDb")
 public class FlowLogUtils {
@@ -78,7 +79,7 @@ public class FlowLogUtils {
 		
 		phaseProg = phaseProg.add(BigDecimal.ONE);
 		FlowLogDetails flowLogDetails = new FlowLogDetails();
-		flowLogDetails.setLogDetEsito(outcome);
+		flowLogDetails.setLogDetEsito(Status.getStatus(outcome));
 		flowLogDetails.setLogDetFase(operation != null ? operation.name() : Constants.SPACE);
 		flowLogDetails.setLogDetNote(phaseDescr + (operation != null ? Constants.SPACE + operation.getDescription() : ""));
 		flowLogDetails.setLogDetProgrFase(phaseProg);

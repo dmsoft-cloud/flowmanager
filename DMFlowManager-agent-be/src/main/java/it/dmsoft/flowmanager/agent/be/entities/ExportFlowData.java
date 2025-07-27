@@ -1,6 +1,7 @@
 package it.dmsoft.flowmanager.agent.be.entities;
 
-import java.math.BigDecimal;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import jakarta.persistence.Column;
 
 public class ExportFlowData {
 	public static enum OttsfexptColumn {
@@ -20,20 +21,34 @@ public class ExportFlowData {
 		EXPT_DECPNT
 	}
 
-	
+
+	@Column(length = 10)
 	private String exportIde;
+	@Column(length = 3)
 	private String exportFile_Type;
+	@Column(length = 5)
 	private String exportDest_Type;
+	@Column(length = 300)
 	private String exportDest;
+	@Column(length = 50)
 	private String exportFile_Name;
+	@Column(length = 40)
 	private String exportFile_Des;
+	@Column(length = 4)
 	private String exportTestata;
+	@Column(length = 4)
 	private String exportDlmt;
+	@Column(length = 9)
 	private String exportRmvblk;
+	@Column(length = 50)
 	private String exportTitolo;
-	private String exportErrato;
-	private String exportRim_Spazi_Alfan_Vuoti;
+	@Column(length = 1)
+	private YesNo exportErrato;
+	@Column(length = 1)
+	private YesNo exportRim_Spazi_Alfan_Vuoti;
+	@Column(length = 6)
 	private String exportFine_Riga;
+	@Column(length = 7)
 	private String exportDecpnt;
 
 	
@@ -97,16 +112,16 @@ public class ExportFlowData {
 	public void setExportTitolo(String exportTitolo) {
 		this.exportTitolo = exportTitolo;
 	}
-	public String getExportErrato() {
+	public YesNo getExportErrato() {
 		return exportErrato;
 	}
-	public void setExportErrato(String exportErrato) {
+	public void setExportErrato(YesNo exportErrato) {
 		this.exportErrato = exportErrato;
 	}
-	public String getExportRimSpaziAlfanVuoti() {
+	public YesNo getExportRimSpaziAlfanVuoti() {
 		return exportRim_Spazi_Alfan_Vuoti;
 	}
-	public void setExportRimSpaziAlfanVuoti(String exportRim_Spazi_Alfan_Vuoti) {
+	public void setExportRimSpaziAlfanVuoti(YesNo exportRim_Spazi_Alfan_Vuoti) {
 		this.exportRim_Spazi_Alfan_Vuoti = exportRim_Spazi_Alfan_Vuoti;
 	}
 	public String getExportFineRiga() {
