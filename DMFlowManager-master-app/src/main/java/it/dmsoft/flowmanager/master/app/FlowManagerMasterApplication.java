@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RestController;
 
 @ComponentScan({"it.dmsoft.flowmanager.app.*", "it.dmsoft.flowmanager.api.*", "it.dmsoft.flowmanager.be.*", "it.dmsoft.flowmanager.framework.*"})
-@EnableJpaRepositories("it.dmsoft.flowmanager.be.repositories")
-@EntityScan("it.dmsoft.flowmanager.be.entities")
+@EnableJpaRepositories("it.dmsoft.flowmanager.master.be.repositories")
+@EntityScan("it.dmsoft.flowmanager.master.be.entities")
 @SpringBootApplication
 //@SpringBootApplication(scanBasePackages = "it.dmsoft.flowmanager")
 @RestController

@@ -10,8 +10,10 @@ import it.dmsoft.flowmanager.common.domain.Domains.Status;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+@Entity
 public class FlowLog {
 	public static enum OtgfflogtCoulmn {
 

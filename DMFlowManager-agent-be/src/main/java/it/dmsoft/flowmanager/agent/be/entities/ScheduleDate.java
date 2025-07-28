@@ -3,8 +3,10 @@ package it.dmsoft.flowmanager.agent.be.entities;
 import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+@Entity
 public class ScheduleDate {
 
 	@Id

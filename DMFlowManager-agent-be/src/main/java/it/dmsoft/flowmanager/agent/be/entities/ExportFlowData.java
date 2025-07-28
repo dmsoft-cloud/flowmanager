@@ -2,7 +2,10 @@ package it.dmsoft.flowmanager.agent.be.entities;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class ExportFlowData {
 	public static enum OttsfexptColumn {
 		EXPT_IDE,
@@ -22,6 +25,7 @@ public class ExportFlowData {
 	}
 
 
+	@Id
 	@Column(length = 10)
 	private String exportIde;
 	@Column(length = 3)

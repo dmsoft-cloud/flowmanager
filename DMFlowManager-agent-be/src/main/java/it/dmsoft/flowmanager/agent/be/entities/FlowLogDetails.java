@@ -5,8 +5,10 @@ import java.sql.Timestamp;
 
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+@Entity
 public class FlowLogDetails {
 	public static enum OtgfflogdCoulmn {
 		

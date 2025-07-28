@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import it.dmsoft.flowmanager.agent.be.keys.FlowIdNumeratorId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 
+@Entity
 public class FlowIdNumerator {
 	
 	@EmbeddedId
