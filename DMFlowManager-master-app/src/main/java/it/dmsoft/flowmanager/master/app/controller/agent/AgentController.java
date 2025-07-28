@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.master.be.entities.Agent;
+import it.dmsoft.flowmanager.be.entities.Agent;
 import jakarta.annotation.Resource;
 
 //@CrossAgent(agents = "http://localhost:4200") 
@@ -22,8 +22,8 @@ import jakarta.annotation.Resource;
 @RequestMapping("/agents")
 public class AgentController {
 	
-	@Value("${cors.allowed.agents}")
-    private String allowedAgents;
+	//@Value("${cors.allowed.agents}")
+    //private String allowedAgents;
 
     @Resource(name = "agentService")
     private BaseService<Agent, AgentData, String> agentService;

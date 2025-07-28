@@ -5,9 +5,14 @@
   <version>0.1.0</version>
   <packaging>pom</packaging>
   
-<!--  <modules>-->
-<!--    	<module>../DMFlowManager-app</module>-->
-<!--    	<module>../DMFlowManager-api</module>-->
-<!--    	<module>../DMFlowManager-be</module>-->
-<!--  </modules>-->
+  <modules>
+    	<module>../DMFlowManager-master-app</module>
+    	<module>../DMFlowManager-master-api</module>
+    	<module>../DMFlowManager-entities</module>
+    	<module>../DMFlowManager-framework</module>
+    	<module>../DMFlowManager-models</module>
+<!--    	<module>../DMFlowManager-agent-app</module>-->
+<!--    	<module>../DMFlowManager-agent-api</module>-->
+<!--    	<module>../DMFlowManager-agent-engine</module>-->
+  </modules>
 </project>

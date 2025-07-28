@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.master.be.entities.Origin;
+import it.dmsoft.flowmanager.be.entities.Origin;
 import jakarta.annotation.Resource;
 
 //@CrossOrigin(origins = "http://localhost:4200") 

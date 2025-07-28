@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.master.be.entities.Flow;
+import it.dmsoft.flowmanager.be.entities.Flow;
 import jakarta.annotation.Resource;
 
 @RestController

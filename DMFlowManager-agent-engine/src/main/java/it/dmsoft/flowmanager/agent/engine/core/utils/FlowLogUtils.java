@@ -7,10 +7,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.agent.be.entities.FlowLog;
-import it.dmsoft.flowmanager.agent.be.entities.FlowLogDetails;
-import it.dmsoft.flowmanager.agent.be.repositories.FlowLogDetailsRepository;
-import it.dmsoft.flowmanager.agent.be.repositories.FlowLogRepository;
+import it.dmsoft.flowmanager.be.entities.FlowLog;
+import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
+import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
+import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
 import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;

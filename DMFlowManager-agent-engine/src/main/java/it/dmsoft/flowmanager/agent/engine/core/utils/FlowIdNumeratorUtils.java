@@ -2,8 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.utils;
 
 import java.math.BigDecimal;
 
-import it.dmsoft.flowmanager.agent.be.entities.FlowIdNumerator;
-import it.dmsoft.flowmanager.agent.be.keys.FlowIdNumeratorId;
+import it.dmsoft.flowmanager.be.entities.FlowIdNumerator;
+import it.dmsoft.flowmanager.be.keys.FlowIdNumeratorId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 

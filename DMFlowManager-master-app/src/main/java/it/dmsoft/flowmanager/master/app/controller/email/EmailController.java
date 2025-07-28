@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.master.be.entities.Email;
+import it.dmsoft.flowmanager.be.entities.Email;
 import jakarta.annotation.Resource;
 
 @RestController

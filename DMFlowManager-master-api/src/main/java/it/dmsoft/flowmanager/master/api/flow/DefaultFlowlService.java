@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.flow.mapper.FlowMapper;
-import it.dmsoft.flowmanager.master.be.entities.Flow;
-import it.dmsoft.flowmanager.master.be.repositories.FlowRepository;
+import it.dmsoft.flowmanager.be.entities.Flow;
+import it.dmsoft.flowmanager.be.repositories.FlowRepository;
 
 
 @Service("flowService")

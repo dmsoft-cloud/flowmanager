@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.agent.be.entities.Email;
-import it.dmsoft.flowmanager.agent.be.entities.MailParms;
-import it.dmsoft.flowmanager.agent.be.entities.Recipient;
-import it.dmsoft.flowmanager.agent.be.repositories.EmailRepository;
+import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.be.entities.MailParms;
+import it.dmsoft.flowmanager.be.entities.Recipient;
+import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.Flow;

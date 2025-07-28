@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.model.mapper.ModelMapper;
-import it.dmsoft.flowmanager.master.be.entities.Model;
-import it.dmsoft.flowmanager.master.be.repositories.ModelRepository;
+import it.dmsoft.flowmanager.be.entities.Model;
+import it.dmsoft.flowmanager.be.repositories.ModelRepository;
 
 @Service("modelService")
 public class DefaultModelService extends DefaultBaseService<Model, ModelData, String> {

@@ -31,8 +31,8 @@ public class SynchController {
      * @param String agentId
      * @return SynchData synchData
      */
-    @PostMapping("/execute")
-    public FullFlowsData execute(@PathParam(value = "agentId") String agentId) {
+    @PostMapping("/execute/agent")
+    public FullFlowsData executeAgent(@PathParam(value = "agentId") String agentId) {
         return synchDataService.synchFullFlowsData(agentId);
     }
 }

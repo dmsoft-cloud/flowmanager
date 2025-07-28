@@ -2,14 +2,15 @@ package it.dmsoft.flowmanager.master.api.email.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
+import it.dmsoft.flowmanager.be.entities.Email;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
-import it.dmsoft.flowmanager.master.be.entities.Email;
 
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.WARN)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface EmailMapper  extends BaseMapper<Email, EmailData>{
 	
 	@Override

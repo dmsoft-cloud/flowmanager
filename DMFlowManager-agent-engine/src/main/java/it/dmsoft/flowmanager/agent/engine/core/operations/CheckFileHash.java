@@ -2,8 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 
 import java.io.File;
 
-import it.dmsoft.flowmanager.agent.be.entities.FlowHash;
-import it.dmsoft.flowmanager.agent.be.repositories.FlowHashRepository;
+import it.dmsoft.flowmanager.be.entities.FlowHash;
+import it.dmsoft.flowmanager.be.repositories.FlowHashRepository;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;

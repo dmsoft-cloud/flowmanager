@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.dmsoft.flowmanager.agent.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;

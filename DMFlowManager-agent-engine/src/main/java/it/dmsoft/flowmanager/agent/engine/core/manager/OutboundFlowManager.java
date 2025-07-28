@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.agent.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ZipOperation;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.OutboundFlowBuilder;

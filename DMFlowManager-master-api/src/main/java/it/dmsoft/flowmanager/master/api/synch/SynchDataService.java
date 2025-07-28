@@ -16,13 +16,13 @@ import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.framework.rest.RestClientHelper;
-import it.dmsoft.flowmanager.master.be.entities.Agent;
-import it.dmsoft.flowmanager.master.be.entities.ConfigurationGroup;
-import it.dmsoft.flowmanager.master.be.entities.Email;
-import it.dmsoft.flowmanager.master.be.entities.Flow;
-import it.dmsoft.flowmanager.master.be.entities.Interface;
-import it.dmsoft.flowmanager.master.be.entities.Model;
-import it.dmsoft.flowmanager.master.be.entities.Origin;
+import it.dmsoft.flowmanager.be.entities.Agent;
+import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
+import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.be.entities.Flow;
+import it.dmsoft.flowmanager.be.entities.Interface;
+import it.dmsoft.flowmanager.be.entities.Model;
+import it.dmsoft.flowmanager.be.entities.Origin;
 import jakarta.annotation.Resource;
 
 @Service("synchDataService")

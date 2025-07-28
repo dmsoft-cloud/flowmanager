@@ -12,8 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.agent.be.entities.FileColumnsStruct;
-import it.dmsoft.flowmanager.agent.be.entities.FileMetadata;
+import it.dmsoft.flowmanager.be.entities.FileColumnsStruct;
+import it.dmsoft.flowmanager.be.entities.FileMetadata;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;

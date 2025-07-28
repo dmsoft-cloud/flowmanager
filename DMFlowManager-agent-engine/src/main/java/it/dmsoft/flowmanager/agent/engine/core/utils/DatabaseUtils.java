@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.InvalidDBTypeException;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;

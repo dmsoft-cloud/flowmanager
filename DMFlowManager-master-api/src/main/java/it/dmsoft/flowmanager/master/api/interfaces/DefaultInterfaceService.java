@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.interfaces.mapper.InterfaceMapper;
-import it.dmsoft.flowmanager.master.be.entities.Interface;
-import it.dmsoft.flowmanager.master.be.repositories.InterfaceRepository;
+import it.dmsoft.flowmanager.be.entities.Interface;
+import it.dmsoft.flowmanager.be.repositories.InterfaceRepository;
 
 @Service("interfaceService")
 public class DefaultInterfaceService extends DefaultBaseService<Interface, InterfaceData, String> {

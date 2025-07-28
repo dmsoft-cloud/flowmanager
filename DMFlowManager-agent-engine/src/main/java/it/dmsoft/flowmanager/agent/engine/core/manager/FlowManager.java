@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.agent.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;

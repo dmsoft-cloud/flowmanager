@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import it.dmsoft.flowmanager.agent.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.agent.be.entities.MailParms;
+import it.dmsoft.flowmanager.be.entities.FlowConfig;
+import it.dmsoft.flowmanager.be.entities.MailParms;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;

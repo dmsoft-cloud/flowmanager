@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 
-import it.dmsoft.flowmanager.agent.be.entities.ExportFlowData;
+import it.dmsoft.flowmanager.be.entities.ExportFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
 //import it.dmsoft.flowmanager.agent.engine.core.db.dao.DbConstants;
 //import it.dmsoft.flowmanager.agent.engine.core.db.dao.OtgffanaDAO;

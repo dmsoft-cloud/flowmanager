@@ -2,13 +2,14 @@ package it.dmsoft.flowmanager.agent.engine.core.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-import it.dmsoft.flowmanager.agent.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.agent.be.entities.FlowLog;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
+import it.dmsoft.flowmanager.be.entities.FlowConfig;
+import it.dmsoft.flowmanager.be.entities.FlowLog;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.WARN)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface FlowLogMapper {
 	
 	//DA AGGIUNGERE
