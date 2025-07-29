@@ -161,8 +161,7 @@ public class DynamicFlowManager {
 	}
 	
 
-	public void executeFlow(ExecutionFlowData executionFlowData, String backupPath, String mailFrom,
-			List<String> overrideMailDests, FlowConfig config) throws Exception{
+	public void executeFlow(ExecutionFlowData executionFlowData, List<String> overrideMailDests, FlowConfig config) throws Exception{
 		
 		String transactionName = executionFlowData.getFlowId();
 		
@@ -179,6 +178,9 @@ public class DynamicFlowManager {
 		BigDecimal transactionId = headLog.getLogProgrLog();
 		
 		String resubmitTransactionId = null;
+		
+		String backupPath = config.getBackupPath();
+		String mailFrom = config.getMailFrom();
 		
 		executeFlow(transactionName, transactionId.toString(), resubmitTransactionId, backupPath, mailFrom, logFile, executionDate, logger, executionFlowData, overrideMailDests, config);
 	}
