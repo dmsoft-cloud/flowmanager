@@ -33,6 +33,7 @@ public class ExecuteService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		return null;

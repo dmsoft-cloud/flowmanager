@@ -31,11 +31,11 @@ public class ExecuteService {
 		
 		return rc.post()
 				.uri(uriBuilder -> uriBuilder
-			      .path("/execute/synch")
+			      .path("/execute/synch/")
 			      .path(flowId)
 			      .build())
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(fullFlowData)
+				//.body(fullFlowData)
 				.retrieve()
 				.body(FlowExecutionOutcome.class);
 	}
