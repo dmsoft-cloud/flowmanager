@@ -5,9 +5,9 @@ import java.nio.charset.Charset;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+//import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+//import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+//import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 import it.dmsoft.flowmanager.agent.engine.generic.clientWs.utility.exceptions.OCSAuthenticationException;
 import it.dmsoft.flowmanager.agent.engine.generic.clientWs.utility.exceptions.OCSURLOAuth2NotFound;
@@ -39,7 +39,7 @@ public class Authentication {
 		if (urlToken == null || "".equals(urlToken.trim())) {
 			throw new OCSURLOAuth2NotFound();
 		}
-
+/*
 		ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
 		resourceDetails.setAccessTokenUri(urlToken);
 		resourceDetails.setClientId(userbasic);
@@ -71,6 +71,8 @@ public class Authentication {
 		headers.set("Authorization", "Bearer " + token);
 		headers.setContentType(mediaType); // application/json
 		return headers;
+		*/
+		return null;
 	}
 
 	/**

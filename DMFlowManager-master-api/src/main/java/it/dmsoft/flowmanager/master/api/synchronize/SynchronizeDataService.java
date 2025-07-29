@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.master.api.synch;
+package it.dmsoft.flowmanager.master.api.synchronize;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,6 +6,16 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.dmsoft.flowmanager.be.entities.Agent;
+import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
+import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.be.entities.Flow;
+import it.dmsoft.flowmanager.be.entities.Interface;
+import it.dmsoft.flowmanager.be.entities.Model;
+import it.dmsoft.flowmanager.be.entities.Origin;
 import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.common.model.FlowData;
@@ -16,17 +26,10 @@ import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.framework.rest.RestClientHelper;
-import it.dmsoft.flowmanager.be.entities.Agent;
-import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
-import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.entities.Flow;
-import it.dmsoft.flowmanager.be.entities.Interface;
-import it.dmsoft.flowmanager.be.entities.Model;
-import it.dmsoft.flowmanager.be.entities.Origin;
 import jakarta.annotation.Resource;
 
 @Service("synchDataService")
-public class SynchDataService {
+public class SynchronizeDataService {
 
     @Resource(name = "agentService")
     private BaseService<Agent, AgentData, String> agentService;
@@ -49,7 +52,7 @@ public class SynchDataService {
     @Resource(name = "originService")
     private BaseService<Origin, OriginData, String> originService;
 
-	public FullFlowsData synchFullFlowsData() {
+	public FullFlowsData synchronizeFullFlowsData() {
 		List<AgentData> agents = agentService.getAll();
 		FullFlowsData flowsData = retrieveFullFlowsData();
 		
@@ -57,25 +60,25 @@ public class SynchDataService {
 			agents = Arrays.asList(AgentData.DEFAULT_AGENT);
 		}
 		
-		agents.stream().forEach(x -> synchFullFlowsData(x, flowsData));
+		agents.stream().forEach(x -> synchronizeFullFlowsData(x, flowsData));
 		
 		return flowsData;
 	}
 
-	public FullFlowsData synchFullFlowsData(String agentId) {
-		AgentData agent = agentService.getById(agentId);		
-		return synchFullFlowsData(agent, null);
+	public FullFlowsData synchronizeFullFlowsData(String agentId) {
+		AgentData agent = agentService.getById(agentId);
+		FullFlowsData flowsData = retrieveFullFlowsData();
+		return synchronizeFullFlowsData(agent, flowsData);
 	}
 	
 	
-	public FullFlowsData synchFullFlowsData(AgentData agent, FullFlowsData flowsData) {
-		
+	public FullFlowsData synchronizeFullFlowsData(AgentData agent, FullFlowsData flowsData) {
 		return RestClientHelper.getAgentRestClient(agent).post()
 				.uri(uriBuilder -> uriBuilder
-			      .path("/synchs/execute")
+			      .path("/synchronize/perform")
 			      .build())
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(agent)
+				.body(flowsData)
 				.retrieve()
 				.body(FullFlowsData.class);
 				

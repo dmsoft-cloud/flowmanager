@@ -31,7 +31,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
 
 	public FlowBuilder createFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
-		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			
 			Operation<CreateFileParam> crtFile = new CrtFile();

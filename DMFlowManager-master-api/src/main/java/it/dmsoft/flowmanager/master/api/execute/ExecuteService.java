@@ -31,7 +31,7 @@ public class ExecuteService {
 		
 		return rc.post()
 				.uri(uriBuilder -> uriBuilder
-			      .path("/execute/synchs")
+			      .path("/execute/synch")
 			      .path(flowId)
 			      .build())
 				.contentType(MediaType.APPLICATION_JSON)

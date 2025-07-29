@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.agent.app.controller.synch;
+package it.dmsoft.flowmanager.agent.app.controller.synchronize;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,11 +10,11 @@ import it.dmsoft.flowmanager.common.model.FullFlowsData;
 import jakarta.annotation.Resource;
 
 @RestController
-@RequestMapping("/synch")
-public class SynchController {
+@RequestMapping("/synchronize")
+public class SynchronizeController {
 	
-	@Resource(name = "synchService")
-    private FlowDataService synchService;
+	@Resource(name = "flowDataService")
+    private FlowDataService flowDataService;
 	
 	//scarico configurazioni flussi
 	//NOTA in fase di update, blocco l'esecuzione di nuovi flussi
@@ -26,9 +26,9 @@ public class SynchController {
      * @param FullFlowsData synchData
      * @return SynchData synchData
      */
-    @PostMapping("/execute")
+    @PostMapping("/perform")
     public FullFlowsData execute(final @RequestBody FullFlowsData flowsData) {
-        return synchService.storeFullFlowsData(flowsData);
+        return flowDataService.storeFullFlowsData(flowsData);
     }
 
     //uuid per progressivo log

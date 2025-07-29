@@ -1,9 +1,9 @@
 package it.dmsoft.flowmanager.agent.engine.generic.authentication.debk;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+//import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+//import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+//import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
@@ -16,6 +16,7 @@ public class TokenRetrieverDeutscheBank {
 			logger.warn("Dati per recupero token non validi");
 			return headers;
 		}
+		/*
 		ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
 		resourceDetails.setAccessTokenUri(urlToken);
 		resourceDetails.setClientId(userbasic);
@@ -34,5 +35,7 @@ public class TokenRetrieverDeutscheBank {
 		headers.set("Authorization", "Bearer " + token);
 
 		return headers;
+		*/
+		return null;
 	}
 }

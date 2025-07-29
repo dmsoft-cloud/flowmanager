@@ -120,7 +120,7 @@ public class InboundFlowManager extends FlowManager {
 			}
 		}
 
-		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + operationParams.getSempahoreFile());
 		}

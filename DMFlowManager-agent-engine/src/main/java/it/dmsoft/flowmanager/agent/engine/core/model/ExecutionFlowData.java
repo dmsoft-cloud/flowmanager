@@ -115,7 +115,7 @@ public class ExecutionFlowData {
 	private String fana_Utente;
 	private String fana_Password;
 	private String fana_Utente_Sftp;
-	private String fana_Intergiry_Check;
+	private String fana_Integrity_Check;
 	private String fana_Fl_Name_Semaforo;
 	private BigDecimal fana_Num_Tenta_Ricez;
 	private BigDecimal fana_Intervallo_Retry;
@@ -356,11 +356,11 @@ public class ExecutionFlowData {
 	public void setFlowUtenteSftp(String fana_Utente_Sftp) {
 		this.fana_Utente_Sftp = fana_Utente_Sftp;
 	}
-	public String getFlowIntergiryCheck() {
-		return fana_Intergiry_Check;
+	public String getFlowIntegrityCheck() {
+		return fana_Integrity_Check;
 	}
-	public void setFlowIntergiryCheck(String fana_Intergiry_Check) {
-		this.fana_Intergiry_Check = fana_Intergiry_Check;
+	public void setFlowIntegrityCheck(String fana_Intergiry_Check) {
+		this.fana_Integrity_Check = fana_Intergiry_Check;
 	}
 	public String getFlowFlNameSemaforo() {
 		return fana_Fl_Name_Semaforo;
@@ -626,7 +626,7 @@ public class ExecutionFlowData {
 				+ ", fana_Host=" + fana_Host + ", fana_Port=" + fana_Port + ", fana_Remote_Folder=" + fana_Remote_Folder
 				+ ", fana_Remote_File_Name=" + fana_Remote_File_Name + ", fana_Utente=" + fana_Utente
 				+ ", fana_Password=" + fana_Password + ", fana_Utente_Sftp=" + fana_Utente_Sftp
-				+ ", fana_Intergiry_Check=" + fana_Intergiry_Check + ", fana_Fl_Name_Semaforo=" + fana_Fl_Name_Semaforo
+				+ ", fana_Intergiry_Check=" + fana_Integrity_Check + ", fana_Fl_Name_Semaforo=" + fana_Fl_Name_Semaforo
 				+ ", fana_Num_Tenta_Ricez=" + fana_Num_Tenta_Ricez + ", fana_Intervallo_Retry=" + fana_Intervallo_Retry
 				+ ", fana_Retention=" + fana_Retention + ", fana_Compression=" + fana_Compression
 				+ ", fana_De_Compression=" + fana_De_Compression + ", fana_Backup=" + fana_Backup + ", fana_Invia_Mail="

@@ -993,7 +993,7 @@ public class FlowBuilder {
 	}
 	
 	private void addDelayIntegrityCheck(ExecutionFlowData executionFlowData, OperationParams operationParams) {
-		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
 					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento()) &&
 					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
@@ -1059,7 +1059,7 @@ public class FlowBuilder {
 	*/
 
 	private void addSemaphore(ExecutionFlowData executionFlowData, OperationParams operationParams) {
-		if (Constants.SI.equals(executionFlowData.getFlowIntergiryCheck())
+		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
 					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento())) {
 			

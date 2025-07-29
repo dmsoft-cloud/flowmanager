@@ -77,7 +77,7 @@ public class FlowMasterDataUtils {
 		                flowMasterData.setFlowUtente(fana.getFlowUtente());
 		                flowMasterData.setFlowPassword(fana.getFlowPassword());
 		                flowMasterData.setFlowUtenteSftp(fana.getFlowUtenteSftp());
-		                flowMasterData.setFlowIntergiryCheck((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INTEGRITY_CHECK.toString() , fana.getFlowIntergiryCheck()));
+		                flowMasterData.setFlowIntegrityCheck((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INTEGRITY_CHECK.toString() , fana.getFlowIntegrityCheck()));
 		                flowMasterData.setFlowFlNameSemaforo((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_FL_NAME_SEMAFORO.toString() , fana.getFlowFlNameSemaforo()));
 			            
 		                flowMasterData.setFlowNumTentaRicez(fana.getFlowNumTentaRicez());

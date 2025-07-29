@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.be.entities.FlowLog;
 import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
@@ -17,7 +16,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
 
-@Service("logDb")
+//@Service("logDb")
 public class FlowLogUtils {
 	
 	private static FlowLogUtils instance = null;

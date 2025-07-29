@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.agent.app.controller.execute;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +30,8 @@ public class ExecuteController {
 	
 	//storicizzazione o log dei dati di lancio
 	
-	@PostMapping("/synch")
-	public FlowExecutionOutcome synch(@PathParam(value = "flowId") String flowId, final @RequestBody FullFlowData fullFlowData) {
+	@PostMapping("/synch/{flowId}")
+	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId, final @RequestBody(required = false) FullFlowData fullFlowData) {
 		FullFlowData _fullFlowData = fullFlowData;
 		if (fullFlowData == null) {
 			_fullFlowData = new FullFlowData();

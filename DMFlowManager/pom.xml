@@ -11,8 +11,8 @@
     	<module>../DMFlowManager-entities</module>
     	<module>../DMFlowManager-framework</module>
     	<module>../DMFlowManager-models</module>
-<!--    	<module>../DMFlowManager-agent-app</module>-->
-<!--    	<module>../DMFlowManager-agent-api</module>-->
-<!--    	<module>../DMFlowManager-agent-engine</module>-->
+    	<module>../DMFlowManager-agent-app</module>
+    	<module>../DMFlowManager-agent-api</module>
+    	<module>../DMFlowManager-agent-engine</module>
   </modules>
 </project>

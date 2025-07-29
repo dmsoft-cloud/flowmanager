@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.app.controller.execute;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,8 @@ public class ExecuteController {
 	
 	//storicizzazione o log dei dati di lancio
 	
-	@PostMapping("/synch")
-	public FlowExecutionOutcome synch(@PathParam(value = "flowId") String flowId) {
+	@PostMapping("/synch/{flowId}")
+	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId) {
 		return executeService.synch(flowId, null);
 	}
 }

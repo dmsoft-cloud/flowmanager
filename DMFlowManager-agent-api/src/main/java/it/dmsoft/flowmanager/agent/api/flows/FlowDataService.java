@@ -20,7 +20,7 @@ import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 
-@Service("synchService")
+@Service("flowDataService")
 public class FlowDataService {
 
 	@Value("${flowmanager.agent.config.data.file}")
@@ -50,13 +50,13 @@ public class FlowDataService {
 		}
 		
 		FlowData flow = flowsData.getFlows().stream().filter(x -> x.getId().equals(flowId)).findAny().get();
-		GroupData group = flowsData.getGroups().stream().filter(x -> x.getId().equals(flow.getGroupId())).findAny().get();
-		EmailData emailOk = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationOk())).findAny().get();
-		EmailData emailKo = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationKo())).findAny().get();
+		GroupData group = flowsData.getGroups().stream().filter(x -> x.getId().equals(flow.getGroupId())).findAny().orElse(null);
+		EmailData emailOk = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationOk())).findAny().orElse(null);
+		EmailData emailKo = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationKo())).findAny().orElse(null);
 		//flowsData.get
 		InterfaceData _interface = flowsData.getInterfaces().stream().filter(x -> x.getId().equals(flow.getInterfaceId())).findAny().get();
 		ModelData model = flowsData.getModels().stream().filter(x -> x.getId().equals(flow.getModel())).findAny().get();
-		OriginData origin = flowsData.getOrigins().stream().filter(x -> x.getId().equals(flow.getOrigin())).findAny().get();
+		OriginData origin = flowsData.getOrigins().stream().filter(x -> x.getId().equals(flow.getOrigin())).findAny().orElse(null);
 		
 		FullFlowData fullFlowData = new FullFlowData(flow, group, emailOk, emailKo, _interface, model, origin);
 		return fullFlowData;
