@@ -16,7 +16,9 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
+import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 //QSH CMD('touch <fana_folder>/<fana_filenamesemaforo>')
 
@@ -36,7 +38,7 @@ public class CrtFile extends Operation<CreateFileParam>{
 		DBTypeEnum dbTypeEnum = dbTypeOpt.map(DBTypeEnum::fromString).orElse(null); 
 		
 		//per ora mantengo la creazione con il qsh solo nel caso di esecuzione locale su as400
-		if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+		if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 			CallAs400 callAs400 = CallAs400.get(parameters);
 			
 			StringBuilder sb = new StringBuilder();

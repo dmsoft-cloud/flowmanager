@@ -10,6 +10,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class Db2File extends ConstraintDependentOperation<DbConversionParam, Boolean>{
 	

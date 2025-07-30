@@ -14,6 +14,7 @@ import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData.OtgffanaCoulmn;
 import it.dmsoft.flowmanager.agent.engine.core.model.MasterdataOverride;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 
 
@@ -77,7 +78,7 @@ public class FlowMasterDataUtils {
 		                flowMasterData.setFlowUtente(fana.getFlowUtente());
 		                flowMasterData.setFlowPassword(fana.getFlowPassword());
 		                flowMasterData.setFlowUtenteSftp(fana.getFlowUtenteSftp());
-		                flowMasterData.setFlowIntegrityCheck((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INTEGRITY_CHECK.toString() , fana.getFlowIntegrityCheck()));
+		                flowMasterData.setFlowIntegrityCheck(YesNo.getYesNo((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INTEGRITY_CHECK.toString() , fana.getFlowIntegrityCheck())));
 		                flowMasterData.setFlowFlNameSemaforo((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_FL_NAME_SEMAFORO.toString() , fana.getFlowFlNameSemaforo()));
 			            
 		                flowMasterData.setFlowNumTentaRicez(fana.getFlowNumTentaRicez());
@@ -87,7 +88,7 @@ public class FlowMasterDataUtils {
 		                flowMasterData.setFlowDeCompression(fana.getFlowDeCompression());
 		                flowMasterData.setFlowBackup(fana.getFlowBackup());
 		                
-		                flowMasterData.setFlowInviaMail((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INVIA_MAIL.toString() , fana.getFlowInviaMail()));
+		                flowMasterData.setFlowInviaMail(YesNo.getYesNo((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_INVIA_MAIL.toString() , fana.getFlowInviaMail())));
 		                flowMasterData.setFlowLetteraOk((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_LETTERA_OK.toString() , fana.getFlowLetteraOk()));
 		                flowMasterData.setFlowLetteraKo((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_LETTERA_KO.toString() , fana.getFlowLetteraKo()));
 			            
@@ -124,7 +125,7 @@ public class FlowMasterDataUtils {
 		                flowMasterData.setFlowExportFlag(fana.getFlowExportFlag());
 		                flowMasterData.setFlowExportCode(fana.getFlowExportCode());
 		                flowMasterData.setFlowFetchSize(fana.getFlowFetchSize());
-		                flowMasterData.setFlowcharemptyspace(fana.getFlowcharemptyspace());
+		                flowMasterData.setFlowCharEmptySpace(fana.getFlowCharEmptySpace());
 		                
 		                mo.setExecutionFlowData(flowMasterData);
 		                

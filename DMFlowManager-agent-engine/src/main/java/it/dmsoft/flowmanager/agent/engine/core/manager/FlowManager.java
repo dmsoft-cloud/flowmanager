@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
@@ -271,7 +272,7 @@ public abstract class FlowManager {
 	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		// ELABORAZIONI COMUNI ALLE DUE DIREZIONI
 
-		if (!Constants.SI.equals(executionFlowData.getFlowStato())) {
+		if (!YesNo.YES.equals(executionFlowData.getFlowStato())) {
 			throw new OperationException("Transaction " + executionFlowData.getFlowId() + " not enabled");
 		}
 
@@ -309,7 +310,7 @@ public abstract class FlowManager {
 		FlowBuilder inboundFlowBuilderMail = new FlowBuilder();
 		operationParams.setOutcome(Constants.KO);
 		
-		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {
+		if (YesNo.YES.equals(executionFlowData.getFlowInviaMail())) {
 			logger.info("Sending mail for outcome KO");
 			inboundFlowBuilderMail.sendOutcomeMail(executionFlowData, operationParams);
 			inboundFlowBuilderMail.build().execute();
@@ -321,7 +322,7 @@ public abstract class FlowManager {
 		logger.info("Start complete process" );
 		operationParams.setOutcome(Constants.OK);
 		
-		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {
+		if (YesNo.YES.equals(executionFlowData.getFlowInviaMail())) {
 			logger.info("Sending mail for outcome OK");
 			flowBuilder.sendOutcomeMail(executionFlowData, operationParams);
 		}

@@ -1,9 +1,11 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
 public class InteractiveProgramCallParam extends GenericAS400Param {
 
 	private String pgm;
-	private String result;
+	private YesNo result;
 	
 	public String getPgm() {
 		return pgm;
@@ -13,11 +15,11 @@ public class InteractiveProgramCallParam extends GenericAS400Param {
 		this.pgm = pgm;
 	}
 
-	public String getResult() {
+	public YesNo getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(YesNo result) {
 		this.result = result;
 	}
 

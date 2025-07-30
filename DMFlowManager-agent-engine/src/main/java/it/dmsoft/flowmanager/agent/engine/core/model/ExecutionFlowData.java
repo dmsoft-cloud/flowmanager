@@ -2,6 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.model;
 
 import java.math.BigDecimal;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
 public class ExecutionFlowData {
 	public static enum OtgffanaCoulmn {
 
@@ -82,570 +84,570 @@ public class ExecutionFlowData {
 	}
 
 	
-	private String fana_Id;
-	private String fana_Desc;
-	private String fana_Gruppo;
-	private String fana_Cod_Interfaccia;
-	private String fana_Stato;
-	private String fana_Tip_Flusso;
-	private String fana_Direzione;
-	private String fana_Libreria;
-	private String fana_File;
-	private String fana_Membro;
-	private String fana_Lib_Source;
-	private String fana_File_Source;
-	private String fana_Membro_Source;
-	private String fana_Folder;
-	private String fana_File_Name;
-	private String fana_Formato;
-	private String fana_Delim_Record;
-	private String fana_Delim_Stringa;
-	private String fana_Rimoz_Spazi;
-	private String fana_Delim_Campo;
-	private String fana_Riemp_Campo;
-	private BigDecimal fana_Codepage;
-	private String fana_Mod_Acquisizione;
-	private BigDecimal fana_From_Ccsid;
-	private String fana_Pgm_Controllo;
-	private String fana_Tipologia_Conn;
-	private String fana_Host;
-	private BigDecimal fana_Port;
-	private String fana_Remote_Folder;
-	private String fana_Remote_File_Name;
-	private String fana_Utente;
-	private String fana_Password;
-	private String fana_Utente_Sftp;
-	private String fana_Integrity_Check;
-	private String fana_Fl_Name_Semaforo;
-	private BigDecimal fana_Num_Tenta_Ricez;
-	private BigDecimal fana_Intervallo_Retry;
-	private BigDecimal fana_Retention;
-	private String fana_Compression;
-	private String fana_De_Compression;
-	private String fana_Backup;
-	private String fana_Invia_Mail;
-	private String fana_Lettera_Ok;
-	private String fana_Lettera_Ko;
-	private String fana_Prog_Person;
-	private String fana_Known_Ht_Fl;
-	private String fana_Key_Fl;
-	private String fana_Modalita_Passiva;
-	private String fana_Job_Desc;
-	private String fana_Lib_Job_Desc;
-	private String fana_Cancella_File;
-	private String fana_Risottomettibile;
-	private BigDecimal fana_Lunghezza_Fl_Flat;
-	private String fana_Tipo_Trasferimento;
-	private String fana_Bypass_Qtemp;
-	private String fana_Esistenza_File;
-	private String fana_Lettera_Flusso;
-	private String fana_Agg_Nomi_Col;
-	private String fana_Crea_Vuoto;
-	private String fana_Internaz;
-	private String fana_Sost_Val_Null;
-	private String fana_Elim_Nom_Col;
-	private String fana_Flag_Ok_Vuoto;
-	private String fana_Ftp_Secure;
-	private String fana_Interactive_Type;
-	private String fana_Interactive_Program;
-	private String fana_Interactive_Result;
-	private String fana_Interactive_Command;
-	private BigDecimal fana_Delay_Semaforo;
-	private String fana_Hash_Unico;
-	private String fana_Export_Flag;
-	private String fana_Export_Code;
-	private BigDecimal fana_Fetch_Size;
-	private String fana_char_empty_space;
+	private String flowId;
+	private String flowDesc;
+	private String flowGruppo;
+	private String flowCodInterfaccia;
+	private YesNo flowStato;
+	private String flowTipFlusso;
+	private String flowDirezione;
+	private String flowLibreria;
+	private String flowFile;
+	private String flowMembro;
+	private String flowLibSource;
+	private String flowFileSource;
+	private String flowMembroSource;
+	private String flowFolder;
+	private String flowFileName;
+	private String flowFormato;
+	private String flowDelimRecord;
+	private String flowDelimStringa;
+	private String flowRimozSpazi;
+	private String flowDelimCampo;
+	private String flowRiempCampo;
+	private BigDecimal flowCodepage;
+	private String flowModAcquisizione;
+	private BigDecimal flowFromCcsid;
+	private String flowPgmControllo;
+	private String flowTipologiaConn;
+	private String flowHost;
+	private BigDecimal flowPort;
+	private String flowRemoteFolder;
+	private String flowRemoteFileName;
+	private String flowUtente;
+	private String flowPassword;
+	private String flowUtenteSftp;
+	private YesNo flowIntegrityCheck;
+	private String flowFlNameSemaforo;
+	private BigDecimal flowNumTentaRicez;
+	private BigDecimal flowIntervalloRetry;
+	private BigDecimal flowRetention;
+	private YesNo flowCompression;
+	private YesNo flowDeCompression;
+	private String flowBackup;
+	private YesNo flowInviaMail;
+	private String flowLetteraOk;
+	private String flowLetteraKo;
+	private String flowProgPerson;
+	private String flowKnownHtFl;
+	private String flowKeyFl;
+	private YesNo flowModalitaPassiva;
+	private String flowJobDesc;
+	private String flowLibJobDesc;
+	private YesNo flowCancellaFile;
+	private YesNo flowRisottomettibile;
+	private BigDecimal flowLunghezzaFlFlat;
+	private String flowTipoTrasferimento;
+	private YesNo flowBypassQtemp;
+	private YesNo flowEsistenzaFile;
+	private String flowLetteraFlusso;
+	private String flowAggNomiCol;
+	private YesNo flowCreaVuoto;
+	private String flowInternaz;
+	private String flowSostValNull;
+	private YesNo flowElimNomCol;
+	private YesNo flowFlagOkVuoto;
+	private YesNo flowFtpSecure;
+	private String flowInteractiveType;
+	private String flowInteractiveProgram;
+	private YesNo flowInteractiveResult;
+	private String flowInteractiveCommand;
+	private BigDecimal flowDelaySemaforo;
+	private YesNo flowHashUnico;
+	private String flowExportFlag;
+	private String flowExportCode;
+	private BigDecimal flowFetchSize;
+	private String flowcharemptyspace;
 	
 	
 	public String getFlowId() {
-		return fana_Id;
+		return flowId;
 	}
-	public void setFlowId(String fana_Id) {
-		this.fana_Id = fana_Id;
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
 	}
 	public String getFlowDesc() {
-		return fana_Desc;
+		return flowDesc;
 	}
-	public void setFlowDesc(String fana_Desc) {
-		this.fana_Desc = fana_Desc;
+	public void setFlowDesc(String flowDesc) {
+		this.flowDesc = flowDesc;
 	}
 	public String getFlowGruppo() {
-		return fana_Gruppo;
+		return flowGruppo;
 	}
-	public void setFlowGruppo(String fana_Gruppo) {
-		this.fana_Gruppo = fana_Gruppo;
+	public void setFlowGruppo(String flowGruppo) {
+		this.flowGruppo = flowGruppo;
 	}
 	public String getFlowCodInterfaccia() {
-		return fana_Cod_Interfaccia;
+		return flowCodInterfaccia;
 	}
-	public void setFlowCodInterfaccia(String fana_Cod_Interfaccia) {
-		this.fana_Cod_Interfaccia = fana_Cod_Interfaccia;
+	public void setFlowCodInterfaccia(String flowCodInterfaccia) {
+		this.flowCodInterfaccia = flowCodInterfaccia;
 	}
-	public String getFlowStato() {
-		return fana_Stato;
+	public YesNo getFlowStato() {
+		return flowStato;
 	}
-	public void setFlowStato(String fana_Stato) {
-		this.fana_Stato = fana_Stato;
+	public void setFlowStato(YesNo flowStato) {
+		this.flowStato = flowStato;
 	}
 	public String getFlowTipFlusso() {
-		return fana_Tip_Flusso;
+		return flowTipFlusso;
 	}
-	public void setFlowTipFlusso(String fana_Tip_Flusso) {
-		this.fana_Tip_Flusso = fana_Tip_Flusso;
+	public void setFlowTipFlusso(String flowTipFlusso) {
+		this.flowTipFlusso = flowTipFlusso;
 	}
 	public String getFlowDirezione() {
-		return fana_Direzione;
+		return flowDirezione;
 	}
-	public void setFlowDirezione(String fana_Direzione) {
-		this.fana_Direzione = fana_Direzione;
+	public void setFlowDirezione(String flowDirezione) {
+		this.flowDirezione = flowDirezione;
 	}
 	public String getFlowLibreria() {
-		return fana_Libreria;
+		return flowLibreria;
 	}
-	public void setFlowLibreria(String fana_Libreria) {
-		this.fana_Libreria = fana_Libreria;
+	public void setFlowLibreria(String flowLibreria) {
+		this.flowLibreria = flowLibreria;
 	}
 	public String getFlowFile() {
-		return fana_File;
+		return flowFile;
 	}
-	public void setFlowFile(String fana_File) {
-		this.fana_File = fana_File;
+	public void setFlowFile(String flowFile) {
+		this.flowFile = flowFile;
 	}
 	public String getFlowMembro() {
-		return fana_Membro;
+		return flowMembro;
 	}
-	public void setFlowMembro(String fana_Membro) {
-		this.fana_Membro = fana_Membro;
+	public void setFlowMembro(String flowMembro) {
+		this.flowMembro = flowMembro;
 	}
 	public String getFlowLibSource() {
-		return fana_Lib_Source;
+		return flowLibSource;
 	}
-	public void setFlowLibSource(String fana_Lib_Source) {
-		this.fana_Lib_Source = fana_Lib_Source;
+	public void setFlowLibSource(String flowLibSource) {
+		this.flowLibSource = flowLibSource;
 	}
 	public String getFlowFileSource() {
-		return fana_File_Source;
+		return flowFileSource;
 	}
-	public void setFlowFileSource(String fana_File_Source) {
-		this.fana_File_Source = fana_File_Source;
+	public void setFlowFileSource(String flowFileSource) {
+		this.flowFileSource = flowFileSource;
 	}
 	public String getFlowMembroSource() {
-		return fana_Membro_Source;
+		return flowMembroSource;
 	}
-	public void setFlowMembroSource(String fana_Membro_Source) {
-		this.fana_Membro_Source = fana_Membro_Source;
+	public void setFlowMembroSource(String flowMembroSource) {
+		this.flowMembroSource = flowMembroSource;
 	}
 	public String getFlowFolder() {
-		return fana_Folder;
+		return flowFolder;
 	}
-	public void setFlowFolder(String fana_Folder) {
-		this.fana_Folder = fana_Folder;
+	public void setFlowFolder(String flowFolder) {
+		this.flowFolder = flowFolder;
 	}
 	public String getFlowFileName() {
-		return fana_File_Name;
+		return flowFileName;
 	}
-	public void setFlowFileName(String fana_File_Name) {
-		this.fana_File_Name = fana_File_Name;
+	public void setFlowFileName(String flowFileName) {
+		this.flowFileName = flowFileName;
 	}
 	public String getFlowFormato() {
-		return fana_Formato;
+		return flowFormato;
 	}
-	public void setFlowFormato(String fana_Formato) {
-		this.fana_Formato = fana_Formato;
+	public void setFlowFormato(String flowFormato) {
+		this.flowFormato = flowFormato;
 	}
 	public String getFlowDelimRecord() {
-		return fana_Delim_Record;
+		return flowDelimRecord;
 	}
-	public void setFlowDelimRecord(String fana_Delim_Record) {
-		this.fana_Delim_Record = fana_Delim_Record;
+	public void setFlowDelimRecord(String flowDelimRecord) {
+		this.flowDelimRecord = flowDelimRecord;
 	}
 	public String getFlowDelimStringa() {
-		return fana_Delim_Stringa;
+		return flowDelimStringa;
 	}
-	public void setFlowDelimStringa(String fana_Delim_Stringa) {
-		this.fana_Delim_Stringa = fana_Delim_Stringa;
+	public void setFlowDelimStringa(String flowDelimStringa) {
+		this.flowDelimStringa = flowDelimStringa;
 	}
 	public String getFlowRimozSpazi() {
-		return fana_Rimoz_Spazi;
+		return flowRimozSpazi;
 	}
-	public void setFlowRimozSpazi(String fana_Rimoz_Spazi) {
-		this.fana_Rimoz_Spazi = fana_Rimoz_Spazi;
+	public void setFlowRimozSpazi(String flowRimozSpazi) {
+		this.flowRimozSpazi = flowRimozSpazi;
 	}
 	public String getFlowDelimCampo() {
-		return fana_Delim_Campo;
+		return flowDelimCampo;
 	}
-	public void setFlowDelimCampo(String fana_Delim_Campo) {
-		this.fana_Delim_Campo = fana_Delim_Campo;
+	public void setFlowDelimCampo(String flowDelimCampo) {
+		this.flowDelimCampo = flowDelimCampo;
 	}
 	public String getFlowRiempCampo() {
-		return fana_Riemp_Campo;
+		return flowRiempCampo;
 	}
-	public void setFlowRiempCampo(String fana_Riemp_Campo) {
-		this.fana_Riemp_Campo = fana_Riemp_Campo;
+	public void setFlowRiempCampo(String flowRiempCampo) {
+		this.flowRiempCampo = flowRiempCampo;
 	}
 	public BigDecimal getFlowCodepage() {
-		return fana_Codepage;
+		return flowCodepage;
 	}
-	public void setFlowCodepage(BigDecimal fana_Codepage) {
-		this.fana_Codepage = fana_Codepage;
+	public void setFlowCodepage(BigDecimal flowCodepage) {
+		this.flowCodepage = flowCodepage;
 	}
 	public String getFlowModAcquisizione() {
-		return fana_Mod_Acquisizione;
+		return flowModAcquisizione;
 	}
-	public void setFlowModAcquisizione(String fana_Mod_Acquisizione) {
-		this.fana_Mod_Acquisizione = fana_Mod_Acquisizione;
+	public void setFlowModAcquisizione(String flowModAcquisizione) {
+		this.flowModAcquisizione = flowModAcquisizione;
 	}
 	public BigDecimal getFlowFromCcsid() {
-		return fana_From_Ccsid;
+		return flowFromCcsid;
 	}
-	public void setFlowFromCcsid(BigDecimal fana_From_Ccsid) {
-		this.fana_From_Ccsid = fana_From_Ccsid;
+	public void setFlowFromCcsid(BigDecimal flowFromCcsid) {
+		this.flowFromCcsid = flowFromCcsid;
 	}
 	public String getFlowPgmControllo() {
-		return fana_Pgm_Controllo;
+		return flowPgmControllo;
 	}
-	public void setFlowPgmControllo(String fana_Pgm_Controllo) {
-		this.fana_Pgm_Controllo = fana_Pgm_Controllo;
+	public void setFlowPgmControllo(String flowPgmControllo) {
+		this.flowPgmControllo = flowPgmControllo;
 	}
 	public String getFlowTipologiaConn() {
-		return fana_Tipologia_Conn;
+		return flowTipologiaConn;
 	}
-	public void setFlowTipologiaConn(String fana_Tipologia_Conn) {
-		this.fana_Tipologia_Conn = fana_Tipologia_Conn;
+	public void setFlowTipologiaConn(String flowTipologiaConn) {
+		this.flowTipologiaConn = flowTipologiaConn;
 	}
 	public String getFlowHost() {
-		return fana_Host;
+		return flowHost;
 	}
-	public void setFlowHost(String fana_Host) {
-		this.fana_Host = fana_Host;
+	public void setFlowHost(String flowHost) {
+		this.flowHost = flowHost;
 	}
 	public BigDecimal getFlowPort() {
-		return fana_Port;
+		return flowPort;
 	}
-	public void setFlowPort(BigDecimal fana_Port) {
-		this.fana_Port = fana_Port;
+	public void setFlowPort(BigDecimal flowPort) {
+		this.flowPort = flowPort;
 	}
 	public String getFlowRemoteFolder() {
-		return fana_Remote_Folder;
+		return flowRemoteFolder;
 	}
-	public void setFlowRemoteFolder(String fana_Remote_Folder) {
-		this.fana_Remote_Folder = fana_Remote_Folder;
+	public void setFlowRemoteFolder(String flowRemoteFolder) {
+		this.flowRemoteFolder = flowRemoteFolder;
 	}
 	public String getFlowRemoteFileName() {
-		return fana_Remote_File_Name;
+		return flowRemoteFileName;
 	}
-	public void setFlowRemoteFileName(String fana_Remote_File_Name) {
-		this.fana_Remote_File_Name = fana_Remote_File_Name;
+	public void setFlowRemoteFileName(String flowRemoteFileName) {
+		this.flowRemoteFileName = flowRemoteFileName;
 	}
 	public String getFlowUtente() {
-		return fana_Utente;
+		return flowUtente;
 	}
-	public void setFlowUtente(String fana_Utente) {
-		this.fana_Utente = fana_Utente;
+	public void setFlowUtente(String flowUtente) {
+		this.flowUtente = flowUtente;
 	}
 	public String getFlowPassword() {
-		return fana_Password;
+		return flowPassword;
 	}
-	public void setFlowPassword(String fana_Password) {
-		this.fana_Password = fana_Password;
+	public void setFlowPassword(String flowPassword) {
+		this.flowPassword = flowPassword;
 	}
 	public String getFlowUtenteSftp() {
-		return fana_Utente_Sftp;
+		return flowUtenteSftp;
 	}
-	public void setFlowUtenteSftp(String fana_Utente_Sftp) {
-		this.fana_Utente_Sftp = fana_Utente_Sftp;
+	public void setFlowUtenteSftp(String flowUtenteSftp) {
+		this.flowUtenteSftp = flowUtenteSftp;
 	}
-	public String getFlowIntegrityCheck() {
-		return fana_Integrity_Check;
+	public YesNo getFlowIntegrityCheck() {
+		return flowIntegrityCheck;
 	}
-	public void setFlowIntegrityCheck(String fana_Intergiry_Check) {
-		this.fana_Integrity_Check = fana_Intergiry_Check;
+	public void setFlowIntegrityCheck(YesNo flowIntergiryCheck) {
+		this.flowIntegrityCheck = flowIntergiryCheck;
 	}
 	public String getFlowFlNameSemaforo() {
-		return fana_Fl_Name_Semaforo;
+		return flowFlNameSemaforo;
 	}
-	public void setFlowFlNameSemaforo(String fana_Fl_Name_Semaforo) {
-		this.fana_Fl_Name_Semaforo = fana_Fl_Name_Semaforo;
+	public void setFlowFlNameSemaforo(String flowFlNameSemaforo) {
+		this.flowFlNameSemaforo = flowFlNameSemaforo;
 	}
 	public BigDecimal getFlowNumTentaRicez() {
-		return fana_Num_Tenta_Ricez;
+		return flowNumTentaRicez;
 	}
-	public void setFlowNumTentaRicez(BigDecimal fana_Num_Tenta_Ricez) {
-		this.fana_Num_Tenta_Ricez = fana_Num_Tenta_Ricez;
+	public void setFlowNumTentaRicez(BigDecimal flowNumTentaRicez) {
+		this.flowNumTentaRicez = flowNumTentaRicez;
 	}
 	public BigDecimal getFlowIntervalloRetry() {
-		return fana_Intervallo_Retry;
+		return flowIntervalloRetry;
 	}
-	public void setFlowIntervalloRetry(BigDecimal fana_Intervallo_Retry) {
-		this.fana_Intervallo_Retry = fana_Intervallo_Retry;
+	public void setFlowIntervalloRetry(BigDecimal flowIntervalloRetry) {
+		this.flowIntervalloRetry = flowIntervalloRetry;
 	}
 	public BigDecimal getFlowRetention() {
-		return fana_Retention;
+		return flowRetention;
 	}
-	public void setFlowRetention(BigDecimal fana_Retention) {
-		this.fana_Retention = fana_Retention;
+	public void setFlowRetention(BigDecimal flowRetention) {
+		this.flowRetention = flowRetention;
 	}
-	public String getFlowCompression() {
-		return fana_Compression;
+	public YesNo getFlowCompression() {
+		return flowCompression;
 	}
-	public void setFlowCompression(String fana_Compression) {
-		this.fana_Compression = fana_Compression;
+	public void setFlowCompression(YesNo flowCompression) {
+		this.flowCompression = flowCompression;
 	}
-	public String getFlowDeCompression() {
-		return fana_De_Compression;
+	public YesNo getFlowDeCompression() {
+		return flowDeCompression;
 	}
-	public void setFlowDeCompression(String fana_De_Compression) {
-		this.fana_De_Compression = fana_De_Compression;
+	public void setFlowDeCompression(YesNo flowDeCompression) {
+		this.flowDeCompression = flowDeCompression;
 	}
 	public String getFlowBackup() {
-		return fana_Backup;
+		return flowBackup;
 	}
-	public void setFlowBackup(String fana_Backup) {
-		this.fana_Backup = fana_Backup;
+	public void setFlowBackup(String flowBackup) {
+		this.flowBackup = flowBackup;
 	}
-	public String getFlowInviaMail() {
-		return fana_Invia_Mail;
+	public YesNo getFlowInviaMail() {
+		return flowInviaMail;
 	}
-	public void setFlowInviaMail(String fana_Invia_Mail) {
-		this.fana_Invia_Mail = fana_Invia_Mail;
+	public void setFlowInviaMail(YesNo flowInviaMail) {
+		this.flowInviaMail = flowInviaMail;
 	}
 	public String getFlowLetteraOk() {
-		return fana_Lettera_Ok;
+		return flowLetteraOk;
 	}
-	public void setFlowLetteraOk(String fana_Lettera_Ok) {
-		this.fana_Lettera_Ok = fana_Lettera_Ok;
+	public void setFlowLetteraOk(String flowLetteraOk) {
+		this.flowLetteraOk = flowLetteraOk;
 	}
 	public String getFlowLetteraKo() {
-		return fana_Lettera_Ko;
+		return flowLetteraKo;
 	}
-	public void setFlowLetteraKo(String fana_Lettera_Ko) {
-		this.fana_Lettera_Ko = fana_Lettera_Ko;
+	public void setFlowLetteraKo(String flowLetteraKo) {
+		this.flowLetteraKo = flowLetteraKo;
 	}
 	public String getFlowProgPerson() {
-		return fana_Prog_Person;
+		return flowProgPerson;
 	}
-	public void setFlowProgPerson(String fana_Prog_Person) {
-		this.fana_Prog_Person = fana_Prog_Person;
+	public void setFlowProgPerson(String flowProgPerson) {
+		this.flowProgPerson = flowProgPerson;
 	}
 	public String getFlowKnownHtFl() {
-		return fana_Known_Ht_Fl;
+		return flowKnownHtFl;
 	}
-	public void setFlowKnownHtFl(String fana_Known_Ht_Fl) {
-		this.fana_Known_Ht_Fl = fana_Known_Ht_Fl;
+	public void setFlowKnownHtFl(String flowKnownHtFl) {
+		this.flowKnownHtFl = flowKnownHtFl;
 	}
 	public String getFlowKeyFl() {
-		return fana_Key_Fl;
+		return flowKeyFl;
 	}
-	public void setFlowKeyFl(String fana_Key_Fl) {
-		this.fana_Key_Fl = fana_Key_Fl;
+	public void setFlowKeyFl(String flowKeyFl) {
+		this.flowKeyFl = flowKeyFl;
 	}
-	public String getFlowModalitaPassiva() {
-		return fana_Modalita_Passiva;
+	public YesNo getFlowModalitaPassiva() {
+		return flowModalitaPassiva;
 	}
-	public void setFlowModalitaPassiva(String fana_Modalita_Passiva) {
-		this.fana_Modalita_Passiva = fana_Modalita_Passiva;
+	public void setFlowModalitaPassiva(YesNo flowModalitaPassiva) {
+		this.flowModalitaPassiva = flowModalitaPassiva;
 	}
 	public String getFlowJobDesc() {
-		return fana_Job_Desc;
+		return flowJobDesc;
 	}
-	public void setFlowJobDesc(String fana_Job_Desc) {
-		this.fana_Job_Desc = fana_Job_Desc;
+	public void setFlowJobDesc(String flowJobDesc) {
+		this.flowJobDesc = flowJobDesc;
 	}
 	public String getFlowLibJobDesc() {
-		return fana_Lib_Job_Desc;
+		return flowLibJobDesc;
 	}
-	public void setFlowLibJobDesc(String fana_Lib_Job_Desc) {
-		this.fana_Lib_Job_Desc = fana_Lib_Job_Desc;
+	public void setFlowLibJobDesc(String flowLibJobDesc) {
+		this.flowLibJobDesc = flowLibJobDesc;
 	}
-	public String getFlowCancellaFile() {
-		return fana_Cancella_File;
+	public YesNo getFlowCancellaFile() {
+		return flowCancellaFile;
 	}
-	public void setFlowCancellaFile(String fana_Cancella_File) {
-		this.fana_Cancella_File = fana_Cancella_File;
+	public void setFlowCancellaFile(YesNo flowCancellaFile) {
+		this.flowCancellaFile = flowCancellaFile;
 	}
-	public String getFlowRisottomettibile() {
-		return fana_Risottomettibile;
+	public YesNo getFlowRisottomettibile() {
+		return flowRisottomettibile;
 	}
-	public void setFlowRisottomettibile(String fana_Risottomettibile) {
-		this.fana_Risottomettibile = fana_Risottomettibile;
+	public void setFlowRisottomettibile(YesNo flowRisottomettibile) {
+		this.flowRisottomettibile = flowRisottomettibile;
 	}
 	public BigDecimal getFlowLunghezzaFlFlat() {
-		return fana_Lunghezza_Fl_Flat;
+		return flowLunghezzaFlFlat;
 	}
-	public void setFlowLunghezzaFlFlat(BigDecimal fana_Lunghezza_Fl_Flat) {
-		this.fana_Lunghezza_Fl_Flat = fana_Lunghezza_Fl_Flat;
+	public void setFlowLunghezzaFlFlat(BigDecimal flowLunghezzaFlFlat) {
+		this.flowLunghezzaFlFlat = flowLunghezzaFlFlat;
 	}
 	public String getFlowTipoTrasferimento() {
-		return fana_Tipo_Trasferimento;
+		return flowTipoTrasferimento;
 	}
-	public void setFlowTipoTrasferimento(String fana_tipo_trasferimento) {
-		this.fana_Tipo_Trasferimento = fana_tipo_trasferimento;
+	public void setFlowTipoTrasferimento(String flowtipotrasferimento) {
+		this.flowTipoTrasferimento = flowtipotrasferimento;
 	}
-	public String getFlowBypassQtemp() {
-		return fana_Bypass_Qtemp;
+	public YesNo getFlowBypassQtemp() {
+		return flowBypassQtemp;
 	}
-	public void setFlowBypassQtemp(String fana_Bypass_Qtemp) {
-		this.fana_Bypass_Qtemp = fana_Bypass_Qtemp;
+	public void setFlowBypassQtemp(YesNo flowBypassQtemp) {
+		this.flowBypassQtemp = flowBypassQtemp;
 	}
-	public String getFlowEsistenzaFile() {
-		return fana_Esistenza_File;
+	public YesNo getFlowEsistenzaFile() {
+		return flowEsistenzaFile;
 	}
-	public void setFlowEsistenzaFile(String fana_Esistenza_File) {
-		this.fana_Esistenza_File = fana_Esistenza_File;
+	public void setFlowEsistenzaFile(YesNo flowEsistenzaFile) {
+		this.flowEsistenzaFile = flowEsistenzaFile;
 	}
 	public String getFlowLetteraFlusso() {
-		return fana_Lettera_Flusso;
+		return flowLetteraFlusso;
 	}
-	public void setFlowLetteraFlusso(String fana_lettera_flusso) {
-		this.fana_Lettera_Flusso = fana_lettera_flusso;
+	public void setFlowLetteraFlusso(String flowletteraflusso) {
+		this.flowLetteraFlusso = flowletteraflusso;
 	}
 	public String getFlowAggNomiCol() {
-		return fana_Agg_Nomi_Col;
+		return flowAggNomiCol;
 	}
-	public void setFlowAggNomiCol(String fana_Agg_Nomi_Col) {
-		this.fana_Agg_Nomi_Col = fana_Agg_Nomi_Col;
+	public void setFlowAggNomiCol(String flowAggNomiCol) {
+		this.flowAggNomiCol = flowAggNomiCol;
 	}
-	public String getFlowCreaVuoto() {
-		return fana_Crea_Vuoto;
+	public YesNo getFlowCreaVuoto() {
+		return flowCreaVuoto;
 	}
-	public void setFlowCreaVuoto(String fana_Crea_Vuoto) {
-		this.fana_Crea_Vuoto = fana_Crea_Vuoto;
+	public void setFlowCreaVuoto(YesNo flowCreaVuoto) {
+		this.flowCreaVuoto = flowCreaVuoto;
 	}
 	public String getFlowInternaz() {
-		return fana_Internaz;
+		return flowInternaz;
 	}
-	public void setFlowInternaz(String fana_Internaz) {
-		this.fana_Internaz = fana_Internaz;
+	public void setFlowInternaz(String flowInternaz) {
+		this.flowInternaz = flowInternaz;
 	}
 	
 	public String getFlowSostValNull() {
-		return fana_Sost_Val_Null;
+		return flowSostValNull;
 	}
-	public void setFlowSostValNull(String fana_Sost_Val_Null) {
-		this.fana_Sost_Val_Null = fana_Sost_Val_Null;
-	}
-	
-	public String getFlowElimNomCol() {
-		return fana_Elim_Nom_Col;
-	}
-	public void setFlowElimNomCol(String fana_Elim_Nom_Col) {
-		this.fana_Elim_Nom_Col = fana_Elim_Nom_Col;
+	public void setFlowSostValNull(String flowSostValNull) {
+		this.flowSostValNull = flowSostValNull;
 	}
 	
-	public String getFlowFlagOkVuoto() {
-		return fana_Flag_Ok_Vuoto;
+	public YesNo getFlowElimNomCol() {
+		return flowElimNomCol;
 	}
-	public void setFlowFlagOkVuoto(String fana_Flag_Ok_Vuoto) {
-		this.fana_Flag_Ok_Vuoto = fana_Flag_Ok_Vuoto;
+	public void setFlowElimNomCol(YesNo flowElimNomCol) {
+		this.flowElimNomCol = flowElimNomCol;
 	}
-	public String getFlowFtpSecure() {
-		return fana_Ftp_Secure;
+	
+	public YesNo getFlowFlagOkVuoto() {
+		return flowFlagOkVuoto;
 	}
-	public void setFlowFtpSecure(String fana_Ftp_Secure) {
-		this.fana_Ftp_Secure = fana_Ftp_Secure;
+	public void setFlowFlagOkVuoto(YesNo flowFlagOkVuoto) {
+		this.flowFlagOkVuoto = flowFlagOkVuoto;
+	}
+	public YesNo getFlowFtpSecure() {
+		return flowFtpSecure;
+	}
+	public void setFlowFtpSecure(YesNo flowFtpSecure) {
+		this.flowFtpSecure = flowFtpSecure;
 	}
 	
 	public String getFlowInteractiveType() {
-		return fana_Interactive_Type;
+		return flowInteractiveType;
 	}
-	public void setFlowInteractiveType(String fana_Interactive_Type) {
-		this.fana_Interactive_Type = fana_Interactive_Type;
+	public void setFlowInteractiveType(String flowInteractiveType) {
+		this.flowInteractiveType = flowInteractiveType;
 	}
 	public String getFlowInteractiveProgram() {
-		return fana_Interactive_Program;
+		return flowInteractiveProgram;
 	}
-	public void setFlowInteractiveProgram(String fana_Interactive_Program) {
-		this.fana_Interactive_Program = fana_Interactive_Program;
+	public void setFlowInteractiveProgram(String flowInteractiveProgram) {
+		this.flowInteractiveProgram = flowInteractiveProgram;
 	}
-	public String getFlowInteractiveResult() {
-		return fana_Interactive_Result;
+	public YesNo getFlowInteractiveResult() {
+		return flowInteractiveResult;
 	}
-	public void setFlowInteractiveResult(String fana_Interactive_Result) {
-		this.fana_Interactive_Result = fana_Interactive_Result;
+	public void setFlowInteractiveResult(YesNo flowInteractiveResult) {
+		this.flowInteractiveResult = flowInteractiveResult;
 	}
 	public String getFlowInteractiveCommand() {
-		return fana_Interactive_Command;
+		return flowInteractiveCommand;
 	}
-	public void setFlowInteractiveCommand(String fana_Interactive_Command) {
-		this.fana_Interactive_Command = fana_Interactive_Command;
+	public void setFlowInteractiveCommand(String flowInteractiveCommand) {
+		this.flowInteractiveCommand = flowInteractiveCommand;
 	}
 	public BigDecimal getFlowDelaySemaforo() {
-		return fana_Delay_Semaforo;
+		return flowDelaySemaforo;
 	}
-	public void setFlowDelaySemaforo(BigDecimal fana_Delay_Semaforo) {
-		this.fana_Delay_Semaforo = fana_Delay_Semaforo;
+	public void setFlowDelaySemaforo(BigDecimal flowDelaySemaforo) {
+		this.flowDelaySemaforo = flowDelaySemaforo;
 	}
-	public String getFlowHashUnico() {
-		return fana_Hash_Unico;
+	public YesNo getFlowHashUnico() {
+		return flowHashUnico;
 	}
-	public void setFlowHashUnico(String fana_Hash_Unico) {
-		this.fana_Hash_Unico = fana_Hash_Unico;
+	public void setFlowHashUnico(YesNo flowHashUnico) {
+		this.flowHashUnico = flowHashUnico;
 	}
 	public String getFlowExportFlag() {
-		return fana_Export_Flag;
+		return flowExportFlag;
 	}
-	public void setFlowExportFlag(String fana_Export_Flag) {
-		this.fana_Export_Flag = fana_Export_Flag;
+	public void setFlowExportFlag(String flowExportFlag) {
+		this.flowExportFlag = flowExportFlag;
 	}
 	public String getFlowExportCode() {
-		return fana_Export_Code;
+		return flowExportCode;
 	}
-	public void setFlowExportCode(String fana_Export_Code) {
-		this.fana_Export_Code = fana_Export_Code;
+	public void setFlowExportCode(String flowExportCode) {
+		this.flowExportCode = flowExportCode;
 	}
 	
 
 	public BigDecimal getFlowFetchSize() {
-		return fana_Fetch_Size;
+		return flowFetchSize;
 	}
-	public void setFlowFetchSize(BigDecimal fana_Fetch_Size) {
-		this.fana_Fetch_Size = fana_Fetch_Size;
+	public void setFlowFetchSize(BigDecimal flowFetchSize) {
+		this.flowFetchSize = flowFetchSize;
 	}
 	
-	public String getFlowcharemptyspace() {
-		return fana_char_empty_space;
+	public String getFlowCharEmptySpace() {
+		return flowcharemptyspace;
 	}
-	public void setFlowcharemptyspace(String fana_char_empty_space) {
-		this.fana_char_empty_space = fana_char_empty_space;
+	public void setFlowCharEmptySpace(String flowcharemptyspace) {
+		this.flowcharemptyspace = flowcharemptyspace;
 	}
 	
 	@Override
 	public String toString() {
-		return "Otgffana [fana_Id=" + fana_Id + ", fana_Desc=" + fana_Desc + ", fana_Gruppo=" + fana_Gruppo
-				+ ", fana_Cod_Interfaccia=" + fana_Cod_Interfaccia + ", fana_Stato=" + fana_Stato + ", fana_Tip_Flusso="
-				+ fana_Tip_Flusso + ", fana_Direzione=" + fana_Direzione + ", fana_Libreria=" + fana_Libreria
-				+ ", fana_File=" + fana_File + ", fana_Membro=" + fana_Membro + ", fana_Lib_Source=" + fana_Lib_Source
-				+ ", fana_File_Source=" + fana_File_Source + ", fana_Membro_Source=" + fana_Membro_Source
-				+ ", fana_Folder=" + fana_Folder + ", fana_File_Name=" + fana_File_Name + ", fana_Formato="
-				+ fana_Formato + ", fana_Delim_Record=" + fana_Delim_Record + ", fana_Delim_Stringa="
-				+ fana_Delim_Stringa + ", fana_Rimoz_Spazi=" + fana_Rimoz_Spazi + ", fana_Delim_Campo="
-				+ fana_Delim_Campo + ", fana_Riemp_Campo=" + fana_Riemp_Campo + ", fana_Codepage=" + fana_Codepage
-				+ ", fana_Mod_Acquisizione=" + fana_Mod_Acquisizione + ", fana_From_Ccsid=" + fana_From_Ccsid
-				+ ", fana_Pgm_Controllo=" + fana_Pgm_Controllo + ", fana_Tipologia_Conn=" + fana_Tipologia_Conn
-				+ ", fana_Host=" + fana_Host + ", fana_Port=" + fana_Port + ", fana_Remote_Folder=" + fana_Remote_Folder
-				+ ", fana_Remote_File_Name=" + fana_Remote_File_Name + ", fana_Utente=" + fana_Utente
-				+ ", fana_Password=" + fana_Password + ", fana_Utente_Sftp=" + fana_Utente_Sftp
-				+ ", fana_Intergiry_Check=" + fana_Integrity_Check + ", fana_Fl_Name_Semaforo=" + fana_Fl_Name_Semaforo
-				+ ", fana_Num_Tenta_Ricez=" + fana_Num_Tenta_Ricez + ", fana_Intervallo_Retry=" + fana_Intervallo_Retry
-				+ ", fana_Retention=" + fana_Retention + ", fana_Compression=" + fana_Compression
-				+ ", fana_De_Compression=" + fana_De_Compression + ", fana_Backup=" + fana_Backup + ", fana_Invia_Mail="
-				+ fana_Invia_Mail + ", fana_Lettera_Ok=" + fana_Lettera_Ok + ", fana_Lettera_Ko=" + fana_Lettera_Ko
-				+ ", fana_Prog_Person=" + fana_Prog_Person + ", fana_Known_Ht_Fl=" + fana_Known_Ht_Fl + ", fana_Key_Fl="
-				+ fana_Key_Fl + ", fana_Modalita_Passiva=" + fana_Modalita_Passiva + ", fana_Job_Desc=" + fana_Job_Desc
-				+ ", fana_Lib_Job_Desc=" + fana_Lib_Job_Desc + ", fana_Cancella_File=" + fana_Cancella_File
-				+ ", fana_Risottomettibile=" + fana_Risottomettibile + ", fana_Lunghezza_Fl_Flat="
-				+ fana_Lunghezza_Fl_Flat + ", fana_Tipo_Trasferimento=" + fana_Tipo_Trasferimento
-				+ ", fana_Bypass_Qtemp=" + fana_Bypass_Qtemp + ", fana_Esistenza_File=" + fana_Esistenza_File
-				+ ", fana_Lettera_Flusso=" + fana_Lettera_Flusso + ", fana_Agg_Nomi_Col=" + fana_Agg_Nomi_Col
-				+ ", fana_Crea_Vuoto=" + fana_Crea_Vuoto + ", fana_Internaz=" + fana_Internaz + ", fana_Sost_Val_Null="
-				+ fana_Sost_Val_Null + ", fana_Elim_Nom_Col=" + fana_Elim_Nom_Col + ", fana_Flag_Ok_Vuoto="
-				+ fana_Flag_Ok_Vuoto + ", fana_Ftp_Secure=" + fana_Ftp_Secure + ", fana_Interactive_Type="
-				+ fana_Interactive_Type + ", fana_Interactive_Program=" + fana_Interactive_Program
-				+ ", fana_Interactive_Result=" + fana_Interactive_Result + ", fana_Interactive_Command="
-				+ fana_Interactive_Command + ", fana_Delay_Semaforo=" + fana_Delay_Semaforo + ", fana_Hash_Unico="
-				+ fana_Hash_Unico + ", fana_Export_Flag=" + fana_Export_Flag + ", fana_Export_Code=" + fana_Export_Code
-				+ ", fana_Fetch_Size=" + fana_Fetch_Size + ", fana_char_empty_space=" + fana_char_empty_space + "]";
+		return "Otgffana [flowId=" + flowId + ", flowDesc=" + flowDesc + ", flowGruppo=" + flowGruppo
+				+ ", flowCodInterfaccia=" + flowCodInterfaccia + ", flowStato=" + flowStato + ", flowTipFlusso="
+				+ flowTipFlusso + ", flowDirezione=" + flowDirezione + ", flowLibreria=" + flowLibreria
+				+ ", flowFile=" + flowFile + ", flowMembro=" + flowMembro + ", flowLibSource=" + flowLibSource
+				+ ", flowFileSource=" + flowFileSource + ", flowMembroSource=" + flowMembroSource
+				+ ", flowFolder=" + flowFolder + ", flowFileName=" + flowFileName + ", flowFormato="
+				+ flowFormato + ", flowDelimRecord=" + flowDelimRecord + ", flowDelimStringa="
+				+ flowDelimStringa + ", flowRimozSpazi=" + flowRimozSpazi + ", flowDelimCampo="
+				+ flowDelimCampo + ", flowRiempCampo=" + flowRiempCampo + ", flowCodepage=" + flowCodepage
+				+ ", flowModAcquisizione=" + flowModAcquisizione + ", flowFromCcsid=" + flowFromCcsid
+				+ ", flowPgmControllo=" + flowPgmControllo + ", flowTipologiaConn=" + flowTipologiaConn
+				+ ", flowHost=" + flowHost + ", flowPort=" + flowPort + ", flowRemoteFolder=" + flowRemoteFolder
+				+ ", flowRemoteFileName=" + flowRemoteFileName + ", flowUtente=" + flowUtente
+				+ ", flowPassword=" + flowPassword + ", flowUtenteSftp=" + flowUtenteSftp
+				+ ", flowIntergiryCheck=" + flowIntegrityCheck + ", flowFlNameSemaforo=" + flowFlNameSemaforo
+				+ ", flowNumTentaRicez=" + flowNumTentaRicez + ", flowIntervalloRetry=" + flowIntervalloRetry
+				+ ", flowRetention=" + flowRetention + ", flowCompression=" + flowCompression
+				+ ", flowDeCompression=" + flowDeCompression + ", flowBackup=" + flowBackup + ", flowInviaMail="
+				+ flowInviaMail + ", flowLetteraOk=" + flowLetteraOk + ", flowLetteraKo=" + flowLetteraKo
+				+ ", flowProgPerson=" + flowProgPerson + ", flowKnownHtFl=" + flowKnownHtFl + ", flowKeyFl="
+				+ flowKeyFl + ", flowModalitaPassiva=" + flowModalitaPassiva + ", flowJobDesc=" + flowJobDesc
+				+ ", flowLibJobDesc=" + flowLibJobDesc + ", flowCancellaFile=" + flowCancellaFile
+				+ ", flowRisottomettibile=" + flowRisottomettibile + ", flowLunghezzaFlFlat="
+				+ flowLunghezzaFlFlat + ", flowTipoTrasferimento=" + flowTipoTrasferimento
+				+ ", flowBypassQtemp=" + flowBypassQtemp + ", flowEsistenzaFile=" + flowEsistenzaFile
+				+ ", flowLetteraFlusso=" + flowLetteraFlusso + ", flowAggNomiCol=" + flowAggNomiCol
+				+ ", flowCreaVuoto=" + flowCreaVuoto + ", flowInternaz=" + flowInternaz + ", flowSostValNull="
+				+ flowSostValNull + ", flowElimNomCol=" + flowElimNomCol + ", flowFlagOkVuoto="
+				+ flowFlagOkVuoto + ", flowFtpSecure=" + flowFtpSecure + ", flowInteractiveType="
+				+ flowInteractiveType + ", flowInteractiveProgram=" + flowInteractiveProgram
+				+ ", flowInteractiveResult=" + flowInteractiveResult + ", flowInteractiveCommand="
+				+ flowInteractiveCommand + ", flowDelaySemaforo=" + flowDelaySemaforo + ", flowHashUnico="
+				+ flowHashUnico + ", flowExportFlag=" + flowExportFlag + ", flowExportCode=" + flowExportCode
+				+ ", flowFetchSize=" + flowFetchSize + ", flowcharemptyspace=" + flowcharemptyspace + "]";
 	}
 	
 

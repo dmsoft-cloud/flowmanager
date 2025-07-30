@@ -127,7 +127,7 @@ public class FlowBuilder {
 		
 		readNameFilesParams.setListFile(operationParams.getListFile());
 		readNameFilesParams.setOperationParams(operationParams);
-		readNameFilesParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
+		readNameFilesParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 		
 		updateGenericAs400(executionFlowData, readNameFilesParams);
 
@@ -210,7 +210,7 @@ public class FlowBuilder {
 	}
 	
 	public FlowBuilder sendOutcomeMail(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		if (Constants.SI.equals(executionFlowData.getFlowInviaMail())) {		
+		if (YesNo.YES.equals(executionFlowData.getFlowInviaMail())) {		
 			String letterCode = Constants.OK.equals(operationParams.getOutcome()) ? executionFlowData.getFlowLetteraOk() : executionFlowData.getFlowLetteraKo();
 			flow.addOperations(sendMail(executionFlowData, operationParams, letterCode, null));
 		}
@@ -268,7 +268,7 @@ public class FlowBuilder {
 			for (String attachmentFile : attachmentFiles) {
 				Allegato allegato = new Allegato();
 				allegato.setContentId(StringUtils.removePath(attachmentFile));
-				if (Constants.SI.equals(executionFlowData.getFlowCompression()) || Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
+				if (YesNo.YES.equals(executionFlowData.getFlowCompression()) || Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
 					allegato.setPath(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + attachmentFile + Constants.ZIP_EXTENSION);
 				}
 				else allegato.setPath(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + attachmentFile);
@@ -293,8 +293,8 @@ public class FlowBuilder {
 		sendMailParam.setTestoHtml(true);
 		
 		sendMailParam.setPgmLibrary(PropertiesUtils.get(Constants.PGM_LIBRARY_KEY));
-		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(Constants.SI::equals).isPresent()) {
-		if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {	
+		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(YesNo.YES::equals).isPresent()) {
+		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {	
 			MailParms mp = ConfigUtils.getMailConfig();
 			sendMailParam.setSmtpUsername(mp.getSmtpUser());
 			sendMailParam.setSmtpPassword(mp.getSmtpPassword());
@@ -308,8 +308,8 @@ public class FlowBuilder {
 		readOtgffempa.setParameters(sendMailParam);
 		
 		List<Operation<?>> retList = new ArrayList<Operation<?>>();
-		//if(!Optional.ofNullable(operationParams.getLegacyModernization()).filter(Constants.SI::equals).isPresent()) retList.add(readOtgffempa);
-		if(!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) retList.add(readOtgffempa);
+		//if(!Optional.ofNullable(operationParams.getLegacyModernization()).filter(YesNo.YES::equals).isPresent()) retList.add(readOtgffempa);
+		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) retList.add(readOtgffempa);
 		
 		retList.add(sendMail);
 		
@@ -391,7 +391,7 @@ public class FlowBuilder {
 			operationParams.setLibrary(Constants.QTEMP);
 		}
 		
-		if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 			operationParams.setLibrary(executionFlowData.getFlowLibreria());
 		}
 		
@@ -445,8 +445,8 @@ public class FlowBuilder {
 				db2CreateZip.setOtgffana(executionFlowData);
 				db2CreateZip.setParameters(dbZipParam);
 
-				if (Constants.SI.equals(executionFlowData.getFlowCompression())
-						|| Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {
+				if (YesNo.YES.equals(executionFlowData.getFlowCompression())
+						/*|| Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())*/) {
 					List<String> backupFileNames = new ArrayList<String>();
 					for (String fileName : operationParams.getFileNames()) {
 						backupFileNames.add(fileName + Constants.ZIP_EXTENSION);
@@ -531,7 +531,7 @@ public class FlowBuilder {
 			@Override
 			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				DependentOperation<DbConversionParam> file2Db ;
-				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+				if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 					file2Db = ConversionOperation.CSV.equals(conversionOperation) ? new File2Table() : new File2TableFixed();
 					
 				} else {
@@ -557,7 +557,7 @@ public class FlowBuilder {
 				
 
 				ConstraintDependentOperation<DbConversionParam, Boolean> db2File;
-				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+				if (StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 					db2File = ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato()) ? new Table2FileFixed() : new Table2File();
 					
 				} else {
@@ -583,7 +583,7 @@ public class FlowBuilder {
 				CreateDbFileParam createDbFileParam = getCreateDbFileParam(executionFlowData, operationParams);
 				
 				Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
-				if (Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+				if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 							createDbFileParam.setLibreria(DbConstants.SCHEMA);
 				} else {
 							createDbFileParam.setLibreria(Constants.QTEMP);
@@ -623,7 +623,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-						&& Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+						&& !StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -639,7 +639,7 @@ public class FlowBuilder {
 				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
 				List<Operation<?>> ret = new ArrayList<Operation<?>>();
 				
-				if(!Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent())
+				if(!Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
 				{
 					ret.add(crtDbFile);
 				}
@@ -659,7 +659,7 @@ public class FlowBuilder {
 
 				dbConversionParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 				//se è remote allora la libreria non è qtemp ma lo schema principale se non è specificata nelle proprerties una libreria temporanea
-				if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {				
+				if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {				
 					dbConversionParam.setLibrary(executionFlowData.getFlowLibreria());
 				}
 								
@@ -694,7 +694,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-							&& Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+							&& !StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -723,7 +723,7 @@ public class FlowBuilder {
 				copyFile.setParameters(copyFileParam);
 				
 				//se non è remote creo il file temporaneo con crtpf e poi lo popolerò con cpyf
-				if(!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {				
+				if(!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {				
 					ret.add(getCreateDbFile(executionFlowData, createDbFileParam));
 				}
 				
@@ -736,13 +736,13 @@ public class FlowBuilder {
 					copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
 					
 					ret.add(ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
-					if (!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent())
+					if (!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
 							ret.add(copyFile);
 				} else if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
 					copyFileParam.setFromLibrary(executionFlowData.getFlowLibreria());					
 					copyFileParam.setToLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					
-					if(!operationParams.getSkipCpyFrmFile() && !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {
+					if(!operationParams.getSkipCpyFrmFile() && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
 						ret.add(copyFile);
 					}
 					
@@ -993,7 +993,7 @@ public class FlowBuilder {
 	}
 	
 	private void addDelayIntegrityCheck(ExecutionFlowData executionFlowData, OperationParams operationParams) {
-		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
+		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
 					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento()) &&
 					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
@@ -1034,7 +1034,7 @@ public class FlowBuilder {
 		fileParam.setSpqName(otgffanasp.getOtgfanasp_SpqName());
 		fileParam.setSpuserid(otgffanasp.getOtgfanasp_Spuserid());
 		
-		if (Constants.SI.equals(otgffanasp.getOtgfanasp_Direct_From_Db())) {
+		if (YesNo.YES.equals(otgffanasp.getOtgfanasp_Direct_From_Db())) {
 			fileParam.setFile((StringUtils.isNullOrEmpty(executionFlowData.getFlowLibreria()) ? "" : executionFlowData.getFlowLibreria() + Constants.PATH_DELIMITER)
 					+ executionFlowData.getFlowFile());
 			fileParam.setMbr(StringUtils.isNullOrEmpty(executionFlowData.getFlowMembro()) ? Constants.FIRST : executionFlowData.getFlowMembro());
@@ -1059,7 +1059,7 @@ public class FlowBuilder {
 	*/
 
 	private void addSemaphore(ExecutionFlowData executionFlowData, OperationParams operationParams) {
-		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
+		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
 					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento())) {
 			
@@ -1088,9 +1088,9 @@ public class FlowBuilder {
 		dbTrasmissionParams.setRetryCount(executionFlowData.getFlowNumTentaRicez());
 		dbTrasmissionParams.setRetryIntervall(executionFlowData.getFlowIntervalloRetry());
 		dbTrasmissionParams.setFtp_secure(executionFlowData.getFlowFtpSecure());
-		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
+		dbTrasmissionParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 
-		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
+		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 		
@@ -1139,9 +1139,9 @@ public class FlowBuilder {
 		dbTrasmissionParams.setLocal_File_Name(fileName);
 		dbTrasmissionParams.setRetryCount(executionFlowData.getFlowNumTentaRicez());
 		dbTrasmissionParams.setRetryIntervall(executionFlowData.getFlowIntervalloRetry());
-		dbTrasmissionParams.setLaunchErrorIfNoFileFound(Constants.SI.equals(executionFlowData.getFlowEsistenzaFile()));
+		dbTrasmissionParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 		
-		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
+		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 
@@ -1163,7 +1163,7 @@ public class FlowBuilder {
 		List<Operation<?>> spazioOperations = new ArrayList<Operation<?>>(operationParams.getTrasmissionFiles().size());
 		/*Otgffanasp otgffanasp = OtgffanaspDAO.read(executionFlowData.getFlowId());
 		
-		operationParams.setBypassConversion(Constants.SI.equals(otgffanasp.getOtgfanasp_Direct_From_Db()));
+		operationParams.setBypassConversion(YesNo.YES.equals(otgffanasp.getOtgfanasp_Direct_From_Db()));
 		
 		for (String trasmissionFile : operationParams.getTrasmissionFiles()) {
 			SpFileParam fileParam = getThemaSpazioParam(trasmissionFile, executionFlowData, otgffanasp);

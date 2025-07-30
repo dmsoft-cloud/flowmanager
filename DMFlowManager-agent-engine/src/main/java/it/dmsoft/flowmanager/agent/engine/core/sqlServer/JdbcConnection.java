@@ -11,6 +11,7 @@ import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class JdbcConnection {
 	
@@ -55,7 +56,7 @@ public class JdbcConnection {
             String dbUrl = DbConstants.DB_HOST;
             String dbUser = DbConstants.USERNAME;
             String dbPassword = DbConstants.PASSWORD;
-            if (!StringUtils.isNullOrEmpty(dbUser) && !StringUtils.isNullOrEmpty(dbPassword) && Optional.ofNullable(DbConstants.SECURE_CONNECTION).filter(Constants.SI::equals).isPresent()) {
+            if (!StringUtils.isNullOrEmpty(dbUser) && !StringUtils.isNullOrEmpty(dbPassword) && YesNo.YES.equals(DbConstants.SECURE_CONNECTION)) {
             // Effettua la connessione al database SQL Server
             dbUrl = dbUrl + Constants.SEMICOLON + "encrypt=true;trustServerCertificate=true";
             } else {

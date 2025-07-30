@@ -26,12 +26,13 @@ import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class OutboundFlowBuilder extends FlowBuilder {
 
 	public FlowBuilder createFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 
-		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
+		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			
 			Operation<CreateFileParam> crtFile = new CrtFile();
@@ -78,7 +79,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		createDbFileParam.setSrcFile(executionFlowData.getFlowFileSource());
 		createDbFileParam.setSrcLibreria(executionFlowData.getFlowLibSource());
 		createDbFileParam.setSrcMembro(executionFlowData.getFlowMembroSource());
-		createDbFileParam.setCreaSeNonEsiste(Constants.SI.equals(executionFlowData.getFlowCreaVuoto()));
+		createDbFileParam.setCreaSeNonEsiste(YesNo.YES.equals(executionFlowData.getFlowCreaVuoto()));
 		createDbFileParam.setRecordLength(executionFlowData.getFlowLunghezzaFlFlat());
 		
 		DependentOperation<ChkObjParam> chkObj = new ChkObj();

@@ -19,6 +19,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 
 public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
@@ -47,7 +48,7 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 		List<SpoolFile> spoolFiles = new ArrayList<SpoolFile>();
 		List<String> taskFileNames = new ArrayList<>();
 		
-		if(Optional.ofNullable(parameters.getOperationParams().getLegacyModernization()).filter(Constants.SI::equals).isPresent()) {
+		if(YesNo.YES.equals(parameters.getOperationParams().getLegacyModernization())) {
 			//leggi il file degli spool con il codice lavoro e popola array file
 			Connection conn = null;
 			String queryString = "SELECT PDF_PATH, PDF_NAME FROM "+ DbConstants.SCHEMA + "ASMFFPDFDATA " +

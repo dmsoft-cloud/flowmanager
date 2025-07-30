@@ -1,7 +1,7 @@
 package it.dmsoft.flowmanager.agent.engine.generic.clientWs.utility.httpLogger;
 
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
-import org.apache.log4j.Level;
+//import org.apache.log4j.Level;
 /**
  * La classe è stata mantenuta, anche se copia di
  * {@link it.ocsnet.utility.logger.LoggerStream} perhcè già usata in alcuni
@@ -19,9 +19,9 @@ public class LoggerStream extends it.dmsoft.flowmanager.agent.engine.generic.uti
 	/**
 	 * @deprecated
 	 */
-	@Deprecated
+	/*@Deprecated
 	public LoggerStream(org.apache.log4j.Logger logger, Level logLevel) {
 		this(Logger.log4j2Logger(logger), Logger.level4j2LevelOcs(logLevel));
-	}
+	}*/
 
 }

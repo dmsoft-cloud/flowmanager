@@ -33,6 +33,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericAS400Par
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 /**
  * Classe che permette di eseguire le chiamate su AS400
@@ -99,7 +100,7 @@ public class CallAs400 {
 			as400 = new AS400();
 			
 		}
-		else if (!StringUtils.isNullOrEmpty(username) && !StringUtils.isNullOrEmpty(password) && Optional.ofNullable(DbConstants.SECURE_CONNECTION).filter(Constants.SI::equals).isPresent()) {
+		else if (!StringUtils.isNullOrEmpty(username) && !StringUtils.isNullOrEmpty(password) && Optional.ofNullable(DbConstants.SECURE_CONNECTION).filter(YesNo.YES::equals).isPresent()) {
 			as400 = new SecureAS400(DbConstants.DB_HOST,username,password );
 			//as400 = new SecureAS400("as400prod.ocsdom.lan","DIEGOA","DIENZWE21" );
 		}

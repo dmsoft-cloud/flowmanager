@@ -799,6 +799,7 @@ public class GenericWsManager {
 	 * @param logger
 	 * @throws NumberFormatException
 	 */
+	/*
 	@Deprecated
 	public static void setTimeout(Map<String, Object> rc, String timeout, org.apache.log4j.Logger logger) throws NumberFormatException {
 		int timeoutInt = 0;
@@ -812,6 +813,7 @@ public class GenericWsManager {
 		}
 
 	}
+	*/
 
 	/**
 	 * Rimuove dal json i parametri che vengono impostati nel generic e non più

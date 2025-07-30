@@ -17,7 +17,7 @@ public interface FlowLogMapper {
 	//model.database
 	//file dei parametri generali: path backup generale
     
-	@Mapping(source = "executionFlowData.flowId", target = "logId")
+	@Mapping(source = "flowConfig.transactionName", target = "logId")
 	FlowLog convert(FlowConfig flowConfig);
 	
     //OK
@@ -36,7 +36,7 @@ public interface FlowLogMapper {
 	@Mapping(source = "executionFlowData.flowDirezione", target = "logDirezione")
 	//OK
 	@Mapping(source = "executionFlowData.flowLibreria", target = "logLibreria")
-	//OK
+	//AL MOMENTO NON IMPLEMENTATO
 	@Mapping(source = "executionFlowData.flowFile", target = "logFile")
 	//AL MOMENTO NON IMPLEMENTATO
 	@Mapping(source = "executionFlowData.flowMembro", target = "logMembro")

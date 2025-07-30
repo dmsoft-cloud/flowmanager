@@ -11,6 +11,8 @@ import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
@@ -36,6 +38,7 @@ public class FlowLog {
 
 	//Auto increment
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(length = 12)
 	private BigDecimal logProgrLog;
 	@Column(length = 20)
@@ -43,7 +46,7 @@ public class FlowLog {
 	private Timestamp logTsInizio;
 	private Timestamp logTsFine;
 	@Column(length = 2)
-	private String logEsito;
+	private Status logEsito;
 	@Column(length = 64)
 	private String logUtente;
 	@Column(length = 64)
@@ -51,7 +54,7 @@ public class FlowLog {
 	@Column(length = 10)
 	private String logCodInterfaccia;
 	@Column(length = 2)
-	private Status logStato;
+	private YesNo logStato;
 	@Column(length = 10)
 	private Type logTipFlusso;
 	@Column(length = 1)
@@ -203,11 +206,11 @@ public class FlowLog {
 		this.logTsFine = logTsFine;
 	}
 
-	public String getLogEsito() {
+	public Status getLogEsito() {
 		return logEsito;
 	}
 
-	public void setLogEsito(String logEsito) {
+	public void setLogEsito(Status logEsito) {
 		this.logEsito = logEsito;
 	}
 
@@ -235,11 +238,11 @@ public class FlowLog {
 		this.logCodInterfaccia = logCodInterfaccia;
 	}
 
-	public Status getLogStato() {
+	public YesNo getLogStato() {
 		return logStato;
 	}
 
-	public void setLogStato(Status logStato) {
+	public void setLogStato(YesNo logStato) {
 		this.logStato = logStato;
 	}
 

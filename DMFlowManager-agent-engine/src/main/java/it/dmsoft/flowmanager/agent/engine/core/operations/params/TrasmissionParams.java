@@ -2,6 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import java.math.BigDecimal;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
 
 //	Host: indica il nome/ip del server remoto. Prevedere una stringa di almeno 100 in quanto alcuni server hanno nomi molto lunghi
 //	Porta: indica la porta da utilizzare per la connessione SFTP/FTP. Se non indicata si utilizzerà la porta standard prevista per il protocollo in oggetto.
@@ -41,9 +43,9 @@ public class TrasmissionParams {
 	
 	private String hostKeyAlias;
 	
-	private String passive_mode;
+	private YesNo passive_mode;
 	
-	private String ftp_Secure;
+	private YesNo ftp_Secure;
 	
 	private BigDecimal retryCount;
 	
@@ -142,11 +144,11 @@ public class TrasmissionParams {
 		this.keyFile = keyFile;
 	}
 
-	public String getPassive_mode() {
+	public YesNo getPassive_mode() {
 		return passive_mode;
 	}
 
-	public void setPassive_mode(String passive_mode) {
+	public void setPassive_mode(YesNo passive_mode) {
 		this.passive_mode = passive_mode;
 	}
 	
@@ -190,11 +192,11 @@ public class TrasmissionParams {
 		this.launchErrorIfNoFileFound = launchErrorIfNoFileFound;
 	}
 	
-	public String getFtp_secure() {
+	public YesNo getFtp_secure() {
 		return ftp_Secure;
 	}
 
-	public void setFtp_secure(String ftp_Secure) {
+	public void setFtp_secure(YesNo ftp_Secure) {
 		this.ftp_Secure = ftp_Secure;
 	}
 

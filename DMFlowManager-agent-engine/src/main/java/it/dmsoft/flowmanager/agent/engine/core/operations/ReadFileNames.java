@@ -20,6 +20,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 
 /*QSH CMD('ls -l /HOME/DIEGOA/GESTOREFLUSSI | grep ''^[-l]''  | awk ''{print $9}''
@@ -46,7 +47,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 		.replace(Constants.STAR, Constants.DOT + Constants.STAR) + Constants.DOLLAR;
 		
 		
-		if(!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()){
+		if(!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)){
 
 			CallAs400 callAs400 = CallAs400.get(parameters);
 			StringBuilder sb = new StringBuilder();
@@ -125,7 +126,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 	
 		// TODO Vedere se e necessario mettere una codifica
 		List<String> lines = Collections.emptyList();
-		lines = (!Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) ?
+		lines = (!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) ?
 			Files.readAllLines(Paths.get(fileListFolder + Constants.PATH_DELIMITER + fileName),
 				Charset.forName(Constants.IBM280)) :
 					Files.readAllLines(Paths.get(fileListFolder + Constants.PATH_DELIMITER + fileName));		

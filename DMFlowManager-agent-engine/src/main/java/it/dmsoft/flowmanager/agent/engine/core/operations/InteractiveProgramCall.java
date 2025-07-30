@@ -12,6 +12,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
  
 
@@ -34,7 +35,7 @@ public class InteractiveProgramCall extends Operation<InteractiveProgramCallPara
 		ProgramParameter[] params;
 						
 		//istanzio la programcall
-		if (parameters.getResult().equals(Constants.SI)) {
+		if (parameters.getResult().equals(YesNo.YES)) {
 			params=new ProgramParameter[1];
 			params[0]  = new ProgramParameter(2);
 		} else {
@@ -46,7 +47,7 @@ public class InteractiveProgramCall extends Operation<InteractiveProgramCallPara
 
 		
 		callAs400.programCall(parameters.getPgm().trim(), params);
-		if (parameters.getResult().equals(Constants.SI) && !char2Converter.toObject(params[params.length-1].getOutputData()).toString().equals(Constants.OK)) { 
+		if (parameters.getResult().equals(YesNo.YES) && !char2Converter.toObject(params[params.length-1].getOutputData()).toString().equals(Constants.OK)) { 
 			logger.info("esito programma interattivo: " +  char2Converter.toObject(params[params.length-1].getOutputData()).toString()) ;
 			throw new Exception("Program call throw an error");
 		}

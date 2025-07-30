@@ -15,6 +15,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class ChkObj extends DependentOperation<ChkObjParam>{
 
@@ -67,7 +68,7 @@ public class ChkObj extends DependentOperation<ChkObjParam>{
 	
 		PreparedStatement ps = conn.prepareStatement(query);
 		logger.info(query);
-		if (Optional.ofNullable(operationParams.getExportFileHeaders()).filter(Constants.SI::equals).isPresent()
+		if (YesNo.YES.equals(operationParams.getExportFileHeaders())
 				&& !StringUtils.isNullOrEmpty(operationParams.getExportTempTable())) {
 			schema = operationParams.getExportTempSchema();
 			table = operationParams.getExportTempTable();

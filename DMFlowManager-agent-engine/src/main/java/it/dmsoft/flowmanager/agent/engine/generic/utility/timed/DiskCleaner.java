@@ -50,10 +50,12 @@ public class DiskCleaner {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static void cleanDisk(String path, org.apache.log4j.Logger logger) {
 		cleanDisk(path, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	public static void cleanDisk(String path, Logger logger) {
 		if (isCleanNeeded(path, logger)) {

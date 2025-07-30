@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ZipOperation;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.OutboundFlowBuilder;
@@ -63,10 +64,10 @@ public class OutboundFlowManager extends FlowManager {
 		
 		handleOuputFileNames(outboundFlowBuilder, executionFlowData, operationParams);
 			
-		if(Constants.SI.equals(executionFlowData.getFlowCreaVuoto()) ) {
-			if(Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && !Constants.SI.equals(operationParams.getLegacyModernization())) {
+		if(YesNo.YES.equals(executionFlowData.getFlowCreaVuoto()) ) {
+			if(Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && !YesNo.YES.equals(operationParams.getLegacyModernization())) {
 				outboundFlowBuilder.crtDb2FileIfNotExist(executionFlowData, operationParams);
-			} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && Constants.SI.equals(operationParams.getLegacyModernization())) {
+			} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && YesNo.YES.equals(operationParams.getLegacyModernization())) {
 				System.out.println("impossibile creare db vuoto in questa modalità");
 			}
 			else {
@@ -90,7 +91,7 @@ public class OutboundFlowManager extends FlowManager {
 				outboundFlowBuilder.selectFileColumns(executionFlowData, operationParams);
 			}
 			
-			if (Constants.SI.equals(executionFlowData.getFlowEsistenzaFile())) {
+			if (YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile())) {
 				outboundFlowBuilder.checkDb2Obj(executionFlowData, operationParams);
 				outboundFlowBuilder.checkDbFileEmpty(executionFlowData, operationParams);
 			}
@@ -98,15 +99,15 @@ public class OutboundFlowManager extends FlowManager {
 		}
 
 		// Verifica hash unico
-	    if (Constants.SI.equals(executionFlowData.getFlowHashUnico())) {
+	    if (YesNo.YES.equals(executionFlowData.getFlowHashUnico())) {
 	        outboundFlowBuilder.checkHashFile(executionFlowData, operationParams, false);
 	    }
 		
 		// TODO creazione file TEST
 		//outboundFlowBuilder.readFileNames(executionFlowData, operationParams);
 		
-	    if (Constants.SI.equals(executionFlowData.getFlowCompression())
-	    		|| Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())) {	    	
+	    if (YesNo.YES.equals(executionFlowData.getFlowCompression())
+	    		/*|| Constants.SPEDIZIONE.equals(executionFlowData.getFlowCompression())*/) {	    	
 		   outboundFlowBuilder.zipOperation(executionFlowData, operationParams, ZipOperation.ZIP); 
 		}
 		 
@@ -119,7 +120,7 @@ public class OutboundFlowManager extends FlowManager {
 		}
 
 		// Scrivo hash unico
-	    if (Constants.SI.equals(executionFlowData.getFlowHashUnico())) {
+	    if (YesNo.YES.equals(executionFlowData.getFlowHashUnico())) {
 	        outboundFlowBuilder.checkHashFile(executionFlowData, operationParams, true);
 	    }
 		
@@ -137,7 +138,7 @@ public class OutboundFlowManager extends FlowManager {
 			deleteFiles.add(operationParams.getListFileFolder() + Constants.PATH_DELIMITER +  operationParams.getListFile());
 		}
 		
-		if (Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
+		if (YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 			for(String fileName: operationParams.getFileNames())
 			{
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + fileName);
@@ -145,7 +146,7 @@ public class OutboundFlowManager extends FlowManager {
 			
 		}
 
-		if (!Constants.NO.equals(executionFlowData.getFlowCompression())) {
+		if (!YesNo.NO.equals(executionFlowData.getFlowCompression())) {
 			for(String fileName: operationParams.getBackupFiles())
 			{
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + fileName);
@@ -153,7 +154,7 @@ public class OutboundFlowManager extends FlowManager {
 			
 		}
 
-		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
+		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + operationParams.getSempahoreFile());
 		}

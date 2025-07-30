@@ -35,7 +35,7 @@ public class ConfigUtils {
 	        config.setCliente((String)data.get(Constants.CONF_CUSTOMER));
 	        
 	        config.setExecutionDateStr((String)data.get(Constants.CONF_EXECUTION_DATE));
-	        config.setLegacyModernization((String)data.get(Constants.CONF_LEGACY_MODERNIZATION));
+	        config.setLegacyModernization(YesNo.getYesNo((String) data.get(Constants.CONF_LEGACY_MODERNIZATION)));
 	        config.setMasterdataOverrides(data.get(Constants.CONF_MASTERDATA_OVERRIDES).toString());
 	        
 	        config.setExtJob((String)data.getOrDefault(Constants.CONF_EXT_JOB, ""));

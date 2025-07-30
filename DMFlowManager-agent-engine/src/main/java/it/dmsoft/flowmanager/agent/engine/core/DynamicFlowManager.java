@@ -16,6 +16,7 @@ import it.dmsoft.flowmanager.be.entities.FlowLog;
 import it.dmsoft.flowmanager.be.repositories.ExportFlowDataRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
@@ -35,6 +36,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.FlowMasterDataUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -53,10 +55,12 @@ public class DynamicFlowManager {
 	@PersistenceContext
     private EntityManager entityManager;
 
+	@Resource(name = "flowLogUtils")
+	private FlowLogUtils flowLogUtils;
 	
-	private FlowLogRepository flowLogRepository;
+	//private FlowLogRepository flowLogRepository;
 	
-	private FlowLogDetailsRepository flowLogDetailsRepository;
+	//private FlowLogDetailsRepository flowLogDetailsRepository;
 	
 	private ExportFlowDataRepository exportFlowDataRepository;
 	
@@ -128,7 +132,7 @@ public class DynamicFlowManager {
 			if (listFlowsOverride !=null) {
 			   for(MasterdataOverride mo : listFlowsOverride)	{
 				   //per la legacy se arriva come libreria QTEMP imposto la libreria temporanei
-				   if(Optional.ofNullable(config.getLegacyModernization()).filter(Constants.SI::equals).isPresent() 
+				   if(YesNo.YES.equals(config.getLegacyModernization()) 
 						   	&& mo.getExecutionFlowData().getFlowLibreria().equalsIgnoreCase(Constants.QTEMP)) {
 					   mo.getExecutionFlowData().setFlowLibreria(PropertiesUtils.get(PropertiesConstants.TMP_LIBRARY));
 				   }
@@ -175,6 +179,7 @@ public class DynamicFlowManager {
 		BigDecimal executionDate = FormatUtils.todayDateBigDec();
 				
 		FlowLog headLog = FlowLogUtils.insertHeadLog(executionFlowData, logFile);
+		
 		BigDecimal transactionId = headLog.getLogProgrLog();
 		
 		String resubmitTransactionId = null;
@@ -210,13 +215,10 @@ public class DynamicFlowManager {
 		inputParam.setListFile(transactionName + transactionId);
 		inputParam.setOverrideMailDests(overrideMailDests);
 		inputParam.setTmpLibrary(PropertiesUtils.get(PropertiesConstants.TMP_LIBRARY));
-		inputParam.setLegacyModernization(Optional.ofNullable(config.getLegacyModernization())
-                .filter(Constants.SI::equals)
-                .map(op -> Constants.SI)
-                .orElse(Constants.NO));
+		inputParam.setLegacyModernization(config.getLegacyModernization());
 		if (exportFlowData != null) inputParam.setExportFileHeaders(exportFlowData.getExportTestata());
 		if (Optional.ofNullable(executionFlowData.getFlowAggNomiCol())
-				.filter(Constants.EXF::equals).isPresent()) inputParam.setExportFileHeaders(Constants.SI);				
+				.filter(Constants.EXF::equals).isPresent()) inputParam.setExportFileHeaders(YesNo.YES);				
 					
 		if(executionDate != null && BigDecimal.ZERO.compareTo(executionDate) < 0) {
 			inputParam.setExecutionDate(FormatUtils.date(executionDate));
@@ -228,8 +230,6 @@ public class DynamicFlowManager {
 
 		logger.debug("masterdata of " + executionFlowData.getFlowId() + " loaded, staring flow manager");
 
-		FlowLogUtils.instantiate(inputParam, flowLogRepository, flowLogDetailsRepository);
-
 		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			OutboundFlowManager outboundManger = new OutboundFlowManager();
 			outboundManger.process(executionFlowData, inputParam);
@@ -240,7 +240,7 @@ public class DynamicFlowManager {
 	}
 	
 	private static ExecutionFlowData resubmit(ExecutionFlowData executionFlowData, String resubmitTransactionId) throws Exception {
-		if (!Constants.SI.equals(executionFlowData.getFlowRisottomettibile())) {
+		if (!YesNo.YES.equals(executionFlowData.getFlowRisottomettibile())) {
 			throw new ParameterException("Transaction not resubmittable");
 		}
 		

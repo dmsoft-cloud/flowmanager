@@ -23,10 +23,12 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public LoggingRequestInterceptor(org.apache.log4j.Logger log) {
 		this(Logger.log4j2Logger(log));
 	}
+	*/
 
 	@Override
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

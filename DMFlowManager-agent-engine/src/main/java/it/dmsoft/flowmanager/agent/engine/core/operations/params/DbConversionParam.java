@@ -3,6 +3,8 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 import java.math.BigDecimal;
 import java.util.List;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
 public class DbConversionParam extends GenericAS400Param{
 	
 	private String library;
@@ -39,7 +41,7 @@ public class DbConversionParam extends GenericAS400Param{
 	
 	private String replaceNullVal;
 	
-	private String removeColName;
+	private YesNo removeColName;
 	
 	private String internazDelimiter;
 	
@@ -183,11 +185,11 @@ public class DbConversionParam extends GenericAS400Param{
 		this.replaceNullVal = replaceNullVal;
 	}
 	
-	public String getRemoveColName() {
+	public YesNo getRemoveColName() {
 		return removeColName;
 	}
 
-	public void setRemoveColName(String removeColName) {
+	public void setRemoveColName(YesNo removeColName) {
 		this.removeColName = removeColName;
 	}
 	

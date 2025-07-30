@@ -213,7 +213,7 @@ public class Main {
 //	}
 //	
 //	private static ExecutionFlowData resubmit(ExecutionFlowData executionFlowData, String resubmitTransactionId) throws Exception {
-//		if (!Constants.SI.equals(executionFlowData.getFlowRisottomettibile())) {
+//		if (!YesNo.YES.equals(executionFlowData.getFlowRisottomettibile())) {
 //			throw new ParameterException("Transaction not resubmittable");
 //		}
 //		

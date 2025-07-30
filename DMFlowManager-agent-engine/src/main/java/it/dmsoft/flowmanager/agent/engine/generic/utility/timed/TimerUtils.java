@@ -53,10 +53,12 @@ public class TimerUtils {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	static void cancelTimer(String uuidDate, org.apache.log4j.Logger logger) {
 		cancelTimer(uuidDate, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	static void cancelTimer(String uuidDate, Logger logger) {
 		Timer timer = timers.remove(uuidDate);
@@ -72,10 +74,12 @@ public class TimerUtils {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	static void handleTimer(String uuidDate, Long timerCacheRisposta, org.apache.log4j.Logger logger) {
 		handleTimer(uuidDate, timerCacheRisposta, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	static void handleTimer(String uuidDate, Long timerCacheRisposta, Logger logger) {
 		if (!timers.containsKey(uuidDate)) {

@@ -344,30 +344,36 @@ public class Invoker {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static <T> OcsGenericRestResponse<T> callEndpoint(String endPoint, Map<String, String> params, HttpMethod method, HttpHeaders headers, String request, int timeout, Class<T> clazz,
 			org.apache.log4j.Logger logger) throws ParseException, IOException {
 		return callEndpoint(endPoint, method, headers, request, timeout, clazz, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static <T> OcsGenericRestResponse<T> callEndpoint(String endPoint, HttpMethod method, HttpHeaders headers, String request, int timeout, Class<T> clazz, org.apache.log4j.Logger logger)
 			throws ParseException, IOException {
 
 		return callEndpoint(endPoint, method, headers, request, timeout, clazz, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static OcsGenericRestResponse<String> callEndpoint(String endPoint, HttpMethod method, HttpHeaders headers, String request, int timeout, org.apache.log4j.Logger logger)
 			throws ParseException, IOException {
 
 		return callEndpoint(endPoint, method, headers, request, timeout, Logger.log4j2Logger(logger));
 	}
+	*/
 
 }

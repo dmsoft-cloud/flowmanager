@@ -1,17 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.2</version>
-  </parent>
-  <groupId>it.dmsoft.flowmanager</groupId>
-  <artifactId>DMFlowManager-agent-app</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>DMFlowManager-agent-app</name>
-  <description>DMSoft Flows Manager</description>
-  
-  	<properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.2</version>
+	</parent>
+	<groupId>it.dmsoft.flowmanager</groupId>
+	<artifactId>DMFlowManager-agent-app</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>DMFlowManager-agent-app</name>
+	<description>DMSoft Flows Manager</description>
+
+	<properties>
 		<java.version>17</java.version>
 		<start-class>it.dmsoft.flowmanager.app.FlowManagerApplication</start-class>
 	</properties>
@@ -19,10 +21,26 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -30,9 +48,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.springdoc</groupId>
-		    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-		    <version>2.6.0</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>
@@ -47,9 +65,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-		            <mainClass>it.dmsoft.flowmanager.app.FlowManagerApplication</mainClass>
-		            <layout>JAR</layout>
-		        </configuration>
+					<mainClass>it.dmsoft.flowmanager.app.FlowManagerApplication</mainClass>
+					<layout>JAR</layout>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

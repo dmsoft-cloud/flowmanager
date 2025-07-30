@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class ResponseGenericClient {
 	// Dimensione massima definita dalla funzione RPGLE JNIString2Alfa
@@ -82,7 +82,7 @@ public class ResponseGenericClient {
 			byte[] messageBytes = message.getBytes();
 			message = new String(messageBytes, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			Logger.getLogger(getClass()).warn("Impossibile codificare in UTF-8: " + message);
+			LogManager.getLogger(getClass()).warn("Impossibile codificare in UTF-8: " + message);
 		}
 
 		return message;

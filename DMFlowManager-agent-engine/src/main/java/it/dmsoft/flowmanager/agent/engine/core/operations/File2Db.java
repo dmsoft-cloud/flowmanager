@@ -11,6 +11,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class File2Db extends DependentOperation<DbConversionParam>{
 
@@ -108,9 +109,9 @@ public class File2Db extends DependentOperation<DbConversionParam>{
 			}
 			
 			//RMVCOLNAM values *NO, *YES
-			if(!StringUtils.isNullOrEmpty(parameters.getRemoveColName())) {
+			if(parameters.getRemoveColName() != null) {
 				 String valueConverted;
-				 if(Constants.SI.equalsIgnoreCase(parameters.getRemoveColName()))
+				 if(YesNo.YES.equals(parameters.getRemoveColName()))
 					 valueConverted = Constants.YES_AS400;
 				 else valueConverted = Constants.NO_AS400;
 				 

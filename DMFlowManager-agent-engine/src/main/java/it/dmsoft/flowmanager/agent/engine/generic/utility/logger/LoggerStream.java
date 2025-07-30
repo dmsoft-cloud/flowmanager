@@ -14,9 +14,9 @@ public class LoggerStream extends OutputStream {
 		this.logLevel = logLevel;
 	}
 
-	public LoggerStream(org.apache.log4j.Logger logger, int logLevel) {
-		this(Logger.log4j2Logger(logger), logLevel);
-	}
+//	public LoggerStream(org.apache.log4j.Logger logger, int logLevel) {
+//		this(Logger.log4j2Logger(logger), logLevel);
+//	}
 
 	@Override
 	public void write(byte[] b) throws IOException {

@@ -15,6 +15,7 @@ import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpFileDescription;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpResponse;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class FtpReceiver extends ConstraintTrasmission<ResponseWrapper<FtpResponse>> {
 
@@ -28,13 +29,13 @@ public class FtpReceiver extends ConstraintTrasmission<ResponseWrapper<FtpRespon
 		
 		boolean passiveMode;
 		boolean ftpSecure;
-		if(Constants.SI.equals(parameters.getPassive_mode())) {
+		if(YesNo.YES.equals(parameters.getPassive_mode())) {
 			passiveMode = true;
 		}else {
 			passiveMode = false;
 		}
 		
-		if(Constants.SI.equals(parameters.getFtp_secure())) {
+		if(YesNo.YES.equals(parameters.getFtp_secure())) {
 			ftpSecure = true;
 		}else {
 			ftpSecure = false;

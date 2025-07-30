@@ -39,7 +39,7 @@ public class ExportFlowData {
 	@Column(length = 40)
 	private String exportFile_Des;
 	@Column(length = 4)
-	private String exportTestata;
+	private YesNo exportTestata;
 	@Column(length = 4)
 	private String exportDlmt;
 	@Column(length = 9)
@@ -92,10 +92,10 @@ public class ExportFlowData {
 	public void setExportFileDes(String exportFile_Des) {
 		this.exportFile_Des = exportFile_Des;
 	}
-	public String getExportTestata() {
+	public YesNo getExportTestata() {
 		return exportTestata;
 	}
-	public void setExportTestata(String exportTestata) {
+	public void setExportTestata(YesNo exportTestata) {
 		this.exportTestata = exportTestata;
 	}
 	public String getExportDlmt() {

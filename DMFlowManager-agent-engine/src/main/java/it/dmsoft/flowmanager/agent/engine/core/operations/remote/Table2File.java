@@ -170,7 +170,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
             	
             	//non scrivo il campo se a stringa è vuota ed è impostato a S il campo FANA_CHAR_EMPTY_SPACE
             	if (!((columnType == Types.CHAR || columnType == Types.VARCHAR)
-            			&& Optional.ofNullable(executionFlowData.getFlowcharemptyspace()).filter("S"::equals).isPresent()
+            			&& Optional.ofNullable(executionFlowData.getFlowCharEmptySpace()).filter("S"::equals).isPresent()
             			&& "".equals(value.trim())
             			)) {
             		bos.write(value.getBytes(cs));            		

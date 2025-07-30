@@ -5,18 +5,18 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
+import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.be.entities.FlowLog;
 import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
 import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
-import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
-import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
 
-//@Service("logDb")
+@Service("flowLogUtils")
 public class FlowLogUtils {
 	
 	private static FlowLogUtils instance = null;
@@ -24,25 +24,17 @@ public class FlowLogUtils {
 	@Autowired
     private FlowLogMapper flowLogMapper;
 	
-	private OperationParams operationParams;
-	
 	private FlowLogRepository flowLogRepository;
 	
 	private FlowLogDetailsRepository flowLogDetailsRepository;
 	
 	private BigDecimal phaseProg;
 	
-	public static void instantiate(OperationParams operationParams, FlowLogRepository flowLogRepository, FlowLogDetailsRepository flowLogDetailsRepository) {
-		if (instance == null) {
-			instance = new FlowLogUtils(operationParams);
-		}
+	public FlowLogUtils(FlowLogRepository flowLogRepository, FlowLogDetailsRepository flowLogDetailsRepository) {
+		instance = this;
 		
-		instance.flowLogDetailsRepository = flowLogDetailsRepository;
-		instance.flowLogRepository = flowLogRepository;
-	}
-
-	private FlowLogUtils(OperationParams operationParams) {
-		this.operationParams = operationParams;
+		this.flowLogDetailsRepository = flowLogDetailsRepository;
+		this.flowLogRepository = flowLogRepository;
 		phaseProg = BigDecimal.ZERO;
 	}
 	
@@ -82,7 +74,6 @@ public class FlowLogUtils {
 		flowLogDetails.setLogDetFase(operation != null ? operation.name() : Constants.SPACE);
 		flowLogDetails.setLogDetNote(phaseDescr + (operation != null ? Constants.SPACE + operation.getDescription() : ""));
 		flowLogDetails.setLogDetProgrFase(phaseProg);
-		flowLogDetails.setLogDetProgrLog(operationParams.getTransactionId());
 		flowLogDetails.setLogDetTs(new Timestamp(date.getTime()));
 		
 		return flowLogDetails;
@@ -90,7 +81,7 @@ public class FlowLogUtils {
 	
 	private FlowLog writeFlowLog(ExecutionFlowData executionFlowData, String logFile) {
 		FlowLog flowLog = getFlowLog(executionFlowData);
-		flowLog.setLogFile(logFile);
+		flowLog.setLogLogFile(logFile);
 		return flowLogRepository.save(flowLog);
 	}
 	

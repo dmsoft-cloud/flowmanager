@@ -15,6 +15,7 @@ import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("inboundFlowManager")
 public class InboundFlowManager extends FlowManager {
@@ -31,14 +32,14 @@ public class InboundFlowManager extends FlowManager {
 		}
 
 		// unzippo
-		if (Constants.SI.equals(executionFlowData.getFlowDeCompression())) {
+		if (YesNo.YES.equals(executionFlowData.getFlowDeCompression())) {
 			// TODO SISTEMARE FLOWBUILDER UNZIP done
 			inboundFlowBuilder.zipOperation(executionFlowData, operationParams, ZipOperation.UNZIP);
 
 		}
 		
 		 // Verifica hash unico
-	    if (Constants.SI.equals(executionFlowData.getFlowHashUnico())) {
+	    if (YesNo.YES.equals(executionFlowData.getFlowHashUnico())) {
 	        inboundFlowBuilder.checkHashFile(executionFlowData, operationParams, false);
 	    }
 
@@ -54,7 +55,7 @@ public class InboundFlowManager extends FlowManager {
 			// verifico se file vuoto su ifs e se devo forzare ok saltando step successivi
 			// vado a forzare il parametro bypassConversion a true in esecuzione del flow 
 			// se file vuoto
-			if(Constants.SI.equals(executionFlowData.getFlowFlagOkVuoto()) && 
+			if(YesNo.YES.equals(executionFlowData.getFlowFlagOkVuoto()) && 
 					Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) ) {
 				inboundFlowBuilder.checkIfsFileEmpty(executionFlowData, operationParams);
 				
@@ -64,14 +65,14 @@ public class InboundFlowManager extends FlowManager {
 			inboundFlowBuilder.conversionToDestFile(executionFlowData, operationParams);
 
 			// TRAVASO IN FILE DESTINAZIONE
-			if(!Constants.SI.equals(executionFlowData.getFlowBypassQtemp()) 
-					&& !Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()
+			if(!YesNo.YES.equals(executionFlowData.getFlowBypassQtemp()) 
+					&& !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)
 					&& ConversionOperation.CSV.name().equals(executionFlowData.getFlowFormato())) {
 				inboundFlowBuilder.fromQtempToDestinationFileOperation(executionFlowData, operationParams);
 				inboundFlowBuilder.cpyFile(executionFlowData, operationParams);
 			}
 			
-			if (Constants.SI.equals(executionFlowData.getFlowEsistenzaFile())) {
+			if (YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile())) {
 				inboundFlowBuilder.checkDb2Obj(executionFlowData, operationParams);
 				inboundFlowBuilder.checkDbFileEmpty(executionFlowData, operationParams);
 			}
@@ -79,12 +80,12 @@ public class InboundFlowManager extends FlowManager {
 		}
 		
 		 // Scrivo hash unico
-	    if (Constants.SI.equals(executionFlowData.getFlowHashUnico())) {
+	    if (YesNo.YES.equals(executionFlowData.getFlowHashUnico())) {
 	        inboundFlowBuilder.checkHashFile(executionFlowData, operationParams, true);
 	    }
 
 		// zippo
-		if (Constants.SI.equals(executionFlowData.getFlowCompression())) {
+		if (YesNo.YES.equals(executionFlowData.getFlowCompression())) {
 			inboundFlowBuilder.zipOperation(executionFlowData, operationParams, ZipOperation.ZIP);
 		}
 
@@ -106,21 +107,21 @@ public class InboundFlowManager extends FlowManager {
 
 		if (!StringUtils.isNullOrEmpty(trasmissionFile)) {
 			if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso())
-					&& Constants.SI.equals(executionFlowData.getFlowCancellaFile())) {
+					&& YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + trasmissionFile);
 			}
 			
-			if (!Constants.NO.equals(executionFlowData.getFlowCompression())) {
+			if (!YesNo.NO.equals(executionFlowData.getFlowCompression())) {
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + trasmissionFile
 						+ Constants.ZIP_EXTENSION);
 			}
 			
-			if (Constants.SI.equals(executionFlowData.getFlowDeCompression())) {
+			if (YesNo.YES.equals(executionFlowData.getFlowDeCompression())) {
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + trasmissionFile);
 			}
 		}
 
-		if (Constants.SI.equals(executionFlowData.getFlowIntegrityCheck())
+		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo())) {
 			deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + operationParams.getSempahoreFile());
 		}

@@ -8,7 +8,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
+
+//import org.apache.log4j.Level;
 
 import it.dmsoft.flowmanager.agent.engine.generic.clientWs.utility.Utility;
 
@@ -150,7 +152,7 @@ public class Logger {
 		return getLevel(level.toString());
 	}
 
-	public static Logger log4j2Logger(org.apache.log4j.Logger logger4j) {
+	public static Logger log4j2Logger(Logger logger4j) {
 		if (logger4j == null) {
 			return null;
 		}

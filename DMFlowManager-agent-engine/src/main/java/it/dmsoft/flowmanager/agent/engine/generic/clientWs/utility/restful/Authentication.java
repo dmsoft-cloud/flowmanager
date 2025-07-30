@@ -29,10 +29,10 @@ public class Authentication {
 	/**
 	 * @deprecated
 	 */
-	@Deprecated
+	/*@Deprecated
 	public static HttpHeaders getBasicHeaders(MediaType mediaType, String username, String password, org.apache.log4j.Logger logger4j) {
 		return getBasicHeaders(mediaType, username, password, Logger.log4j2Logger(logger4j));
-	}
+	}*/
 
 	public static HttpHeaders getOAuth2Headers(MediaType mediaType, String urlToken, String userbasic, String pwdbasic, Logger logger) throws OCSAuthenticationException, OCSURLOAuth2NotFound {
 
@@ -78,9 +78,10 @@ public class Authentication {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static HttpHeaders getOAuth2Headers(MediaType mediaType, String urlToken, String userbasic, String pwdbasic, org.apache.log4j.Logger logger4j)
 			throws OCSAuthenticationException, OCSURLOAuth2NotFound {
 		return getOAuth2Headers(mediaType, urlToken, userbasic, pwdbasic, Logger.log4j2Logger(logger4j));
-	}
+	}*/
 }

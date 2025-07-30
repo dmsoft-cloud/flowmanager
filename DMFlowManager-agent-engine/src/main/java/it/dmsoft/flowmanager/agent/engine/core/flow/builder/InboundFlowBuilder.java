@@ -18,6 +18,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFilePar
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class InboundFlowBuilder extends FlowBuilder{
 
@@ -26,7 +27,7 @@ public class InboundFlowBuilder extends FlowBuilder{
 	}*/
 	
 	public FlowBuilder conversionToDestFile(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		return super.conversionToDestFile(executionFlowData, operationParams, Constants.SI.equals(executionFlowData.getFlowBypassQtemp()));
+		return super.conversionToDestFile(executionFlowData, operationParams, YesNo.YES.equals(executionFlowData.getFlowBypassQtemp()));
 	}
 	
 	public FlowBuilder createDbFileQtemp(ExecutionFlowData executionFlowData, OperationParams operationParams) {

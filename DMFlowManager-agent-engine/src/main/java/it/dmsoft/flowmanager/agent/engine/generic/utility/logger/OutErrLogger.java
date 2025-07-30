@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.agent.engine.generic.utility.logger;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import org.apache.log4j.Level;
+//import org.apache.log4j.Level;
 
 public class OutErrLogger {
 	private static HashMap<String, PrintStream> streamsInfo = new HashMap<String, PrintStream>();
@@ -25,19 +25,23 @@ public class OutErrLogger {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static void setOutAndErrToLog(org.apache.log4j.Logger logger) {
 		setOutAndErrToLog(Logger.log4j2Logger(logger), Logger.LEVEL_INFO);
 	}
+	*/
 
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static void setOutAndErrToLog(org.apache.log4j.Logger logger, Level level) {
 		setOutAndErrToLog(Logger.log4j2Logger(logger), Logger.level4j2LevelOcs(level));
 	}
-
+	*/
+	
 	private static void setOutToLog(Logger logger, int level) {
 		if (!streamsInfo.containsKey(logger.getName())) {
 			streamsInfo.put(logger.getName(), new PrintStream(new LoggerStream(logger, level)));

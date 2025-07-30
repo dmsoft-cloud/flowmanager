@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
@@ -121,7 +122,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 	        	//BufferedReader brData = new BufferedReader(new FileReader(file))   
 	        	
 	        	// Salta la prima riga se specificato dal parametro
-	        	 if(Optional.ofNullable(parameters.getRemoveColName()).filter(Constants.SI::equals).isPresent()) 
+	        	 if(YesNo.YES.equals(parameters.getRemoveColName())) 
 	        		 	brData.readLine(); 
 	
 	             String line;

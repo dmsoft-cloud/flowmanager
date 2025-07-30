@@ -67,9 +67,11 @@ public class TimedCacheManager {
 	 * @deprecated
 	 */
 	@Deprecated
+	/*
 	public static <T> String saveDataInCache(T data, String path, org.apache.log4j.Logger logger, Long timerCacheRisposta) throws IOException {
 		return saveDataInCache(data, path, Logger.log4j2Logger(logger), timerCacheRisposta);
 	}
+	*/
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getCachedData(String uuidDate, String path, Class<T> clazz, Long timerCacheRisposta, Logger logger) throws IOException, ClassNotFoundException {
@@ -89,10 +91,12 @@ public class TimedCacheManager {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static <T> T getCachedData(String uuidDate, String path, Class<T> clazz, Long timerCacheRisposta, org.apache.log4j.Logger logger) throws IOException, ClassNotFoundException {
 		return getCachedData(uuidDate, path, clazz, timerCacheRisposta, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	// TODO restituire un ENUM
 	public static <T> String removeCachedData(String uuidDate, String path, Logger logger) {
@@ -119,10 +123,12 @@ public class TimedCacheManager {
 	/**
 	 * @deprecated
 	 */
+	/*
 	@Deprecated
 	public static <T> String removeCachedData(String uuidDate, String path, org.apache.log4j.Logger logger) {
 		return removeCachedData(uuidDate, path, Logger.log4j2Logger(logger));
 	}
+	*/
 
 	static Map<String, Object> getListaDatiOutput() {
 		return listaDatiOutput;

@@ -13,6 +13,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class ReadOtgffempa extends Operation<SendMailParam> {
 
@@ -72,7 +73,7 @@ public class ReadOtgffempa extends Operation<SendMailParam> {
 		parameters.setSmtpPassword(char8Converter.toObject(parmlist[7].getOutputData()).toString());
 		parameters.setPort(new BigDecimal(dec.toObject(parmlist[5].getOutputData()).toString()));
 		parameters.setHostName(char256Converter.toObject(parmlist[4].getOutputData()).toString().trim());
-		Boolean secure = Constants.SI.equals(char1Converter.toObject(parmlist[8].getOutputData()).toString());
+		Boolean secure = YesNo.YES.getCode().equals(char1Converter.toObject(parmlist[8].getOutputData()).toString());
 		parameters.setSecure(secure);
 
 		logger.info("end execution of " + ReadOtgffempa.class.getName());

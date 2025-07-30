@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.be.entities;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class FlowConfig {
 	private String transactionName;
@@ -12,14 +13,12 @@ public class FlowConfig {
 	private String mailFrom;
 	private String cliente ;
 	private String executionDateStr;
-	private String legacyModernization;
+	private YesNo legacyModernization;
 	private String extJob;
 	private String extUser;
 	private String extNumber;
 	private String extTask;
 	private String masterdataOverrides;
-	
-	
 	
 	public String getTransactionName() {
 		return transactionName;
@@ -88,10 +87,10 @@ public class FlowConfig {
 		this.masterdataOverrides = masterdataOverrides;
 	}
 	
-	public String getLegacyModernization() {
+	public YesNo getLegacyModernization() {
 		return legacyModernization;
 	}
-	public void setLegacyModernization(String legacyModernization) {
+	public void setLegacyModernization(YesNo legacyModernization) {
 		this.legacyModernization = legacyModernization;
 	}
 	

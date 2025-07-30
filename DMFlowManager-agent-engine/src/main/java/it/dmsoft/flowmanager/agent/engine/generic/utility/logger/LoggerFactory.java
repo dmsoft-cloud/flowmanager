@@ -36,15 +36,15 @@ public class LoggerFactory {
 			// vengono aggiunti gli appender corretti al logger. Il check su
 			// log4j è necessario per poter gestire quelel situazioni (es. DEBK)
 			// per cui la classe viene rimossa in fase di build del Generic
-			if (checkLog4jAvailable()) {
-				new Logger4j(sizeLog, maxBackupIndex, path, pathApplicationLog, logLevel, jobNumber, pkg, logKey, forceOneAppender, enableSingleLog);
-			}
+			//if (checkLog4jAvailable()) {
+			//	new Logger4j(sizeLog, maxBackupIndex, path, pathApplicationLog, logLevel, jobNumber, pkg, logKey, forceOneAppender, enableSingleLog);
+			//}
 			loggerReturn = new Logger4j2(sizeLog, maxBackupIndex, path, pathApplicationLog, logLevel, jobNumber, pkg, logKey, forceOneAppender, enableSingleLog);
 			break;
 
 		case LOG4J1:
 		default:
-			loggerReturn = new Logger4j(sizeLog, maxBackupIndex, path, pathApplicationLog, logLevel, jobNumber, pkg, logKey, forceOneAppender, enableSingleLog);
+			loggerReturn = new Logger4j2(sizeLog, maxBackupIndex, path, pathApplicationLog, logLevel, jobNumber, pkg, logKey, forceOneAppender, enableSingleLog);
 			break;
 		}
 
@@ -120,11 +120,11 @@ public class LoggerFactory {
 	 * @return
 	 */
 	public static LoggerAbstract getInstanceLog4j() {
-		if (checkLog4j2Available()) {
-			return new Logger4j2();
-		} else {
-			return new Logger4j();
-		}
+		//if (checkLog4j2Available()) {
+		return new Logger4j2();
+		//} else {
+		//	return new Logger4j();
+		//}
 	}
 
 }

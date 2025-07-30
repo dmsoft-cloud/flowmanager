@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class OperationParams {
 
@@ -35,8 +36,8 @@ public class OperationParams {
 	private Date executionDate = FormatUtils.todayDate();
 	private List<String> overrideMailDests;
 	private String overrideMailText;
-	private String legacyModernization;
-	private String exportFileHeaders;
+	private YesNo legacyModernization;
+	private YesNo exportFileHeaders;
 	private String exportTempSchema;
 	private String exportTempTable;
 	private String externalJob;
@@ -257,19 +258,19 @@ public class OperationParams {
 	}
 	
 
-	public String getLegacyModernization() {
+	public YesNo getLegacyModernization() {
 		return legacyModernization;
 	}
 
-	public void setLegacyModernization(String legacyModernization) {
+	public void setLegacyModernization(YesNo legacyModernization) {
 		this.legacyModernization = legacyModernization;
 	}
 
-	public String getExportFileHeaders() {
+	public YesNo getExportFileHeaders() {
 		return exportFileHeaders;
 	}
 
-	public void setExportFileHeaders(String exportFileHeaders) {
+	public void setExportFileHeaders(YesNo exportFileHeaders) {
 		this.exportFileHeaders = exportFileHeaders;
 	}
 

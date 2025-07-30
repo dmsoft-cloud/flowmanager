@@ -185,7 +185,7 @@ public static final String Y = "S";
     
     public enum Status implements CodeEnum {
  		OK("OK"),
- 		KO("TO");
+ 		KO("KO");
  		
  		private String code;
  		

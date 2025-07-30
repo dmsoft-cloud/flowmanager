@@ -20,8 +20,9 @@ public class PropertiesUtils {
 	
 	private static Properties getProperties() throws Exception {
 		if (appProps == null) {
-			String path = new File(Main.class.getProtectionDomain().getCodeSource().getLocation()
-				    .toURI()).getParent();
+			//String path = new File(Main.class.getProtectionDomain().getCodeSource().getLocation()
+			//	    .toURI()).getParent();
+			String path = new File("").getAbsolutePath();
 			logger.info("Working Directory -> " + path);
 			appProps = new Properties();
 			appProps.load(new FileInputStream(path + Constants.PATH_DELIMITER + PROP_FILENAME));

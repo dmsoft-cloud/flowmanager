@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.InvalidDBTypeException;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
@@ -41,13 +42,13 @@ public class DatabaseUtils {
 		DbConstants.DB_HOST = PropertiesUtils.get(PropertiesConstants.DATABASE_URL);
 		DbConstants.REMOTE_HOST = PropertiesUtils.get(PropertiesConstants.REMOTE_HOST);
 		DbConstants.DB_TYPE = PropertiesUtils.get(PropertiesConstants.DATABASE_TYPE);
-		DbConstants.SECURE_CONNECTION = PropertiesUtils.get(PropertiesConstants.SECURE_CONNECTION);
+		DbConstants.SECURE_CONNECTION = YesNo.getYesNo(PropertiesUtils.get(PropertiesConstants.SECURE_CONNECTION));
 		DbConstants.USERNAME= PropertiesUtils.get(Constants.USER);
 		dbPassword = PropertiesUtils.get(Constants.PASSWORD);
 		if(!StringUtils.isNullOrEmpty(dbPassword)) DbConstants.PASSWORD=dbPassword;
 		
 		//controllo valorizzazioni se non sono in esecuzione locale su as400
-		if(Optional.ofNullable(DbConstants.REMOTE_HOST).filter(Constants.SI::equals).isPresent()) {		
+		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {		
 			//verifico che sia un valore previsto altrimenti ritorno errore
 			Optional.ofNullable(DBTypeEnum.fromString(DbConstants.DB_TYPE)).orElseThrow(() -> new InvalidDBTypeException("DB type not allowed!!!!!!"));
 			if (StringUtils.isNullOrEmpty(DbConstants.DB_HOST)) throw new InvalidDBTypeException("host not provided!!!!!!"); 
