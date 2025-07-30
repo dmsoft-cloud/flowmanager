@@ -39,7 +39,7 @@ public class ChkDbFileEmpty extends Operation<ChkDbFileEmptyParam>{
 		PreparedStatement ps = conn.prepareStatement(query);
 		ResultSet rs = ps.executeQuery();
 
-		if (!rs.next() || BigDecimal.ZERO.compareTo(rs.getBigDecimal(1)) == 0) {
+		if (!rs.next() || rs.getBigDecimal(1) == null || BigDecimal.ZERO.compareTo(rs.getBigDecimal(1)) == 0) {
 			throw new OperationException("File " + library + parameters.getFile() + " is empty");
 		}
 		

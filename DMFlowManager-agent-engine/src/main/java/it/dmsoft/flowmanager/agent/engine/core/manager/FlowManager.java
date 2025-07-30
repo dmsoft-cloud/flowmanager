@@ -7,19 +7,20 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.InteractiveType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.TransferType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -31,6 +32,10 @@ public abstract class FlowManager {
     protected EntityManager entityManager;
 	
 	protected ScheduleDateRepository scheduleDateRepository;
+	
+	public FlowManager(ScheduleDateRepository scheduleDateRepository) {
+		this.scheduleDateRepository = scheduleDateRepository;
+	}
 	
 	/*
 	public static void main(String[] args) throws Exception {
@@ -261,6 +266,9 @@ public abstract class FlowManager {
 		public static String replace(String source, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 			String ret = source;
 			
+			if (StringUtils.isNullOrEmpty(ret))
+				return ret;
+			
 			for (Replacer replacer : Replacer.values()) {
 				ret = replacer.replaceString(ret, executionFlowData, operationParams);
 			}
@@ -327,17 +335,21 @@ public abstract class FlowManager {
 			flowBuilder.sendOutcomeMail(executionFlowData, operationParams);
 		}
 		logger.info("valore campo interattivo: " +  executionFlowData.getFlowInteractiveType());
-		switch (executionFlowData.getFlowInteractiveType()) {
-		case "P":	
-			flowBuilder.interactiveProgram(executionFlowData, operationParams);
-			break;
-		case "C":
-			flowBuilder.interactiveCommand(executionFlowData, operationParams);
-			break;
-		default:
-			break;
-		}
 		
+		//TODO REFACTOR
+		
+		if (executionFlowData.getFlowInteractiveType() != null) {
+			switch (executionFlowData.getFlowInteractiveType()) {
+			case "P":	
+				flowBuilder.interactiveProgram(executionFlowData, operationParams);
+				break;
+			case "C":
+				flowBuilder.interactiveCommand(executionFlowData, operationParams);
+				break;
+			default:
+				break;
+			}
+		}
 		
 		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowPgmControllo())) {
 			flowBuilder.controlProgram(executionFlowData, operationParams);

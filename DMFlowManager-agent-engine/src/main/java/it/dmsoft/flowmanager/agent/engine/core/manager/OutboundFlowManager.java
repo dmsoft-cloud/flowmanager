@@ -25,6 +25,11 @@ import jakarta.persistence.PersistenceContext;
 @Service("outboundFlowManager")
 public class OutboundFlowManager extends FlowManager {
 	
+	public OutboundFlowManager(ScheduleDateRepository scheduleDateRepository) {
+		super(scheduleDateRepository);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void handleOuputFileNames(OutboundFlowBuilder outboundFlowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		//CERCO FILE SU IFS
 		if(Constants.IFS.equals(executionFlowData.getFlowTipFlusso())) {
@@ -124,7 +129,7 @@ public class OutboundFlowManager extends FlowManager {
 	        outboundFlowBuilder.checkHashFile(executionFlowData, operationParams, true);
 	    }
 		
-		if (BigDecimal.ZERO.compareTo(executionFlowData.getFlowRetention()) < 0) {
+		if (executionFlowData.getFlowRetention() != null && BigDecimal.ZERO.compareTo(executionFlowData.getFlowRetention()) < 0) {
 			// operationParams.setBackupFolder(StringUtils.setDefault(executionFlowData.getFlowBackup(),
 			// operationParams.getBackupFolder()));
 			operationParams

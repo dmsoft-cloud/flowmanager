@@ -15,10 +15,16 @@ import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
+import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("inboundFlowManager")
 public class InboundFlowManager extends FlowManager {
+
+	public InboundFlowManager(ScheduleDateRepository scheduleDateRepository) {
+		super(scheduleDateRepository);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
@@ -89,7 +95,7 @@ public class InboundFlowManager extends FlowManager {
 			inboundFlowBuilder.zipOperation(executionFlowData, operationParams, ZipOperation.ZIP);
 		}
 
-		if (BigDecimal.ZERO.compareTo(executionFlowData.getFlowRetention()) < 0) {
+		if (executionFlowData.getFlowRetention() != null && BigDecimal.ZERO.compareTo(executionFlowData.getFlowRetention()) < 0) {
 			operationParams
 					.setPathBackup(StringUtils.setDefault(executionFlowData.getFlowBackup(), operationParams.getPathBackup()));
 			inboundFlowBuilder.createBackup(executionFlowData, operationParams);

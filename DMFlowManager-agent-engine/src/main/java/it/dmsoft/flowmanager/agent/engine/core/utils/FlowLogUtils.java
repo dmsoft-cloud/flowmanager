@@ -38,10 +38,10 @@ public class FlowLogUtils {
 		phaseProg = BigDecimal.ZERO;
 	}
 	
-	public static FlowLog insertHeadLog(ExecutionFlowData executionFlowData, String logFile) {
-		return instance.writeFlowLog(executionFlowData, logFile);
+	public static FlowLog insertFlowLog(ExecutionFlowData executionFlowData) {
+		return instance.writeFlowLog(executionFlowData);
 	}
-	
+
 	public static void startDetail(OperationType operation) throws Exception {		
 		instance.writeFlowLogDetails(operation, Constants.START_PHASE_DESCR, Constants.OK);
 	}
@@ -52,6 +52,12 @@ public class FlowLogUtils {
 	
 	public static void koDetail() throws Exception {
 		instance.writeFlowLogDetails(null, Constants.KO_DESCR, Constants.KO);
+	}
+	
+	public static FlowLog updateLogPath(FlowLog flowLog, String logFile) {
+		FlowLog flowLogDb = instance.flowLogRepository.getReferenceById(flowLog.getLogProgrLog());
+		flowLogDb.setLogLogFile(logFile);
+		return instance.flowLogRepository.save(flowLogDb);
 	}
 	
 	public static void updateBackupPath(BigDecimal transactionId, String destFile) {
@@ -79,9 +85,8 @@ public class FlowLogUtils {
 		return flowLogDetails;
 	}
 	
-	private FlowLog writeFlowLog(ExecutionFlowData executionFlowData, String logFile) {
+	private FlowLog writeFlowLog(ExecutionFlowData executionFlowData) {
 		FlowLog flowLog = getFlowLog(executionFlowData);
-		flowLog.setLogLogFile(logFile);
 		return flowLogRepository.save(flowLog);
 	}
 	

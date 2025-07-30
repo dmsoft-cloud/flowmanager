@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.be.entities.ExportFlowData;
@@ -43,7 +45,7 @@ import jakarta.persistence.PersistenceContext;
 
 @Service("dynamicFlowManager")
 public class DynamicFlowManager {
-
+	
 	/**
 	 * 
 	 * @param args
@@ -57,6 +59,9 @@ public class DynamicFlowManager {
 
 	@Resource(name = "flowLogUtils")
 	private FlowLogUtils flowLogUtils;
+	
+	@Autowired
+    protected ApplicationContext applicationContext;
 	
 	//private FlowLogRepository flowLogRepository;
 	
@@ -169,18 +174,20 @@ public class DynamicFlowManager {
 		
 		String transactionName = executionFlowData.getFlowId();
 		
+		
+		BigDecimal executionDate = FormatUtils.todayDateBigDec();
+				
+		FlowLog headLog = FlowLogUtils.insertFlowLog(executionFlowData);
+		BigDecimal transactionId = headLog.getLogProgrLog();
+		config.setTransactionId(transactionId.toString());
+		
 		String logFile = config.getLogPath() + Constants.PATH_DELIMITER + config.getTransactionName() + Constants.PATH_DELIMITER
 				+ config.getTransactionId();
 		
 		Logger logger = Logger.getLogger(config.getLogRotation(), config.getLogSizeMB(), logFile, config.getLogLevel(), config.getTransactionId(), Main.class.getName(),
 				config.getCliente(), Constants.GESTOREFLUSSI);
 		
-		
-		BigDecimal executionDate = FormatUtils.todayDateBigDec();
-				
-		FlowLog headLog = FlowLogUtils.insertHeadLog(executionFlowData, logFile);
-		
-		BigDecimal transactionId = headLog.getLogProgrLog();
+		FlowLogUtils.updateLogPath(headLog, logFile);
 		
 		String resubmitTransactionId = null;
 		
@@ -231,10 +238,10 @@ public class DynamicFlowManager {
 		logger.debug("masterdata of " + executionFlowData.getFlowId() + " loaded, staring flow manager");
 
 		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
-			OutboundFlowManager outboundManger = new OutboundFlowManager();
+			OutboundFlowManager outboundManger = (OutboundFlowManager) applicationContext.getBean("outboundFlowManager");
 			outboundManger.process(executionFlowData, inputParam);
 		} else {
-			InboundFlowManager inboundManager = new InboundFlowManager();
+			InboundFlowManager inboundManager = (InboundFlowManager) applicationContext.getBean("inboundFlowManager");
 			inboundManager.process(executionFlowData, inputParam);
 		}
 	}

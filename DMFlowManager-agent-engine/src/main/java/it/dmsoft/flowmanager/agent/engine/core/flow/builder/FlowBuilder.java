@@ -996,6 +996,7 @@ public class FlowBuilder {
 		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
 					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento()) &&
+					executionFlowData.getFlowDelaySemaforo() != null &&
 					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
 			
 			DelayIntegrityCheckParams delayParams = new DelayIntegrityCheckParams();
