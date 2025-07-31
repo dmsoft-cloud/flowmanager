@@ -32,6 +32,7 @@ public class SftpReceiver extends ConstraintTrasmission<ResponseWrapper<SftpResp
 				+ " removeAfter => " + parameters.isRemoveRemoteFile() + "\n" + " hostKeyAlias  => " + parameters.getHostKeyAlias() +  "" + "\n" + " identityPassword =>"
 				+ "null" + "\n" + " identityPath =>" + parameters.getKeyFile() + "\n" + " knownHostsPath => "
 				+ parameters.getKnown_Hosts_File() + "\n" + " sftpHost => " + parameters.getHost() + "\n"
+				+ " sftpTrustHost => " + parameters.getTrustHost() + "\n"
 				+ " sftpPassword => " + parameters.getPassword() + "\n" + " sftpPort => "
 				+ parameters.getPort().intValue() + "\n");
 
@@ -40,7 +41,7 @@ public class SftpReceiver extends ConstraintTrasmission<ResponseWrapper<SftpResp
 		try {
 			resp = ReceiveManager.exposedRun(null, Logger.getLogger(SftpReceiver.class),
 					parameters.getLocal_Folder() + Constants.PATH_DELIMITER + parameters.getLocal_File_Name(), parameters.getRemote_Folder(), parameters.getRemote_File_Name(),
-					parameters.isRemoveRemoteFile(), parameters.getHostKeyAlias(), null, parameters.getKeyFile(), parameters.getKnown_Hosts_File(),
+					parameters.isRemoveRemoteFile(), parameters.getHostKeyAlias(), null, parameters.getKeyFile(), parameters.getTrustHost(), parameters.getKnown_Hosts_File(),
 					parameters.getHost(), parameters.getPassword(), parameters.getPort().intValue());
 			
 			logger.info("response SftpReciever: " + resp.toString());

@@ -165,6 +165,7 @@ public interface FlowDataMapper {
 	@Mapping(target = "flowFetchSize", source = "fullFlowData.model.fetchSize")
 	//AL MOMENTO NON PARAMETRIZZATO MA IMPLEMENTATO
 	//@Mapping(target = "flowCharEmptySpace", source = "")
+	@Mapping(target = "flowTrustHost", source = "fullFlowData._interface.trustHost")
 	ExecutionFlowData convert(FullFlowData fullFlowData);
 
 }

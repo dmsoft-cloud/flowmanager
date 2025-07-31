@@ -1,10 +1,13 @@
 package it.dmsoft.flowmanager.agent.engine.generic.utility.sftp;
 
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
 public class SftpParameters {
 	private String knownHostsPath;
 	private String hostKeyAlias;
 	private String identityPath;
 	private String identityPassword;
+	private YesNo trustHost;
 	private String sftpHost;
 	private int sftpPort;
 	private String sftpPassword;
@@ -68,10 +71,20 @@ public class SftpParameters {
 	public void setSftpPassword(String sftpPassword) {
 		this.sftpPassword = sftpPassword;
 	}
+	
+	public YesNo getTrustHost() {
+		return trustHost;
+	}
+
+	public void setTrustHost(YesNo trustHost) {
+		this.trustHost = trustHost;
+	}
 
 	@Override
 	public String toString() {
-		return "SftpParameters [knownHostsPath=" + knownHostsPath + ", hostKeyAlias=" + hostKeyAlias + ", identityPath=" + identityPath + ", identityPassword=" + identityPassword + ", sftpHost="
+		return "SftpParameters [knownHostsPath=" + knownHostsPath + ", hostKeyAlias=" + hostKeyAlias + ", identityPath="
+				+ identityPath + ", identityPassword=" + identityPassword + ", trustHost=" + trustHost + ", sftpHost="
 				+ sftpHost + ", sftpPort=" + sftpPort + ", sftpPassword=" + sftpPassword + "]";
 	}
+
 }

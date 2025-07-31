@@ -17,6 +17,7 @@ import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
 
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 /**
  * Classe manager per la connessione sFTP.
@@ -32,6 +33,7 @@ public class SftpConnection {
 	private Session session;
 	private ChannelSftp sFTPChannel;
 	private String hostKeyAlias;
+	private YesNo trustHost;
 	private Logger logger = Logger.getLogger(SftpConnection.class);
 
 	/**
@@ -58,6 +60,7 @@ public class SftpConnection {
 		
 		// Connessione SSH.
 		this.session = this.secureChannel.getSession(this.user, this.host, this.port);
+		
 		if (this.hostKeyAlias != null) {
 			this.session.setHostKeyAlias(this.hostKeyAlias);
 			logger.debug("Impostato HostKeyAlias: " + this.hostKeyAlias);
@@ -68,17 +71,21 @@ public class SftpConnection {
 		
 		// Imposta l'algoritmo corretto della chiave pubblica del server. 
 		// Jsch preferisce ssh-rsa, ma nel nostro caso abbiamo ecdsa-sha2-nistp256, quindi dobbiamo esplicitarlo noi.
-		HostKey[] hostKeys = this.secureChannel.getHostKeyRepository().getHostKey();
-	    for (HostKey hk : hostKeys) { 
-	    	String[] hosts = hk.getHost().split(",");
-	    	for (String h : hosts) {
-	    		if (h.equals(this.host) || h.equals(this.hostKeyAlias)) {
-	    			String type = hk.getType();
-	    			session.setConfig("server_host_key", type);	    			
-	    		}
-	    	}
-	    }
-	    
+		if (YesNo.YES.equals(trustHost)) {
+			this.session.setConfig("StrictHostKeyChecking", "no");
+		} else {
+			HostKey[] hostKeys = this.secureChannel.getHostKeyRepository().getHostKey();
+		    for (HostKey hk : hostKeys) { 
+		    	String[] hosts = hk.getHost().split(",");
+		    	for (String h : hosts) {
+		    		if (h.equals(this.host) || h.equals(this.hostKeyAlias)) {
+		    			String type = hk.getType();
+		    			session.setConfig("server_host_key", type);	    			
+		    		}
+		    	}
+		    }
+		}
+		
 		this.session.connect();
 
 		// Inizia sessione sFTP.
@@ -97,6 +104,10 @@ public class SftpConnection {
 	 */
 	public void setKnownHosts(String as400path) throws FileNotFoundException, JSchException {
 		this.secureChannel.setKnownHosts(as400path);
+	}
+	
+	public void setTrustHost(YesNo trustHost) {
+		this.trustHost = trustHost;
 	}
 
 	/**
@@ -245,6 +256,8 @@ public class SftpConnection {
 		String idpwd = sftpParams.getIdentityPassword();
 		String hka = sftpParams.getHostKeyAlias();
 		String sftppwd = sftpParams.getSftpPassword();
+		
+		this.setTrustHost(sftpParams.getTrustHost());
 		
 		if (kh != null && !kh.isEmpty()) {
 			this.setKnownHosts(kh);

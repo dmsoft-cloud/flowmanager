@@ -1254,7 +1254,7 @@ public class FlowBuilder {
 					+ Constants.PATH_DELIMITER + Constants.KEY_FILE);
 		}
 		
-
+		dbTrasmissionParams.setTrustHost(executionFlowData.getFlowTrustHost());
 		dbTrasmissionParams.setUser_Sftp(executionFlowData.getFlowUtenteSftp());
 
 		dbTrasmissionParams.setPassword(executionFlowData.getFlowPassword());

@@ -26,6 +26,7 @@ import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpInfo;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpRequest;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.sftp.utility.PathReader;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class SendManager {
 	private static final String FORWARD_SLASH = "/";
@@ -102,7 +103,7 @@ public class SendManager {
 
 	// Metodo chiamato da exposedRun
 	public static ResponseWrapper<SftpResponse> exposedRun(AppOpePar parametri, Logger loggerExt, String localPath, String remotePath, String remoteFile, boolean removeAfter, String hostKeyAlias,
-			String identityPassword, String identityPath, String knownHostsPath, String sftpHost, String sftpPassword, int sftpPort)
+			String identityPassword, String identityPath, YesNo trustHost, String knownHostsPath, String sftpHost, String sftpPassword, int sftpPort)
 			throws KeyManagementException, NoSuchAlgorithmException, JSchException, IOException, SftpException {
 		SftpRequest request = new SftpRequest();
 		request.setLocalPath(localPath);
@@ -115,6 +116,7 @@ public class SendManager {
 		sftpParameters.setIdentityPath(identityPath);
 		sftpParameters.setKnownHostsPath(knownHostsPath);
 		sftpParameters.setSftpHost(sftpHost);
+		sftpParameters.setTrustHost(trustHost);
 		sftpParameters.setSftpPassword(sftpPassword);
 		sftpParameters.setSftpPort(sftpPort);
 		request.setSftpParameters(sftpParameters);
@@ -148,9 +150,9 @@ public class SendManager {
 	 */
 	@Deprecated
 	public static ResponseWrapper<SftpResponse> exposedRun(AppOpePar parametri, Logger loggerExt, String localPath, String remotePath, boolean removeAfter, String hostKeyAlias,
-			String identityPassword, String identityPath, String knownHostsPath, String sftpHost, String sftpPassword, int sftpPort)
+			String identityPassword, String identityPath, YesNo trustHost, String knownHostsPath, String sftpHost, String sftpPassword, int sftpPort)
 			throws KeyManagementException, NoSuchAlgorithmException, JSchException, IOException, SftpException {
-		return exposedRun(parametri, loggerExt, localPath, remotePath, null, removeAfter, hostKeyAlias, identityPassword, identityPath, knownHostsPath, sftpHost, sftpPassword, sftpPort);
+		return exposedRun(parametri, loggerExt, localPath, remotePath, null, removeAfter, hostKeyAlias, identityPassword, identityPath, trustHost, knownHostsPath, sftpHost, sftpPassword, sftpPort);
 	}
 
 	// Metodo chiamato da exposedRun

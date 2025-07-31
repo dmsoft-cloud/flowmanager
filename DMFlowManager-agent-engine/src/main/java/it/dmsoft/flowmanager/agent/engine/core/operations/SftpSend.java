@@ -30,13 +30,14 @@ public class SftpSend extends Trasmission {
 				+ " removeAfter => " + false + "\n" + " hostKeyAlias  => " + parameters.getHostKeyAlias() + "" + "\n" + " identityPassword =>"
 				+ "null" + "\n" + " identityPath =>" + parameters.getKeyFile() + "\n" + " knownHostsPath => "
 				+ parameters.getKnown_Hosts_File() + "\n" + " sftpHost => " + parameters.getHost() + "\n"
+				+ " sftpTrustHost => " + parameters.getTrustHost() + "\n"
 				+ " sftpPassword => " + parameters.getPassword() + "\n" + " sftpPort => "
 				+ parameters.getPort().intValue() + "\n");
 
 		try {
 			ResponseWrapper<SftpResponse> resp = SendManager.exposedRun(null, Logger.getLogger(SftpSend.class),
 					parameters.getLocal_Folder() + '/' + parameters.getLocal_File_Name(), parameters.getRemote_Folder(), parameters.getRemote_File_Name(),
-					false, parameters.getHostKeyAlias(), null, parameters.getKeyFile(), parameters.getKnown_Hosts_File(),
+					false, parameters.getHostKeyAlias(), null, parameters.getKeyFile(), parameters.getTrustHost(), parameters.getKnown_Hosts_File(),
 					parameters.getHost(), parameters.getPassword(), parameters.getPort().intValue());
 			
 			ExceptionUtils.throwExceptionIfNecessary(resp);

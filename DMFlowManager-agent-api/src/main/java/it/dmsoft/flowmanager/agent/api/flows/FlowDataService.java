@@ -41,14 +41,15 @@ public class FlowDataService {
 			throw new RuntimeException(e);
 		}
 		
+		flowsData = fullFlowsData;
 		return fullFlowsData;
 	}
 	
 	public FullFlowData getFullFlowData(String flowId) {
-		//TODO HANDLE CACHE
-		//if(flowsData == null) {
+		//TODO HANDLE BETTER CACHE
+		if(flowsData == null) {
 			flowsData = loadFullFlowsData();
-		//}
+		}
 		
 		FlowData flow = flowsData.getFlows().stream().filter(x -> x.getId().equals(flowId)).findAny().get();
 		GroupData group = flowsData.getGroups().stream().filter(x -> x.getId().equals(flow.getGroupId())).findAny().orElse(null);

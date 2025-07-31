@@ -159,7 +159,8 @@ public class ExecutionFlowData {
 	private String flowExportFlag;
 	private String flowExportCode;
 	private BigDecimal flowFetchSize;
-	private String flowcharemptyspace;
+	private String flowCharEmptySpace;
+	private YesNo flowTrustHost;
 	
 	
 	public String getFlowId() {
@@ -610,12 +611,18 @@ public class ExecutionFlowData {
 	}
 	
 	public String getFlowCharEmptySpace() {
-		return flowcharemptyspace;
+		return flowCharEmptySpace;
 	}
-	public void setFlowCharEmptySpace(String flowcharemptyspace) {
-		this.flowcharemptyspace = flowcharemptyspace;
+	public void setFlowCharEmptySpace(String flowCharEmptySpace) {
+		this.flowCharEmptySpace = flowCharEmptySpace;
 	}
 	
+	public YesNo getFlowTrustHost() {
+		return flowTrustHost;
+	}
+	public void setFlowTrustHost(YesNo flowTrustHost) {
+		this.flowTrustHost = flowTrustHost;
+	}
 	@Override
 	public String toString() {
 		return "Otgffana [flowId=" + flowId + ", flowDesc=" + flowDesc + ", flowGruppo=" + flowGruppo
@@ -650,7 +657,7 @@ public class ExecutionFlowData {
 				+ ", flowInteractiveResult=" + flowInteractiveResult + ", flowInteractiveCommand="
 				+ flowInteractiveCommand + ", flowDelaySemaforo=" + flowDelaySemaforo + ", flowHashUnico="
 				+ flowHashUnico + ", flowExportFlag=" + flowExportFlag + ", flowExportCode=" + flowExportCode
-				+ ", flowFetchSize=" + flowFetchSize + ", flowcharemptyspace=" + flowcharemptyspace + "]";
+				+ ", flowFetchSize=" + flowFetchSize + ", flowcharemptyspace=" + flowCharEmptySpace + "]";
 	}
 	
 

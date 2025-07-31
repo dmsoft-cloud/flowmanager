@@ -37,6 +37,8 @@ public class TrasmissionParams {
 	
 	private String password;
 	
+	private YesNo trustHost;
+	
 	private String known_Hosts_File;
 	
 	private String keyFile;
@@ -199,19 +201,32 @@ public class TrasmissionParams {
 	public void setFtp_secure(YesNo ftp_Secure) {
 		this.ftp_Secure = ftp_Secure;
 	}
+	
+	public YesNo getTrustHost() {
+		return trustHost;
+	}
+
+	public void setTrustHost(YesNo trustHost) {
+		this.trustHost = trustHost;
+	}
+
+	public YesNo getFtp_Secure() {
+		return ftp_Secure;
+	}
+
+	public void setFtp_Secure(YesNo ftp_Secure) {
+		this.ftp_Secure = ftp_Secure;
+	}
 
 	@Override
 	public String toString() {
 		return "TrasmissionParams [host=" + host + ", port=" + port + ", remote_Folder=" + remote_Folder
 				+ ", remote_File_Name=" + remote_File_Name + ", local_Folder=" + local_Folder + ", local_File_Name="
 				+ local_File_Name + ", user=" + user + ", user_Sftp=" + user_Sftp + ", password=" + password
-				+ ", known_Hosts_File=" + known_Hosts_File + ", keyFile=" + keyFile + ", hostKeyAlias=" + hostKeyAlias
-				+ ", passive_mode=" + passive_mode + ", retryCount=" + retryCount + ", retryIntervall=" + retryIntervall
-				+ ", removeRemoteFile=" + removeRemoteFile + ", launchErrorIfNoFileFound=" + launchErrorIfNoFileFound
-				+ ", ftpSecure=" + ftp_Secure
-				+ "]";
+				+ ", trustHost=" + trustHost + ", known_Hosts_File=" + known_Hosts_File + ", keyFile=" + keyFile
+				+ ", hostKeyAlias=" + hostKeyAlias + ", passive_mode=" + passive_mode + ", ftp_Secure=" + ftp_Secure
+				+ ", retryCount=" + retryCount + ", retryIntervall=" + retryIntervall + ", removeRemoteFile="
+				+ removeRemoteFile + ", launchErrorIfNoFileFound=" + launchErrorIfNoFileFound + "]";
 	}
 
-	
-	
 }
