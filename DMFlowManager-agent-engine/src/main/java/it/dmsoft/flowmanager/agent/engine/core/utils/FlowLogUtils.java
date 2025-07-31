@@ -12,6 +12,7 @@ import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.be.entities.FlowLog;
 import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
+import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
 import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
@@ -28,6 +29,8 @@ public class FlowLogUtils {
 	
 	private FlowLogDetailsRepository flowLogDetailsRepository;
 	
+	private BigDecimal transactionId;
+	
 	private BigDecimal phaseProg;
 	
 	public FlowLogUtils(FlowLogRepository flowLogRepository, FlowLogDetailsRepository flowLogDetailsRepository) {
@@ -35,11 +38,14 @@ public class FlowLogUtils {
 		
 		this.flowLogDetailsRepository = flowLogDetailsRepository;
 		this.flowLogRepository = flowLogRepository;
-		phaseProg = BigDecimal.ZERO;
+
 	}
 	
 	public static FlowLog insertFlowLog(ExecutionFlowData executionFlowData) {
-		return instance.writeFlowLog(executionFlowData);
+		FlowLog flowLog = instance.writeFlowLog(executionFlowData);
+		instance.transactionId = flowLog.getLogProgrLog();
+		instance.phaseProg = BigDecimal.ZERO;
+		return flowLog;
 	}
 
 	public static void startDetail(OperationType operation) throws Exception {		
@@ -76,10 +82,15 @@ public class FlowLogUtils {
 		
 		phaseProg = phaseProg.add(BigDecimal.ONE);
 		FlowLogDetails flowLogDetails = new FlowLogDetails();
+		
+		FlowLogDetailsId id = new FlowLogDetailsId();
+		id.setLogProgrLog(transactionId);
+		id.setLogProgrFase(phaseProg);
+		
+		flowLogDetails.setFlowLogDetailsId(id);
 		flowLogDetails.setLogDetEsito(Status.getStatus(outcome));
 		flowLogDetails.setLogDetFase(operation != null ? operation.name() : Constants.SPACE);
 		flowLogDetails.setLogDetNote(phaseDescr + (operation != null ? Constants.SPACE + operation.getDescription() : ""));
-		flowLogDetails.setLogDetProgrFase(phaseProg);
 		flowLogDetails.setLogDetTs(new Timestamp(date.getTime()));
 		
 		return flowLogDetails;

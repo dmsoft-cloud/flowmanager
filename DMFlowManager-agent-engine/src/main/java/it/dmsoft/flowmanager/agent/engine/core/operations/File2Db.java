@@ -11,6 +11,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class File2Db extends DependentOperation<DbConversionParam>{
@@ -19,7 +20,7 @@ public class File2Db extends DependentOperation<DbConversionParam>{
 	
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		

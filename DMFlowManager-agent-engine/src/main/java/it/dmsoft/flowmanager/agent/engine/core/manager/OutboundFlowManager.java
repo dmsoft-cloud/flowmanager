@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ZipOperation;
@@ -37,7 +38,7 @@ public class OutboundFlowManager extends FlowManager {
 			readOutboundFlowBuilder.readFileNames(executionFlowData, operationParams);
 			readOutboundFlowBuilder.build().execute();
 			
-			if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione()) 
+			if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) 
 					&& executionFlowData.getFlowRemoteFileName().matches(Constants.REGEXP_WILDCARD + Constants.$PR__REGEXP + Constants.REGEXP_WILDCARD)) {
 				
 				BigDecimal executionDate8 = FormatUtils.date(operationParams.getExecutionDate());
@@ -46,7 +47,7 @@ public class OutboundFlowManager extends FlowManager {
 				operationParams.setDayStartProgressiveIndex(startProgr);				
 				outboundFlowBuilder.addProgressiveSequenceId(executionFlowData, operationParams);			
 			} 
-		} else if (Constants.SPOOL.equals(executionFlowData.getFlowTipFlusso()) && Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())){
+		} else if (Constants.SPOOL.equals(executionFlowData.getFlowTipFlusso()) && Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())){
 			FlowBuilder readOutboundFlowBuilder = new FlowBuilder();
 			readOutboundFlowBuilder.readSpoolFiles(executionFlowData, operationParams);
 			readOutboundFlowBuilder.build().execute();
@@ -120,7 +121,7 @@ public class OutboundFlowManager extends FlowManager {
 		// create File Semaforo
 		outboundFlowBuilder.createFile(executionFlowData, operationParams);
 
-		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowTipoTrasferimento())) {
+		if (executionFlowData.getFlowTipoTrasferimento() != null) {
 			outboundFlowBuilder.trasmit(executionFlowData, operationParams);
 		}
 

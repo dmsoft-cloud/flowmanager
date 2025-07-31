@@ -16,15 +16,15 @@ public abstract class Trasmission extends Operation<TrasmissionParams>{
 	public final void execute() throws Exception {
 		logger.info("Start of execute constraint trasmission");
 		Exception lastExc = null;
-		for(int i=0; i < parameters.getRetryCount().intValue() + 1;i++) {
-			
+		int retryCount = parameters.getRetryCount() == null ? 0 : parameters.getRetryCount().intValue();
+		for(int i=0; i < retryCount + 1;i++) {
 			try {
 				logger.info("Start of execute trasmission");
 				executeTrasmission();
 				return;
 			} catch(Exception e) {
 				lastExc = e;
-				handleError(e);
+				handleError(e, i > 0);
 			}
 		}
 		
@@ -34,13 +34,13 @@ public abstract class Trasmission extends Operation<TrasmissionParams>{
 		}
 		
 		throw lastExc;
-		
 	}
 		
-	private void handleError(Exception e) throws Exception{
+	private void handleError(Exception e, boolean doSleep) throws Exception{
 		logger.error("Error on trasmission execution:", e);
 		FlowLogUtils.endDetail(OperationType.TRASM_KO);
-		Thread.sleep(parameters.getRetryIntervall().intValue() * 1000);
+		if(doSleep)
+			Thread.sleep(parameters.getRetryIntervall().intValue() * 1000);
 	}
 	
 	public void launchExceptionIfNoFileFound(List<?> downloadFiles) throws OperationException {

@@ -71,7 +71,7 @@ public interface FlowLogMapper {
 	//AL MOMENTO NON IMPLEMENTATO
 	@Mapping(source = "executionFlowData.flowPgmControllo", target = "logPgmControllo")
     //OK
-	@Mapping(source = "executionFlowData.flowTipologiaConn", target = "logTipologiaConn")
+	//@Mapping(source = "executionFlowData.flowTipologiaConn", target = "logTipologiaConn")
 	//OK
     @Mapping(source = "executionFlowData.flowHost", target = "logHost")
 	//OK

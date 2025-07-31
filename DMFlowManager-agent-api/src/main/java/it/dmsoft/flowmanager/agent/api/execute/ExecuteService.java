@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import it.dmsoft.flowmanager.agent.api.flows.FlowDataService;
 import it.dmsoft.flowmanager.agent.api.properties.AgentPropertiesService;
 import it.dmsoft.flowmanager.agent.api.properties.mapper.FlowConfigMapper;
-import it.dmsoft.flowmanager.agent.engine.core.DynamicFlowManager;
+import it.dmsoft.flowmanager.agent.engine.core.manager.DynamicFlowManager;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.be.entities.FlowConfig;

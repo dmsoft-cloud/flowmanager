@@ -20,6 +20,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -40,7 +41,7 @@ public abstract class FlowManager {
 	/*
 	public static void main(String[] args) throws Exception {
 		ExecutionFlowData executionFlowData = new ExecutionFlowData();
-		executionFlowData.setFlowDirezione(Constants.OUTBOUND);
+		executionFlowData.setFlowDirezione(Direction.OUTBOUND);
 		executionFlowData.setFlowTipFlusso(Constants.DB2);
 	
 		OperationParams operationParams = new OperationParams();
@@ -169,9 +170,9 @@ public abstract class FlowManager {
 		TS(Constants.$TS) {
 			@Override
 			protected String getReplaceString(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception{
-				if(Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
+				if(Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 					return FormatUtils.formatTimestamp();
-				} else if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) 
+				} else if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) 
 						&& (executionFlowData.getFlowRemoteFileName().contains(Constants.$TS)
 							 || executionFlowData.getFlowFileName().contains(Constants.$TS))) {
 					throw new ParameterException("Wildcard " + Constants.$TS + " specified for inbound transaction"); 
@@ -290,7 +291,7 @@ public abstract class FlowManager {
 		String replaceRemote = replaceFileNamePlaceholder(executionFlowData.getFlowRemoteFileName(), executionFlowData, operationParams);
 		String replaceSemaphore = replaceFileNamePlaceholder(executionFlowData.getFlowFlNameSemaforo(), executionFlowData, operationParams);
 		
-		if (Constants.INBOUND.contentEquals(executionFlowData.getFlowDirezione()) 
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) 
 				&& StringUtils.isNullOrEmpty(executionFlowData.getFlowRemoteFileName())
 				&& !Constants.THEMA_SPAZIO.equals(executionFlowData.getFlowTipoTrasferimento())) {
 			replaceRemote = replaceLocal;

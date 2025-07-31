@@ -143,7 +143,8 @@ public static final String Y = "S";
  		FTP("F"),
  		SCP("C"),
  		SMTP("M"),
- 		IMAP("I");
+ 		IMAP("I"),
+ 		SPAZIO("T");
  		
  		private String code;
  		

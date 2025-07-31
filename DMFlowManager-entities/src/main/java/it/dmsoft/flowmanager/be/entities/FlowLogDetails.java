@@ -3,8 +3,10 @@ package it.dmsoft.flowmanager.be.entities;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -21,12 +23,9 @@ public class FlowLogDetails {
 
 	}
 	
-
-	@Id
-	@Column(length = 12)
-	public BigDecimal logProgrLog;
-	@Column(length = 3)
-	public BigDecimal logProgrFase;
+	@EmbeddedId
+	private FlowLogDetailsId flowLogDetailsId;
+	
 	@Column(length = 10)
 	public String logFase;
 	public Timestamp logTs;
@@ -35,17 +34,12 @@ public class FlowLogDetails {
 	@Column(length = 255)
 	public String logNote;
 	
-	public BigDecimal getLogDetProgrLog() {
-		return logProgrLog;
+
+	public FlowLogDetailsId getFlowLogDetailsId() {
+		return flowLogDetailsId;
 	}
-	public void setLogDetProgrLog(BigDecimal logProgrLog) {
-		this.logProgrLog = logProgrLog;
-	}
-	public BigDecimal getLogDetProgrFase() {
-		return logProgrFase;
-	}
-	public void setLogDetProgrFase(BigDecimal logProgrFase) {
-		this.logProgrFase = logProgrFase;
+	public void setFlowLogDetailsId(FlowLogDetailsId flowLogDetailsId) {
+		this.flowLogDetailsId = flowLogDetailsId;
 	}
 	public String getLogDetFase() {
 		return logFase;
@@ -71,12 +65,12 @@ public class FlowLogDetails {
 	public void setLogDetNote(String logNote) {
 		this.logNote = logNote;
 	}
-	
 	@Override
 	public String toString() {
-		return "Otgfflogd [logProgrLog=" + logProgrLog + ", logProgrFase=" + logProgrFase
-				+ ", logFase=" + logFase + ", logTs=" + logTs + ", logEsito="
-				+ logEsito + ", logNote=" + logNote + "]";
+		return "FlowLogDetails [flowLogDetailsId=" + flowLogDetailsId + ", logFase=" + logFase + ", logTs=" + logTs
+				+ ", logEsito=" + logEsito + ", logNote=" + logNote + "]";
 	}
+	
+
 	
 }

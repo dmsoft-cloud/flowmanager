@@ -12,6 +12,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 
 public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmptyParam, Boolean > {
 	
@@ -19,7 +20,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 	
 	@Override
 	public void updateParameters() throws Exception {		
-		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			setFiles(operationParams.getRemoteTrasmissionFiles());					
 		}		
 	}
@@ -82,7 +83,7 @@ public class ChkIfsFileEmpty extends ConstraintDependentOperation< ChkIfsFileEmp
 
 	@Override
 	public void updateOperationParams(Boolean data) throws Exception {
-		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && data.equals(true)) {
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) && data.equals(true)) {
 			operationParams.setBypassConversion(true);
 			logger.info("BYPASS DB2 PHASE DUE TO EMPTY FILE  ");
 		}

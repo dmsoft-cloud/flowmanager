@@ -33,7 +33,7 @@ public class InboundFlowManager extends FlowManager {
 		super.process(executionFlowData, operationParams);
 		
 		// ricezione
-		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowTipoTrasferimento())) {
+		if (executionFlowData.getFlowTipoTrasferimento() != null) {
 			inboundFlowBuilder.trasmit(executionFlowData, operationParams);
 		}
 

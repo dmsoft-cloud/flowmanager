@@ -82,9 +82,9 @@ public class Constants {
 	
 	public static final String DB2 = "D";
 
-	public static final String INBOUND = "I";
+	//public static final String INBOUND = "I";
 	
-	public static final String OUTBOUND = "O";
+	//public static final String OUTBOUND = "O";
 	
 	public static final String ROWID = "ROWID";
 
@@ -242,6 +242,10 @@ public class Constants {
 	public static final String CONF_MASTERDATA_OVERRIDES = "OVERRIDES";
 	
 	public static final String CFT_CL_PGM = "cftPgm";
+
+	public static final BigDecimal DEFAULT_FTP_PORT = BigDecimal.valueOf(21);
+
+	public static final BigDecimal DEFAULT_SFTP_PORT = BigDecimal.valueOf(22);
 	
 	
 	//
@@ -300,32 +304,6 @@ public class Constants {
 		
 	}
 	
-	public enum TransferType {
-		TRANSMISSION("T"),
-		THEMA_SPAZIO("S"),
-		MAIL("M"),
-		CFT("C");
-		
-		private String code;
-		
-		private TransferType(String code) {
-			this.code = code;
-		}
-
-		public String getCode() {
-			return code;
-		}
-		
-		public static TransferType getTransferType(String code) {
-			for (TransferType transferType : TransferType.values()) {
-				if (transferType.getCode().equals(code)) {
-					return transferType;
-				}
-			}
-			
-			return null;
-		}
-	}
 	
 	public enum MailReceiverType {
 		RECEIVER("TO"),

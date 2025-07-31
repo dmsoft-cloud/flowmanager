@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
@@ -34,7 +35,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 	
 	@Override
 	public void updateParameters() throws Exception {
-		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			return;
 		}
 		

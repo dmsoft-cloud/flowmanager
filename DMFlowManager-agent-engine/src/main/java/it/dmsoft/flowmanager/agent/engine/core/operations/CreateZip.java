@@ -17,6 +17,7 @@ import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrappe
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.zip.ZipManager;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 
 public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWrapper<ZipResponse>> {
 
@@ -25,7 +26,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 	//TODO IDEA DI SPOSTARE IL SETTAGGIO DEI PARAMETRI ALL'INTERNO DI OGNI OPERAZIONE (PRATICAMENTE I FLOW BUILDER SPARIREBEBRO)
 	@Override
 	public void updateParameters() throws Exception {		
-		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			setFiles(operationParams.getRemoteTrasmissionFiles());					
 		}		
 	}
@@ -91,7 +92,7 @@ public class CreateZip extends ConstraintDependentOperation<ZipParam, ResponseWr
 
 	@Override
 	public void updateOperationParams(ResponseWrapper<ZipResponse> data) throws Exception {
-		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			operationParams.setBackupFiles(operationParams.getZipFiles());
 			List<String> deleteFiles = operationParams.getDeleteFiles() != null ? operationParams.getDeleteFiles() 
 					: new ArrayList<String>(operationParams.getZipFiles().size());

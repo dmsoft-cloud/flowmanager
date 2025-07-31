@@ -68,7 +68,7 @@ public interface FlowDataMapper {
 	//AL MOMENTO NON IMPLEMENTATO
 	//@Mapping(target = "flowPgmControllo", source = "")
     //OK
-	@Mapping(target = "flowTipologiaConn", source = "fullFlowData._interface.connectionType")
+	//@Mapping(target = "flowTipologiaConn", source = "fullFlowData.model.type")
 	//OK
     @Mapping(target = "flowHost", source = "fullFlowData._interface.host")
 	//OK
@@ -124,7 +124,7 @@ public interface FlowDataMapper {
 	//OK
 	@Mapping(target = "flowLunghezzaFlFlat", source = "fullFlowData.flow.lengthFixed")
 	//OK
-	@Mapping(target = "flowTipoTrasferimento", source = "fullFlowData.model.type")
+	@Mapping(target = "flowTipoTrasferimento", source = "fullFlowData._interface.connectionType")
 	//AL MOMENTO NON IMPLEMENTATO
 	//@Mapping(target = "flowBypassQtemp", source = "")
 	//AL MOMENTO NON IMPLEMENTATO

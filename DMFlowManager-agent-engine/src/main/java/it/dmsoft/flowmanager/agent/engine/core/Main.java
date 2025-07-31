@@ -203,7 +203,7 @@ public class Main {
 //
 //		LogDb.instantiate(inputParam);
 //
-//		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
+//		if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 //			OutboundFlowManager outboundManger = new OutboundFlowManager();
 //			outboundManger.process(executionFlowData, inputParam);
 //		} else {

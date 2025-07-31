@@ -69,7 +69,7 @@ public class FlowMasterDataUtils {
 		                flowMasterData.setFlowModAcquisizione((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_MOD_ACQUISIZIONE.toString() , fana.getFlowModAcquisizione()));
 		                flowMasterData.setFlowFromCcsid(fana.getFlowFromCcsid());
 		                flowMasterData.setFlowPgmControllo(fana.getFlowPgmControllo());
-		                flowMasterData.setFlowTipologiaConn(fana.getFlowTipologiaConn());
+		                //flowMasterData.setFlowTipologiaConn(fana.getFlowTipologiaConn());
 		                flowMasterData.setFlowHost(fana.getFlowHost());
 		                flowMasterData.setFlowPort(fana.getFlowPort());
 		                flowMasterData.setFlowRemoteFolder((String)jsonObject.getOrDefault(OtgffanaCoulmn.FANA_REMOTE_FOLDER.toString() , fana.getFlowRemoteFolder()));

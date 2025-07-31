@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.agent.engine.core;
+package it.dmsoft.flowmanager.agent.engine.core.manager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,12 +18,12 @@ import it.dmsoft.flowmanager.be.entities.FlowLog;
 import it.dmsoft.flowmanager.be.repositories.ExportFlowDataRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
 import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.agent.engine.core.Main;
 import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
-import it.dmsoft.flowmanager.agent.engine.core.manager.InboundFlowManager;
-import it.dmsoft.flowmanager.agent.engine.core.manager.OutboundFlowManager;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.model.MasterdataOverride;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
@@ -237,7 +237,7 @@ public class DynamicFlowManager {
 
 		logger.debug("masterdata of " + executionFlowData.getFlowId() + " loaded, staring flow manager");
 
-		if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {
 			OutboundFlowManager outboundManger = (OutboundFlowManager) applicationContext.getBean("outboundFlowManager");
 			outboundManger.process(executionFlowData, inputParam);
 		} else {

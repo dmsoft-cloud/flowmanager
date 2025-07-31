@@ -2,6 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.model;
 
 import java.math.BigDecimal;
 
+import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class ExecutionFlowData {
@@ -90,7 +92,7 @@ public class ExecutionFlowData {
 	private String flowCodInterfaccia;
 	private YesNo flowStato;
 	private String flowTipFlusso;
-	private String flowDirezione;
+	private Direction flowDirezione;
 	private String flowLibreria;
 	private String flowFile;
 	private String flowMembro;
@@ -109,7 +111,7 @@ public class ExecutionFlowData {
 	private String flowModAcquisizione;
 	private BigDecimal flowFromCcsid;
 	private String flowPgmControllo;
-	private String flowTipologiaConn;
+	//private Type flowTipologiaConn;
 	private String flowHost;
 	private BigDecimal flowPort;
 	private String flowRemoteFolder;
@@ -137,7 +139,7 @@ public class ExecutionFlowData {
 	private YesNo flowCancellaFile;
 	private YesNo flowRisottomettibile;
 	private BigDecimal flowLunghezzaFlFlat;
-	private String flowTipoTrasferimento;
+	private ConnectionType flowTipoTrasferimento;
 	private YesNo flowBypassQtemp;
 	private YesNo flowEsistenzaFile;
 	private String flowLetteraFlusso;
@@ -196,10 +198,10 @@ public class ExecutionFlowData {
 	public void setFlowTipFlusso(String flowTipFlusso) {
 		this.flowTipFlusso = flowTipFlusso;
 	}
-	public String getFlowDirezione() {
+	public Direction getFlowDirezione() {
 		return flowDirezione;
 	}
-	public void setFlowDirezione(String flowDirezione) {
+	public void setFlowDirezione(Direction flowDirezione) {
 		this.flowDirezione = flowDirezione;
 	}
 	public String getFlowLibreria() {
@@ -310,12 +312,14 @@ public class ExecutionFlowData {
 	public void setFlowPgmControllo(String flowPgmControllo) {
 		this.flowPgmControllo = flowPgmControllo;
 	}
-	public String getFlowTipologiaConn() {
-		return flowTipologiaConn;
-	}
-	public void setFlowTipologiaConn(String flowTipologiaConn) {
-		this.flowTipologiaConn = flowTipologiaConn;
-	}
+	//public Type getFlowTipologiaConn() {
+	//	return flowTipologiaConn;
+	//}
+	
+	//public void setFlowTipologiaConn(Type flowTipologiaConn) {
+	//	this.flowTipologiaConn = flowTipologiaConn;
+	//}
+	
 	public String getFlowHost() {
 		return flowHost;
 	}
@@ -478,10 +482,10 @@ public class ExecutionFlowData {
 	public void setFlowLunghezzaFlFlat(BigDecimal flowLunghezzaFlFlat) {
 		this.flowLunghezzaFlFlat = flowLunghezzaFlFlat;
 	}
-	public String getFlowTipoTrasferimento() {
+	public ConnectionType getFlowTipoTrasferimento() {
 		return flowTipoTrasferimento;
 	}
-	public void setFlowTipoTrasferimento(String flowtipotrasferimento) {
+	public void setFlowTipoTrasferimento(ConnectionType flowtipotrasferimento) {
 		this.flowTipoTrasferimento = flowtipotrasferimento;
 	}
 	public YesNo getFlowBypassQtemp() {
@@ -624,8 +628,7 @@ public class ExecutionFlowData {
 				+ flowDelimStringa + ", flowRimozSpazi=" + flowRimozSpazi + ", flowDelimCampo="
 				+ flowDelimCampo + ", flowRiempCampo=" + flowRiempCampo + ", flowCodepage=" + flowCodepage
 				+ ", flowModAcquisizione=" + flowModAcquisizione + ", flowFromCcsid=" + flowFromCcsid
-				+ ", flowPgmControllo=" + flowPgmControllo + ", flowTipologiaConn=" + flowTipologiaConn
-				+ ", flowHost=" + flowHost + ", flowPort=" + flowPort + ", flowRemoteFolder=" + flowRemoteFolder
+				+ ", flowPgmControllo=" + flowPgmControllo + ", flowHost=" + flowHost + ", flowPort=" + flowPort + ", flowRemoteFolder=" + flowRemoteFolder
 				+ ", flowRemoteFileName=" + flowRemoteFileName + ", flowUtente=" + flowUtente
 				+ ", flowPassword=" + flowPassword + ", flowUtenteSftp=" + flowUtenteSftp
 				+ ", flowIntergiryCheck=" + flowIntegrityCheck + ", flowFlNameSemaforo=" + flowFlNameSemaforo

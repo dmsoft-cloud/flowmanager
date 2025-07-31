@@ -13,10 +13,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.entities.MailParms;
-import it.dmsoft.flowmanager.be.entities.Recipient;
-import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.Flow;
@@ -77,7 +73,6 @@ import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ConfigUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.TransferType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowIdNumeratorUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
@@ -86,7 +81,14 @@ import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrappe
 import it.dmsoft.flowmanager.agent.engine.mailclient.utility.Allegato;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
+import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.be.entities.MailParms;
+import it.dmsoft.flowmanager.be.entities.Recipient;
+import it.dmsoft.flowmanager.be.repositories.EmailRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -318,7 +320,7 @@ public class FlowBuilder {
 
 	public FlowBuilder zipOperation(ExecutionFlowData executionFlowData, OperationParams operationParams, ZipOperation zipOperation) throws ParameterException {
 
-		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowDirezione())) {
+		if (executionFlowData.getFlowDirezione() != null) {
 			Operation<ZipParam> createZipOperation = zipOperation.get(executionFlowData, operationParams);
 			flow.addOperation(createZipOperation);
 		} else {
@@ -527,7 +529,7 @@ public class FlowBuilder {
 
 	public enum ConversionDirection {
 
-		I {
+		INBOUND(Direction.INBOUND) {
 			@Override
 			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				DependentOperation<DbConversionParam> file2Db ;
@@ -546,13 +548,13 @@ public class FlowBuilder {
 				return file2Db;
 			}
 		},
-		O {
+		OUTBOUND(Direction.OUTBOUND) {
 			@Override
 			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				//TODO VALUTARE DI ESTENDERE A FILE2DBFIXED ANCHE PER I FLUSSI FIXED NON SU THEMA
-				String transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
+				ConnectionType transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
 				
-				boolean doCpytostmf = (TransferType.THEMA_SPAZIO.getCode().equals(transferTypeCode) || Constants.FIXED.contentEquals(executionFlowData.getFlowDelimRecord()))
+				boolean doCpytostmf = (ConnectionType.SPAZIO.equals(transferTypeCode) || Constants.FIXED.contentEquals(executionFlowData.getFlowDelimRecord()))
 											&& ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato());
 				
 
@@ -572,6 +574,25 @@ public class FlowBuilder {
 		};
 
 		public abstract Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams);
+		
+		private Direction direction;
+		
+		private ConversionDirection(Direction direction) {
+			this.direction = direction;
+		}
+		
+		public Direction getDirection() {
+			return this.direction;
+		}
+		
+		public static ConversionDirection getConversionDirection(Direction direction) {
+			for (ConversionDirection cd : ConversionDirection.values()) {
+				if(cd.getDirection().equals(direction))
+					return cd;
+			}
+			
+			return null;
+		}
 	}
 
 	public enum ConversionOperation {
@@ -636,10 +657,10 @@ public class FlowBuilder {
 				}
 					
 				
-				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
+				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
 				List<Operation<?>> ret = new ArrayList<Operation<?>>();
 				
-				if(!Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
+				if(!Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
 				{
 					ret.add(crtDbFile);
 				}
@@ -731,14 +752,14 @@ public class FlowBuilder {
 				copyFileParam.setFromFile(executionFlowData.getFlowFile());
 				copyFileParam.setToFile(executionFlowData.getFlowFile());
 				
-				if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+				if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 					copyFileParam.setFromLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
 					
-					ret.add(ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
+					ret.add(ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
 					if (!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
 							ret.add(copyFile);
-				} else if (Constants.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
+				} else if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
 					copyFileParam.setFromLibrary(executionFlowData.getFlowLibreria());					
 					copyFileParam.setToLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					
@@ -746,7 +767,7 @@ public class FlowBuilder {
 						ret.add(copyFile);
 					}
 					
-					ret.add(ConversionDirection.valueOf(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
+					ret.add(ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
 				}
 				
 				return ret;
@@ -762,7 +783,7 @@ public class FlowBuilder {
 
 	public enum SftpDirection {
 
-		I {
+		INBOUND(Direction.INBOUND) {
 			@Override
 			public Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams) {
 				ConstraintOperation<TrasmissionParams, ResponseWrapper<SftpResponse>> db2SftpReceiver = new SftpReceiver();
@@ -772,7 +793,7 @@ public class FlowBuilder {
 			}
 		},
 
-		O {
+		OUTBOUBD(Direction.OUTBOUND) {
 			@Override
 			public Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams) {
 				Operation<TrasmissionParams> db2SftpSend = new SftpSend();
@@ -780,13 +801,34 @@ public class FlowBuilder {
 				return db2SftpSend;
 			}
 		};
+		
+
+		private Direction direction;
+		
+		private SftpDirection(Direction direction) {
+			this.direction = direction;
+		}
+		
+		public Direction getDirection() {
+			return this.direction;
+		}
 
 		public abstract Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams);
-	}
+
+		public static SftpDirection getSftpDirection(Direction direction) {
+			for (SftpDirection sftpDir : SftpDirection.values()) {
+				if(sftpDir.getDirection().equals(direction))
+					return sftpDir;
+			}
+			
+			return null;
+		}
+
+}
 
 	public enum FtpDirection {
 
-		I {
+		INBOUND(Direction.INBOUND) {
 			@Override
 			public Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams) {
 				ConstraintOperation<TrasmissionParams, ResponseWrapper<FtpResponse>> db2FtpReceiver = new FtpReceiver();
@@ -796,7 +838,7 @@ public class FlowBuilder {
 			}
 		},
 
-		O {
+		OUTBOUND(Direction.OUTBOUND) {
 			@Override
 			public Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams) {
 				Operation<TrasmissionParams> db2FtpSend = new FtpSend();
@@ -805,12 +847,31 @@ public class FlowBuilder {
 			}
 		};
 
+		private Direction direction;
+		
+		private FtpDirection(Direction direction) {
+			this.direction = direction;
+		}
+		
+		public Direction getDirection() {
+			return this.direction;
+		}
+
 		public abstract Operation<TrasmissionParams> get(TrasmissionParams trasmissionParams, OperationParams operationParams);
+	
+		public static FtpDirection getFtpDirection(Direction direction) {
+			for (FtpDirection ftpDir : FtpDirection.values()) {
+				if(ftpDir.getDirection().equals(direction))
+					return ftpDir;
+			}
+			
+			return null;
+		}
 	}
 	
 	public enum SpFileDirection {
 
-		I {
+		INBOUND(Direction.INBOUND) {
 			@Override
 			public Operation<SpFileParam> get(SpFileParam fileParam) {
 				Operation<SpFileParam> db2SftpReceiver = new SpFileAcq();
@@ -819,7 +880,7 @@ public class FlowBuilder {
 			}
 		},
 
-		O {
+		OUTBOUND(Direction.OUTBOUND) {
 			@Override
 			public Operation<SpFileParam> get(SpFileParam fileParam) {
 				Operation<SpFileParam> db2SftpSend = new SpFileDsp();
@@ -828,12 +889,31 @@ public class FlowBuilder {
 			}
 		};
 
+		private Direction direction;
+		
+		private SpFileDirection(Direction direction) {
+			this.direction = direction;
+		}
+		
+		public Direction getDirection() {
+			return this.direction;
+		}
+
 		public abstract Operation<SpFileParam> get(SpFileParam fileParam);
+		
+		public static SpFileDirection getSpFileDirection(Direction direction) {
+			for (SpFileDirection spfDir : SpFileDirection.values()) {
+				if(spfDir.getDirection().equals(direction))
+					return spfDir;
+			}
+			
+			return null;
+		}
 		
 	}
 
 	public enum SemaphoreOperation {
-		SFTP {
+		SFTP(ConnectionType.SFTP) {
 
 			@Override
 			public Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
@@ -844,7 +924,7 @@ public class FlowBuilder {
 
 		},
 
-		FTP {
+		FTP(ConnectionType.FTP) {
 
 			@Override
 			public Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
@@ -854,59 +934,84 @@ public class FlowBuilder {
 			}
 
 		};
+		
+		private ConnectionType connectionType;
+		
+		private SemaphoreOperation(ConnectionType connectionType) {
+			this.connectionType = connectionType;
+		}
+		
+		public ConnectionType getConnectionType() {
+			return this.connectionType;
+		}
 
 		public abstract Operation<TrasmissionParams> get(ExecutionFlowData executionFlowData, OperationParams operationParams);
+	
+		public static SemaphoreOperation getSemaphoreOperation(ConnectionType connectionType) {
+			for(SemaphoreOperation so : SemaphoreOperation.values()) {
+				if(so.getConnectionType().equals(connectionType))
+					return so;
+			}
+			
+			return null;
+		}
 	}
 
 	public enum TransferTypeOperation {
-		THEMA(TransferType.THEMA_SPAZIO) {
+		THEMA(ConnectionType.SPAZIO) {
 			@Override
 			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return getThemaSpazio(executionFlowData, operationParams);
 			}
 		},
-		
-		CFT(TransferType.CFT) {
+		/*
+		CFT(ConnectionType.CFT) {
 			@Override
 			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return cftSend(executionFlowData, operationParams);
 			}
 		},
-		
-		MAIL(TransferType.MAIL) {
+		*/
+		MAIL(ConnectionType.SMTP) {
 			@Override
 			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				return flowBuilder.sendMail(executionFlowData, operationParams, executionFlowData.getFlowLetteraFlusso(), operationParams.getFileNames());
 			}
 		},
 		
-		TRASMISSION(TransferType.TRANSMISSION) {
+		TRASMISSION(new ConnectionType[]{ConnectionType.FTP, ConnectionType.SCP, ConnectionType.SFTP}) {
 			@Override
 			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-				if (StringUtils.isNullOrEmpty(executionFlowData.getFlowTipologiaConn())) {
+				if (executionFlowData.getFlowTipoTrasferimento() == null) {
 					return new ArrayList<Operation<?>>();
 				} else {
-					return TrasmissionOperation.valueOf(executionFlowData.getFlowTipologiaConn()).get(executionFlowData, operationParams);
+					return TrasmissionOperation.getTrasmissionOperation(executionFlowData.getFlowTipoTrasferimento()).get(executionFlowData, operationParams);
 				}
 			}
 		};
 		
-		private TransferType transferType;
+		private ConnectionType[] connectionTypes;
 		
-		private TransferTypeOperation(TransferType transferType) {
-			this.transferType = transferType;
+		private TransferTypeOperation(ConnectionType connectionType) {
+			this.connectionTypes = new ConnectionType[]{connectionType};
+		}
+		
+		private TransferTypeOperation(ConnectionType[] connectionTypes) {
+			this.connectionTypes = connectionTypes;
 		}
 
-		public TransferType getTransferType() {
-			return transferType;
+		public ConnectionType[] getConnectionTypes() {
+			return this.connectionTypes;
 		}
 		
 		public abstract List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
 		
-		public static TransferTypeOperation getTransferTypeOperation(TransferType transferType) {
+		public static TransferTypeOperation getTransferTypeOperation(ConnectionType connectionType) {
 			for (TransferTypeOperation transferTypeOperation : TransferTypeOperation.values()) {
-				if (transferTypeOperation.getTransferType().equals(transferType)) {
-					return transferTypeOperation;
+				for (ConnectionType ct : transferTypeOperation.getConnectionTypes()) {
+					if (ct.equals(connectionType)) {
+						return transferTypeOperation;
+					}
 				}
 			}
 			
@@ -917,7 +1022,7 @@ public class FlowBuilder {
 	
 	public enum TrasmissionOperation {
 		
-		SFTP {
+		SFTP(ConnectionType.SFTP) {
 
 			@Override
 			public Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams) {
@@ -926,7 +1031,7 @@ public class FlowBuilder {
 
 		},
 
-		FTP {
+		FTP(ConnectionType.FTP) {
 
 			@Override
 			protected Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams) {
@@ -934,6 +1039,16 @@ public class FlowBuilder {
 			}
 
 		};
+		
+		private ConnectionType connectionType;
+		
+		private TrasmissionOperation(ConnectionType connectionType) {
+			this.connectionType = connectionType;
+		}
+		
+		public ConnectionType getConnectionType() {
+			return this.connectionType;
+		}
 
 		public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 			List<Operation<?>> trasmOperation = new ArrayList<Operation<?>>();
@@ -948,6 +1063,15 @@ public class FlowBuilder {
 		}
 		
 		protected abstract Operation<?> get(String remotefileName, String trasmissionFile, ExecutionFlowData executionFlowData, OperationParams operationParams);
+		
+		public static TrasmissionOperation getTrasmissionOperation(ConnectionType connectionType) {
+			for (TrasmissionOperation to : TrasmissionOperation.values()) {
+				if (to.getConnectionType().equals(connectionType))
+					return to;
+			}
+			
+			return null;
+		}
 
 	}
 	
@@ -979,7 +1103,7 @@ public class FlowBuilder {
 
 
 	public FlowBuilder trasmit(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		if (Constants.INBOUND.equals(executionFlowData.getFlowDirezione())) {
+		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione())) {
 			addSemaphore(executionFlowData, operationParams);
 			addDelayIntegrityCheck(executionFlowData, operationParams);
 			addTrasmit(executionFlowData, operationParams);
@@ -995,7 +1119,7 @@ public class FlowBuilder {
 	private void addDelayIntegrityCheck(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
-					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento()) &&
+					Arrays.asList(TransferTypeOperation.TRASMISSION.getConnectionTypes()).stream().anyMatch(x -> x.equals(executionFlowData.getFlowTipoTrasferimento())) &&
 					executionFlowData.getFlowDelaySemaforo() != null &&
 					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
 			
@@ -1010,10 +1134,10 @@ public class FlowBuilder {
 	}
 	
 	private void addTrasmit(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		String transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
 		
-		TransferType transferType = TransferType.getTransferType(transferTypeCode);
-		TransferTypeOperation transferTypeOperation = TransferTypeOperation.getTransferTypeOperation(transferType);
+		ConnectionType connectionType = executionFlowData.getFlowTipoTrasferimento();
+		
+		TransferTypeOperation transferTypeOperation = TransferTypeOperation.getTransferTypeOperation(connectionType);
 		
 		List<Operation<?>> trasmissionOperations = transferTypeOperation.get(this, executionFlowData, operationParams);
 		flow.addOperations(trasmissionOperations);
@@ -1062,10 +1186,10 @@ public class FlowBuilder {
 	private void addSemaphore(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		if (YesNo.YES.equals(executionFlowData.getFlowIntegrityCheck())
 				&& !StringUtils.isNullOrEmpty(executionFlowData.getFlowFlNameSemaforo()) &&
-					TransferType.TRANSMISSION.getCode().equals(executionFlowData.getFlowTipoTrasferimento())) {
+				Arrays.asList(TransferTypeOperation.TRASMISSION.getConnectionTypes()).stream().anyMatch(x -> x.equals(executionFlowData.getFlowTipoTrasferimento()))) {
 			
 			Operation<TrasmissionParams> trasmissionOperation = SemaphoreOperation
-					.valueOf(executionFlowData.getFlowTipologiaConn()).get(executionFlowData, operationParams);
+					.getSemaphoreOperation(executionFlowData.getFlowTipoTrasferimento()).get(executionFlowData, operationParams);
 			flow.addOperation(trasmissionOperation);
 		}
 	}
@@ -1075,7 +1199,7 @@ public class FlowBuilder {
 		TrasmissionParams dbTrasmissionParams = new TrasmissionParams();
 
 		dbTrasmissionParams.setHost(executionFlowData.getFlowHost());
-		dbTrasmissionParams.setPort(executionFlowData.getFlowPort());
+		dbTrasmissionParams.setPort(executionFlowData.getFlowPort() == null ? Constants.DEFAULT_FTP_PORT : executionFlowData.getFlowPort());
 		dbTrasmissionParams.setLocal_Folder(
 				StringUtils.setDefault(operationParams.getTrasmissionFolder(), executionFlowData.getFlowFolder()));
 		dbTrasmissionParams.setLocal_File_Name(fileName);
@@ -1091,7 +1215,7 @@ public class FlowBuilder {
 		dbTrasmissionParams.setFtp_secure(executionFlowData.getFlowFtpSecure());
 		dbTrasmissionParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 
-		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
+		if(Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 		
@@ -1106,7 +1230,7 @@ public class FlowBuilder {
 	
 	private static Operation<TrasmissionParams> getFtp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams, TrasmissionParams trasmissionParams) {
-		return FtpDirection.valueOf(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
+		return FtpDirection.getFtpDirection(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
 	}
 
 	private static TrasmissionParams getSftpParams(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
@@ -1114,7 +1238,7 @@ public class FlowBuilder {
 		TrasmissionParams dbTrasmissionParams = new TrasmissionParams();
 
 		dbTrasmissionParams.setHost(executionFlowData.getFlowUtente() + Constants.AT + executionFlowData.getFlowHost());
-		dbTrasmissionParams.setPort(executionFlowData.getFlowPort());
+		dbTrasmissionParams.setPort(executionFlowData.getFlowPort() == null ? Constants.DEFAULT_SFTP_PORT : executionFlowData.getFlowPort());
 		dbTrasmissionParams.setRemote_Folder(executionFlowData.getFlowRemoteFolder());
 		dbTrasmissionParams.setRemote_File_Name(remoteFileName);
 		dbTrasmissionParams.setUser(executionFlowData.getFlowUtente());
@@ -1142,7 +1266,7 @@ public class FlowBuilder {
 		dbTrasmissionParams.setRetryIntervall(executionFlowData.getFlowIntervalloRetry());
 		dbTrasmissionParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 		
-		if(Constants.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
+		if(Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) && YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 			dbTrasmissionParams.setRemoveRemoteFile(true);
 		}
 
@@ -1157,7 +1281,7 @@ public class FlowBuilder {
 	
 	private static Operation<TrasmissionParams> getSftp(String remoteFileName, String fileName, ExecutionFlowData executionFlowData,
 			OperationParams operationParams, TrasmissionParams trasmissionParams) {
-		return SftpDirection.valueOf(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
+		return SftpDirection.getSftpDirection(executionFlowData.getFlowDirezione()).get(trasmissionParams, operationParams);
 	}
 	
 	private static List<Operation<?>> getThemaSpazio(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
