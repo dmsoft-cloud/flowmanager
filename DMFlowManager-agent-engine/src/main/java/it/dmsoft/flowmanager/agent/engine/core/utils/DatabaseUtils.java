@@ -9,17 +9,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
-import it.dmsoft.flowmanager.agent.engine.core.exception.InvalidDBTypeException;
-import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
-import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 
 public class DatabaseUtils {
+	/*
 	private static final Logger logger = Logger.getLogger(DatabaseUtils.class.getName());
 
 	
@@ -64,16 +60,18 @@ public class DatabaseUtils {
 					DbConstants.HIBERNATE_DIALECT = "org.hibernate.dialect.PostgreSQLDialect";
 					break;
 				*/
+				/*
 				case DB2:
 					DbConstants.HIBERNATE_DIALECT = "org.hibernate.dialect.DB2400Dialect";
 	                break;
 			}
 		}
 	}
+	*/
 	
 	//enum per i tipi di db ammessi
 	public enum DBTypeEnum {
-	    DB2("db2"){
+	    DB2(DbType.DB2_ISERIES){
 	    	@Override
 			public String escapeColumnName(String columnName) {
 	    		return "\"" + columnName.replace("\"", "\"\"") + "\"";
@@ -85,8 +83,8 @@ public class DatabaseUtils {
 	    	}
 
 			@Override
-			public Connection getConnection() throws Exception {
-				return it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection.get();
+			public Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception {
+				return it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection.get(genericConnectionParams);
 			}
 
 			@Override
@@ -100,7 +98,7 @@ public class DatabaseUtils {
 	    	
 	    }
 	    ,
-	    SQLServer("SqlServer"){
+	    SQLServer(DbType.MSSQLSERVER){
 	    	@Override
 			public String escapeColumnName(String columnName) {
 				return "[" + columnName.replace("]", "]]") + "]"; 
@@ -112,8 +110,8 @@ public class DatabaseUtils {
 	    	}
 
 			@Override
-			public Connection getConnection() throws Exception {
-				return it.dmsoft.flowmanager.agent.engine.core.sqlServer.JdbcConnection.get();
+			public Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception {
+				return it.dmsoft.flowmanager.agent.engine.core.sqlServer.JdbcConnection.get(genericConnectionParams);
 			}
 
 			@Override
@@ -131,21 +129,21 @@ public class DatabaseUtils {
 	    	
 	    };
 	    
-	    private String dbTypeName;
+	    private DbType dbType;
 
-	    DBTypeEnum(String dbTypeName) {
-	        this.dbTypeName = dbTypeName;
+	    DBTypeEnum(DbType dbType) {
+	        this.dbType = dbType;
 	    }
 
-	    public String getDbTypeName() {
-	        return dbTypeName;
+	    public DbType getDbType() {
+	        return dbType;
 	    }
 
 	    // Metodo per cercare un enum a partire dal valore stringa
-	    public static DBTypeEnum fromString(String dbTypeName) {
-	        for (DBTypeEnum dbType : DBTypeEnum.values()) {
-	            if (dbType.dbTypeName.equalsIgnoreCase(dbTypeName)) {
-	                return dbType;
+	    public static DBTypeEnum get(DbType dbType) {
+	        for (DBTypeEnum dbTypeEnum : DBTypeEnum.values()) {
+	            if (dbTypeEnum.getDbType().equals(dbType)) {
+	                return dbTypeEnum;
 	            }
 	        }
 	        // Se non viene trovato alcun valore corrispondente, restituisce null
@@ -156,7 +154,7 @@ public class DatabaseUtils {
 	    public abstract String getQueryCheckObj();
 	    
 	    //ritorna query per la verifica dell'esistenza dell'oggetto
-	    public abstract Connection getConnection() throws Exception;
+	    public abstract Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception;
 	    
 	  //ritorna query per la creazione di una tabella vuota
 	    public abstract String getQueryCreateEmptyTable(String fileds, String newSchema, String newTable, String oldSchema, String oldTable);	
@@ -189,8 +187,8 @@ public class DatabaseUtils {
 	
     
     //metodo per verificare la presenza di una tabella
-	public static boolean checkTableExists(Connection conn, String tableName, String tableSchema) throws SQLException {
-        String checkTableQuery = DBTypeEnum.fromString(DbConstants.DB_TYPE).getQueryCheckObj();
+	public static boolean checkTableExists(DbType dbType, Connection conn, String tableName, String tableSchema) throws SQLException {
+        String checkTableQuery = DBTypeEnum.get(dbType).getQueryCheckObj();
 
         
         try (PreparedStatement pstmt = conn.prepareStatement(checkTableQuery)) {

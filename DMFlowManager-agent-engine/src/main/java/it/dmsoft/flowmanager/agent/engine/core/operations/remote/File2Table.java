@@ -12,12 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
 
-import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
-import it.dmsoft.flowmanager.common.domain.Domains.Direction;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
@@ -28,6 +23,9 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.be.entities.ColumnMetadata;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class File2Table extends DependentOperation<DbConversionParam>{
 
@@ -90,7 +88,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 		//utilizzato per gestire il file in modalità *add/*replace
 		boolean appendMode = parameters.getMemberOptionAddReplace().equals("*ADD") ? true : false;
 		
-		Connection conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection();
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
 
         List<String> files = parameters.getDownloadedFiles();
         
@@ -102,7 +100,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 	        File file = new File(Constants.PATH_DELIMITER + parameters.getFolderIfs() + Constants.PATH_DELIMITER + currentFile);	
 			
 			
-			if (!DatabaseUtils.checkTableExists(conn,parameters.getFile(), parameters.getLibrary())) {
+			if (!DatabaseUtils.checkTableExists(parameters.getDbType(), conn,parameters.getFile(), parameters.getLibrary())) {
 				throw new OperationException("Table not found: " + parameters.getLibrary() + Constants.DOT + parameters.getFile());
 	        }
 			List<ColumnMetadata> tableColumns = DatabaseUtils.getTableColumns(conn, parameters.getLibrary(), parameters.getFile());

@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import java.math.BigDecimal;
 
-public class CreateDbFileParam extends GenericAS400Param{
+public class CreateDbFileParam extends GenericConnectionParams{
 
 	
 	private String file;

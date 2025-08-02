@@ -1,0 +1,21 @@
+package it.dmsoft.flowmanager.master.api.email.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
+
+import it.dmsoft.flowmanager.be.entities.EmailParms;
+import it.dmsoft.flowmanager.common.model.EmailParmsData;
+import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
+
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
+public interface EmailParmsMapper  extends BaseMapper<EmailParms, EmailParmsData>{
+	
+	@Override
+    EmailParms convertModel(EmailParmsData model);
+
+	@Override
+    EmailParmsData convertEntity(EmailParms entity);
+	
+}

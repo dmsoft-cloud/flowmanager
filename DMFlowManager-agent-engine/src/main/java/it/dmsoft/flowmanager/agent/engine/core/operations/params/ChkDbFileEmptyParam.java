@@ -1,6 +1,8 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class ChkDbFileEmptyParam extends GenericAS400Param {
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
+
+public class ChkDbFileEmptyParam extends GenericConnectionParams {
 
 	private String file;
 	private String libreria;
@@ -24,8 +26,7 @@ public class ChkDbFileEmptyParam extends GenericAS400Param {
 
 	@Override
 	public String toString() {
-		return "ChkDbFileParam [file=" + file + ", libreria=" + libreria + "]";
+		return "ChkDbFileEmptyParam [file=" + file + ", libreria=" + libreria + "]";
 	}
-	
 
 }

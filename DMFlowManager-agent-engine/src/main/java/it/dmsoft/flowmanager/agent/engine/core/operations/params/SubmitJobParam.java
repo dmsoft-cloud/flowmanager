@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class SubmitJobParam extends GenericAS400Param {
+public class SubmitJobParam extends GenericConnectionParams {
 
 	private String command;
 

@@ -18,7 +18,7 @@ public class OperationParams {
 	private String tmpLibrary;
 	private String memberOptionAddReplace;
 	private String outcome;
-	private String mailAccount;
+	//private String mailAccount;
 	private List<String> trasmissionFiles;
 	private List<String> remoteTrasmissionFiles;
 	private List<String> fileNames;
@@ -36,7 +36,7 @@ public class OperationParams {
 	private Date executionDate = FormatUtils.todayDate();
 	private List<String> overrideMailDests;
 	private String overrideMailText;
-	private YesNo legacyModernization;
+	private YesNo ibmi;
 	private YesNo exportFileHeaders;
 	private String exportTempSchema;
 	private String exportTempTable;
@@ -118,6 +118,7 @@ public class OperationParams {
 		this.outcome = outcome;
 	}
 
+	/*
 	public String getMailAccount() {
 		return mailAccount;
 	}
@@ -125,7 +126,8 @@ public class OperationParams {
 	public void setMailAccount(String mailAccount) {
 		this.mailAccount = mailAccount;
 	}
-
+	*/
+	
 	public String getTransactionName() {
 		return transactionName;
 	}
@@ -258,12 +260,12 @@ public class OperationParams {
 	}
 	
 
-	public YesNo getLegacyModernization() {
-		return legacyModernization;
+	public YesNo isIBMi() {
+		return ibmi;
 	}
 
-	public void setLegacyModernization(YesNo legacyModernization) {
-		this.legacyModernization = legacyModernization;
+	public void setIBMi(YesNo ibmi) {
+		this.ibmi = ibmi;
 	}
 
 	public YesNo getExportFileHeaders() {
@@ -337,7 +339,7 @@ public class OperationParams {
 		return "OperationParams [transactionId=" + transactionId + ", transactionName=" + transactionName
 				+ ", pathBackup=" + pathBackup + ", trasmissionFolder=" + trasmissionFolder + ", backupFolder="
 				+ backupFolder + ", library=" + library + ", tmpLibrary=" + tmpLibrary + ", memberOptionAddReplace="
-				+ memberOptionAddReplace + ", outcome=" + outcome + ", mailAccount=" + mailAccount
+				+ memberOptionAddReplace + ", outcome=" + outcome
 				+ ", trasmissionFiles=" + trasmissionFiles + ", remoteTrasmissionFiles=" + remoteTrasmissionFiles
 				+ ", fileNames=" + fileNames + ", backupFiles=" + backupFiles + ", zipFiles=" + zipFiles
 				+ ", deleteFiles=" + deleteFiles + ", checkedFiles=" + checkedFiles + ", listFile=" + listFile
@@ -345,7 +347,7 @@ public class OperationParams {
 				+ ", scheduleDate=" + scheduleDate + ", bypassConversion=" + bypassConversion + ", skipCpyFrmFile="
 				+ skipCpyFrmFile + ", listFileFolder=" + listFileFolder + ", executionDate=" + executionDate
 				+ ", overrideMailDests=" + overrideMailDests + ", overrideMailText=" + overrideMailText
-				+ ", legacyModernization=" + legacyModernization + ", exportFileHeaders=" + exportFileHeaders
+				+ ", IBMi=" + ibmi + ", exportFileHeaders=" + exportFileHeaders
 				+ ", exportTempSchema=" + exportTempSchema + ", exportTempTable=" + exportTempTable + ", externalJob="
 				+ externalJob + ", externalUser=" + externalUser + ", externalNumber=" + externalNumber
 				+ ", externalTask=" + externalTask + "]";

@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class ReadSpoolFilesParams extends GenericAS400Param {
+public class ReadSpoolFilesParams extends GenericConnectionParams {
 
 	private String folder;
 	private String listFile;
@@ -8,6 +8,7 @@ public class ReadSpoolFilesParams extends GenericAS400Param {
 	private String defaultShell;
 	private OperationParams operationParams;
 	private boolean launchErrorIfNoFileFound = false;
+	private String schema;
 
 	public String getFolder() {
 		return folder;
@@ -58,16 +59,19 @@ public class ReadSpoolFilesParams extends GenericAS400Param {
 		this.defaultShell = defaultShell;
 	}
 
+	public String getSchema() {
+		return schema;
+	}
+
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
 	@Override
 	public String toString() {
 		return "ReadSpoolFilesParams [folder=" + folder + ", listFile=" + listFile + ", fileName=" + fileName
 				+ ", defaultShell=" + defaultShell + ", operationParams=" + operationParams
-				+ ", launchErrorIfNoFileFound=" + launchErrorIfNoFileFound + "]";
+				+ ", launchErrorIfNoFileFound=" + launchErrorIfNoFileFound + ", schema=" + schema + "]";
 	}
-
-
-
-	
-
 
 }

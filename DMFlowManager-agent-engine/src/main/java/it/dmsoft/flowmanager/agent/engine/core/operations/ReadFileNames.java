@@ -7,10 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ReadFileNamesParams;
@@ -47,7 +45,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 		.replace(Constants.STAR, Constants.DOT + Constants.STAR) + Constants.DOLLAR;
 		
 		
-		if(!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)){
+		if(YesNo.YES.equals(parameters.isIBMi())){
 
 			CallAs400 callAs400 = CallAs400.get(parameters);
 			StringBuilder sb = new StringBuilder();
@@ -126,7 +124,7 @@ public class ReadFileNames extends Operation<ReadFileNamesParams> {
 	
 		// TODO Vedere se e necessario mettere una codifica
 		List<String> lines = Collections.emptyList();
-		lines = (!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) ?
+		lines = (YesNo.YES.equals(parameters.isIBMi())) ?
 			Files.readAllLines(Paths.get(fileListFolder + Constants.PATH_DELIMITER + fileName),
 				Charset.forName(Constants.IBM280)) :
 					Files.readAllLines(Paths.get(fileListFolder + Constants.PATH_DELIMITER + fileName));		

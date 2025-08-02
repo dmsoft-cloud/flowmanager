@@ -1,9 +1,13 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class CreateFileParam extends GenericAS400Param {
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
+public class CreateFileParam extends GenericConnectionParams {
 
 	private String folder;
 	private String fileName;
+	private DbType dbType;
 
 	public String getFolder() {
 		return folder;
@@ -20,10 +24,18 @@ public class CreateFileParam extends GenericAS400Param {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	
+	public DbType getDbType() {
+		return dbType;
+	}
+
+	public void setDbType(DbType dbType) {
+		this.dbType = dbType;
+	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "\n CreateFileParam [folder=" + folder + ", fileName=" + fileName + "]";
+		return "CreateFileParam [folder=" + folder + ", fileName=" + fileName + ", dbType=" + dbType + "]";
 	}
 
 }

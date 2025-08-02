@@ -2,7 +2,6 @@ package it.dmsoft.flowmanager.agent.engine.core.flow.builder;
 
 import java.util.Arrays;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.manager.FlowManager.Replacer;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CheckFileHash;
@@ -40,8 +39,9 @@ public class OutboundFlowBuilder extends FlowBuilder {
 
 			createFileParam.setFileName(operationParams.getSempahoreFile());
 			createFileParam.setFolder(executionFlowData.getFlowFolder());
+			createFileParam.setDbType(executionFlowData.getOrigin().getDbType());
 
-			updateGenericAs400(executionFlowData, createFileParam);
+			updateGenericConnectionParams(executionFlowData, createFileParam);
 			crtFile.setParameters(createFileParam);
 
 			flow.addOperation(crtFile);
@@ -61,8 +61,9 @@ public class OutboundFlowBuilder extends FlowBuilder {
 			operationParams.setTrasmissionFolder(executionFlowData.getFlowFolder());
 			createFileParam.setFileName(replaceLocal);
 			createFileParam.setFolder(executionFlowData.getFlowFolder());
-			updateGenericAs400(executionFlowData, createFileParam);
+			updateGenericConnectionParams(executionFlowData, createFileParam);
 			crtFile.setParameters(createFileParam);
+
 	
 			flow.addOperation(crtFile);
 		}
@@ -73,7 +74,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
 	public FlowBuilder crtDb2FileIfNotExist(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		
 		CreateDbFileParam createDbFileParam = new CreateDbFileParam();
-		updateGenericAs400(executionFlowData, createDbFileParam);
+		updateGenericConnectionParams(executionFlowData, createDbFileParam);
 		createDbFileParam.setFile(executionFlowData.getFlowFile());
 		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), executionFlowData.getFlowLibreria()));
 		createDbFileParam.setSrcFile(executionFlowData.getFlowFileSource());
@@ -83,7 +84,7 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		createDbFileParam.setRecordLength(executionFlowData.getFlowLunghezzaFlFlat());
 		
 		DependentOperation<ChkObjParam> chkObj = new ChkObj();
-		chkObj.setParameters(getChkObjParam(createDbFileParam));
+		chkObj.setParameters(getChkObjParam(executionFlowData, createDbFileParam));
 		chkObj.setOperationParams(operationParams);
 		
 		try {
@@ -108,20 +109,23 @@ public class OutboundFlowBuilder extends FlowBuilder {
 		return this;
 	}
 	
-	private ChkObjParam getChkObjParam(CreateDbFileParam createDbFileParam) {
+	private ChkObjParam getChkObjParam(ExecutionFlowData executionFlowData, CreateDbFileParam createDbFileParam) {
 		ChkObjParam chkObjParam = new ChkObjParam();
 		chkObjParam.setObj(createDbFileParam.getFile());
 		chkObjParam.setLibreria(createDbFileParam.getLibreria());
 		chkObjParam.setMbr(createDbFileParam.getMembro());
+		chkObjParam.setDbType(executionFlowData.getOrigin().getDbType());
 		return chkObjParam; 
 	}
 	
 	private ChkDbFileEmptyParam getCheckDbFileEmptyParam(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkDbFileEmptyParam chkDbFileEmptyParam = new ChkDbFileEmptyParam();
 		
-		updateGenericAs400(executionFlowData, chkDbFileEmptyParam);
+		updateGenericConnectionParams(executionFlowData, chkDbFileEmptyParam);
 		chkDbFileEmptyParam.setFile(executionFlowData.getFlowFile());
 		chkDbFileEmptyParam.setLibreria(executionFlowData.getFlowLibreria());
+		chkDbFileEmptyParam.setDbType(executionFlowData.getOrigin().getDbType());
+		
 		return chkDbFileEmptyParam;
 		
 	}
@@ -145,8 +149,10 @@ public class OutboundFlowBuilder extends FlowBuilder {
         SelectFileColumnsParam sfcParam = new SelectFileColumnsParam();
         sfcParam.setPgmLibrary(!StringUtils.isNullOrEmpty(PropertiesUtils.get(PropertiesConstants.SCHEMA_EXPORT_CONFIG_FILE)) ?
         				PropertiesUtils.get(PropertiesConstants.SCHEMA_EXPORT_CONFIG_FILE) : PropertiesUtils.get(Constants.PGM_LIBRARY_KEY) );
-        sfcParam.setTargetSchema(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? DbConstants.GF_CURLIB: operationParams.getTmpLibrary());
+        sfcParam.setTargetSchema(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? executionFlowData.getFlowLibreria() : operationParams.getTmpLibrary());
         sfcParam.setTargetTable("GF" + operationParams.getTransactionId());
+        sfcParam.setDbType(executionFlowData.getOrigin().getDbType());
+        sfcParam.setSchema(executionFlowData.getFlowLibreria());
         
         ConstraintDependentOperation<SelectFileColumnsParam, Boolean> sfc = new SelectFileColumns();
         sfc.setOperationParams(operationParams);
@@ -160,8 +166,9 @@ public class OutboundFlowBuilder extends FlowBuilder {
 	
 	public FlowBuilder dropTmpExportTable(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
         DropTmpExportTableParam dteParam = new DropTmpExportTableParam();
-        dteParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? DbConstants.GF_CURLIB: operationParams.getTmpLibrary());
+        dteParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? executionFlowData.getFlowLibreria() : operationParams.getTmpLibrary());
         dteParam.setTable("GF" + operationParams.getTransactionId());
+        dteParam.setDbType(executionFlowData.getOrigin().getDbType());
         
         DependentOperation<DropTmpExportTableParam> dtet = new DropTmpExportTable();
         dtet.setOperationParams(operationParams);

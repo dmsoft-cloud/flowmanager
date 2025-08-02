@@ -5,16 +5,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Optional;
 import java.util.Set;
 
 import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -34,11 +31,10 @@ public class CrtFile extends Operation<CreateFileParam>{
 		FlowLogUtils.startDetail(OperationType.CREATE_FL);
 		
 		//verifico valore db2
-		Optional<String> dbTypeOpt = Optional.ofNullable(DbConstants.DB_TYPE);
-		DBTypeEnum dbTypeEnum = dbTypeOpt.map(DBTypeEnum::fromString).orElse(null); 
+		//DBTypeEnum dbTypeEnum = DBTypeEnum.get(parameters.getDbType()); 
 		
 		//per ora mantengo la creazione con il qsh solo nel caso di esecuzione locale su as400
-		if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+		if (YesNo.YES.equals(parameters.isIBMi()) && StringUtils.isNullOrEmpty(parameters.getHost())) {
 			CallAs400 callAs400 = CallAs400.get(parameters);
 			
 			StringBuilder sb = new StringBuilder();

@@ -12,9 +12,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.be.entities.FileColumnsStruct;
-import it.dmsoft.flowmanager.be.entities.FileMetadata;
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SelectFileColumnsParam;
@@ -25,6 +22,9 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.ExportUtils.ExportType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.be.entities.FileColumnsStruct;
+import it.dmsoft.flowmanager.be.entities.FileMetadata;
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 
 public class SelectFileColumns extends ConstraintDependentOperation<SelectFileColumnsParam, Boolean> {
 	
@@ -59,13 +59,13 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
         try {
 
         	Connection conn = null;
-    		conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection();
+    		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
     		
         	executeQryInsertNewColumns(conn);
         	executeQryRemoveColumns(conn);
         	
-        	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryExtractExportData(
-        			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
+        	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryExtractExportData(parameters.getSchema(),
+        			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : parameters.getSchema() );
         	logger.info("check export file query:  " + st);
     		
     		PreparedStatement ps = conn.prepareStatement(st);
@@ -113,7 +113,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
 	                    .orElseThrow(() -> new IllegalArgumentException("Campo non trovato per selezione tabella temporanea: " + item.getDescription())))
 	                .collect(Collectors.toList());
 	            
-	            createNewTableAndTransferData(conn, parameters.getTargetTable(), parameters.getTargetSchema() , executionFlowData.getFlowFile(),executionFlowData.getFlowLibreria() , sortedItems, sortedAvailableFields);
+	            createNewTableAndTransferData(conn, parameters.getTargetTable(), parameters.getTargetSchema() , executionFlowData.getFlowFile(),executionFlowData.getFlowLibreria() , sortedItems, sortedAvailableFields, parameters.getDbType());
 	            
 	            
 	            /*
@@ -144,8 +144,8 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
     }
     
     private void executeQryInsertNewColumns(Connection conn) throws SQLException {
-    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryInsertNewColumns(
-    			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
+    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryInsertNewColumns(parameters.getSchema(),
+    			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : parameters.getSchema() );
     	logger.info("check order columns query:  " + st);
     	PreparedStatement ps1 = conn.prepareStatement(st);
     	
@@ -156,8 +156,8 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
     }
     
     private void executeQryRemoveColumns(Connection conn) throws SQLException {
-    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryRemoveColumns(
-    			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : DbConstants.SCHEMA );
+    	String st = ExportType.fromString(executionFlowData.getFlowExportFlag()).getQryRemoveColumns(parameters.getSchema(),
+    			!StringUtils.isNullOrEmpty(parameters.getPgmLibrary()) ? parameters.getPgmLibrary() + Constants.DOT : parameters.getSchema() );
     	
     	logger.info("delete columns query:  " + st); 
     	PreparedStatement ps2 = conn.prepareStatement(st);
@@ -191,7 +191,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
     
     
     // Crea una nuova tabella con i campi rinominati e riordinati e li inserisce nella tabella target
-    private static void createNewTableAndTransferData(Connection conn, String newTableName, String newTableSchema , String oldTableName,String oldTableSchema , List<FileColumnsStruct> fields, List<FileMetadata> sortedAvailableFields) throws SQLException {
+    private static void createNewTableAndTransferData(Connection conn, String newTableName, String newTableSchema , String oldTableName,String oldTableSchema , List<FileColumnsStruct> fields, List<FileMetadata> sortedAvailableFields, DbType dbType) throws SQLException {
     	// Crea la query per creare la nuova tabella con i campi riordinati e rinominati
         //String createQuery = "CREATE TABLE " + newTableSchema + Constants.DOT + newTableName + " AS ( SELECT ";
 
@@ -203,7 +203,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
                          .orElseThrow(() -> new IllegalArgumentException("Campo non trovato: " + fileColumnsStruct.getDescription()));
                      
                      //Controllo se mettere escape nel nome colonna
-                     String newField = needsEscape(fileColumnsStruct.getDescription()) ?  DBTypeEnum.fromString(DbConstants.DB_TYPE).escapeColumnName(fileColumnsStruct.getDescription()) : fileColumnsStruct.getDescription();
+                     String newField = needsEscape(fileColumnsStruct.getDescription()) ?  DBTypeEnum.get(dbType).escapeColumnName(fileColumnsStruct.getDescription()) : fileColumnsStruct.getDescription();
                      return field.getDescription() + " AS " + newField;  // Restituisci l'associazione campo originale -> nome nuovo
                      
         		 })
@@ -213,7 +213,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
         	
         	//String strFrom =	" FROM " + oldTableSchema + Constants.DOT + oldTableName + " WHERE 1=0 ) " + " WITH NO DATA ";
         	//String finalQry = createQuery + strFiled + strFrom;
-        	String finalQry = DBTypeEnum.fromString(DbConstants.DB_TYPE).getQueryCreateEmptyTable(strFiled, newTableSchema, newTableName, oldTableSchema, oldTableName );
+        	String finalQry = DBTypeEnum.get(dbType).getQueryCreateEmptyTable(strFiled, newTableSchema, newTableName, oldTableSchema, oldTableName );
         	
         	logger.info("query to crate new table: " + finalQry);
         // Esegui la query per creare la nuova tabella (solo struttura)
@@ -227,7 +227,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
         String insertQuery = "INSERT INTO " + newTableSchema + Constants.DOT + newTableName + " (" +
             fields.stream()
                 .map(fileColumnsStruct -> needsEscape(fileColumnsStruct.getDescription()) ? 
-                		DBTypeEnum.fromString(DbConstants.DB_TYPE).escapeColumnName(fileColumnsStruct.getDescription()) : fileColumnsStruct.getDescription())
+                		DBTypeEnum.get(dbType).escapeColumnName(fileColumnsStruct.getDescription()) : fileColumnsStruct.getDescription())
                 .collect(Collectors.joining(", ")) +  // Unisce i nomi dei nuovi campi con una virgola
             ") SELECT " +
             fields.stream()
@@ -236,7 +236,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("Campo non trovato")))
                     .map(field -> needsEscape(field.getDescription()) ? 
-                    		DBTypeEnum.fromString(DbConstants.DB_TYPE).escapeColumnName(field.getDescription()) : field.getDescription())
+                    		DBTypeEnum.get(dbType).escapeColumnName(field.getDescription()) : field.getDescription())
                 .collect(Collectors.joining(", ")) +  // Unisce i nomi originali dei campi con una virgola
             " FROM " + oldTableSchema + Constants.DOT + oldTableName;
 

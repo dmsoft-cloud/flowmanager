@@ -16,12 +16,14 @@ public class FullFlowsData {
 
 	private List<OriginData> origins;
 	
+	private EmailParmsData mailParms;
+	
 	public FullFlowsData() {
 		super();
 	}
 
 	public FullFlowsData(List<EmailData> emails, List<FlowData> flows, List<GroupData> groups,
-			List<InterfaceData> interfaces, List<ModelData> models, List<OriginData> origins) {
+			List<InterfaceData> interfaces, List<ModelData> models, List<OriginData> origins, EmailParmsData mailParms) {
 		super();
 		this.emails = emails;
 		this.flows = flows;
@@ -29,6 +31,7 @@ public class FullFlowsData {
 		this.interfaces = interfaces;
 		this.models = models;
 		this.origins = origins;
+		this.mailParms = mailParms;
 	}
 
 	public List<EmailData> getEmails() {
@@ -77,6 +80,14 @@ public class FullFlowsData {
 
 	public void setOrigins(List<OriginData> origins) {
 		this.origins = origins;
+	}
+
+	public EmailParmsData getMailParms() {
+		return mailParms;
+	}
+
+	public void setMailParms(EmailParmsData mailParms) {
+		this.mailParms = mailParms;
 	}
 
 }

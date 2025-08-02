@@ -18,7 +18,7 @@ public class OriginData {
 	// JDBC CUSTOM STRING
 
 	private String id;
-	private String ip;
+	private String host;
 	private Integer port;
 	private String description;
 	private String note;
@@ -37,12 +37,12 @@ public class OriginData {
 		this.id = id;
 	}
 
-	public String getIp() {
-		return ip;
+	public String getHost() {
+		return host;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public Integer getPort() {

@@ -5,8 +5,10 @@ import java.util.List;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class DbConversionParam extends GenericAS400Param{
+public class DbConversionParam extends GenericConnectionParams{
 	
+	private String id;
+
 	private String library;
 	
 	private String file;
@@ -47,7 +49,14 @@ public class DbConversionParam extends GenericAS400Param{
 	
 	private List<String> downloadedFiles;
 	
-	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getDecimalPointer() {
 		return decimalPointer;
 	}
@@ -211,8 +220,8 @@ public class DbConversionParam extends GenericAS400Param{
 
 	@Override
 	public String toString() {
-		return "DbConversionParam [library=" + library + ", file=" + file + ", member=" + member + ", folderIfs="
-				+ folderIfs + ", fileNameIfs=" + fileNameIfs + ", recordDelimiter=" + recordDelimiter
+		return "DbConversionParam [id=" + id + ", library=" + library + ", file=" + file + ", member=" + member
+				+ ", folderIfs=" + folderIfs + ", fileNameIfs=" + fileNameIfs + ", recordDelimiter=" + recordDelimiter
 				+ ", fieldDelimiter=" + fieldDelimiter + ", stringDelimiter=" + stringDelimiter + ", codepage="
 				+ codepage + ", memberOptionAddReplace=" + memberOptionAddReplace + ", removeBlanks=" + removeBlanks
 				+ ", fromCcsid=" + fromCcsid + ", columnName=" + columnName + ", decimalPointer=" + decimalPointer
@@ -220,11 +229,5 @@ public class DbConversionParam extends GenericAS400Param{
 				+ ", removeColName=" + removeColName + ", internazDelimiter=" + internazDelimiter + ", downloadedFiles="
 				+ downloadedFiles + "]";
 	}
-
-	
-
-	
-
-	
 
 }

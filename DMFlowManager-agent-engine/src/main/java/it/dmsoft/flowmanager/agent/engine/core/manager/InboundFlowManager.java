@@ -72,7 +72,7 @@ public class InboundFlowManager extends FlowManager {
 
 			// TRAVASO IN FILE DESTINAZIONE
 			if(!YesNo.YES.equals(executionFlowData.getFlowBypassQtemp()) 
-					&& !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)
+					&& YesNo.YES.equals(operationParams.isIBMi())
 					&& ConversionOperation.CSV.name().equals(executionFlowData.getFlowFormato())) {
 				inboundFlowBuilder.fromQtempToDestinationFileOperation(executionFlowData, operationParams);
 				inboundFlowBuilder.cpyFile(executionFlowData, operationParams);

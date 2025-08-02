@@ -30,7 +30,7 @@ public class DropTmpExportTable extends DependentOperation<DropTmpExportTablePar
 		try {
 			//controllo se devo utilizzare il file con le colonne rielaborate in ordine e intestazione
 			Connection conn = null;
-			conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection(); 
+			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
 			
 			
 			String query = "DROP TABLE " + operationParams.getExportTempSchema() + Constants.DOT + operationParams.getExportTempTable();

@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class SpFileParam extends GenericAS400Param {
+public class SpFileParam extends GenericConnectionParams {
 
 	private String id;
 	private String spmqm;

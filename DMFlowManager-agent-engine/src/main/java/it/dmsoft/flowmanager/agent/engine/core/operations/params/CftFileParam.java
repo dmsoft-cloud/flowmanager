@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import java.math.BigDecimal;
 
-public class CftFileParam extends GenericAS400Param {
+public class CftFileParam extends GenericConnectionParams {
 
 	private String id;
 	private String partner;

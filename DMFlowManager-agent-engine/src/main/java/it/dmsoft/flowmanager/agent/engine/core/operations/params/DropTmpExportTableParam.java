@@ -1,7 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-
-public class DropTmpExportTableParam extends GenericAS400Param {
+public class DropTmpExportTableParam extends GenericConnectionParams {
 
 	private String table;
 	private String library;
@@ -18,12 +17,10 @@ public class DropTmpExportTableParam extends GenericAS400Param {
 	public void setLibrary(String library) {
 		this.library = library;
 	}
+
 	@Override
 	public String toString() {
-		return "DropTmpExportTablePram [table=" + table + ", library=" + library + "]";
+		return "DropTmpExportTableParam [table=" + table + ", library=" + library + "]";
 	}
-
-
-	
 
 }

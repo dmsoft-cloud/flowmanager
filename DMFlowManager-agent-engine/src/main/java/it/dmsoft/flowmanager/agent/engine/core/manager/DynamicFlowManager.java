@@ -93,10 +93,10 @@ public class DynamicFlowManager {
 			
 			}
 			*/
-			String params = args[0];
+			//String params = args[0];
 			String resubmitTransactionId = "";
 			BigDecimal executionDate = null;
-			FlowConfig config = ConfigUtils.setConfig(params);
+			FlowConfig config = null;//ConfigUtils.setConfig(params);
 			System.out.println("CONFIG: " + config.toString() );
 
 			File file = new File(config.getLogPath());
@@ -119,12 +119,14 @@ public class DynamicFlowManager {
 			logger.info("cliente -> " + config.getCliente() + 
 					", execution date -> " + (executionDate != null ? executionDate.toString() : FormatUtils.todayDateBigDec().toString()));
 			
+			/*
 			try {
 				DatabaseUtils.setDBConstants();
 				
 			} catch (FileNotFoundException e) {
 				logger.info("properties file not found");
 			}
+			*/
 			
 			//ExecutionFlowData executionFlowData = OtgffanaDAO.read(config.getTransactionName());
 			
@@ -141,10 +143,10 @@ public class DynamicFlowManager {
 						   	&& mo.getExecutionFlowData().getFlowLibreria().equalsIgnoreCase(Constants.QTEMP)) {
 					   mo.getExecutionFlowData().setFlowLibreria(PropertiesUtils.get(PropertiesConstants.TMP_LIBRARY));
 				   }
-				   executeFlow(config.getTransactionName(), config.getTransactionId(), resubmitTransactionId, config.getBackupPath(), config.getMailFrom(), logFile, executionDate, logger, mo.getExecutionFlowData(), mo.getMailDest(), config); 
+				   executeFlow(config.getTransactionName(), config.getTransactionId(), resubmitTransactionId, config.getBackupPath(), /*config.getMailFrom(),*/ logFile, executionDate, logger, mo.getExecutionFlowData(), mo.getMailDest(), config); 
 			   }
 			}
-			else executeFlow(config.getTransactionName(), config.getTransactionId(), resubmitTransactionId, config.getBackupPath(), config.getMailFrom(), logFile, executionDate, logger, executionFlowData, null, config);
+			else executeFlow(config.getTransactionName(), config.getTransactionId(), resubmitTransactionId, config.getBackupPath(), /*config.getMailFrom(),*/ logFile, executionDate, logger, executionFlowData, null, config);
 		} catch (Exception e) {
 			if (e instanceof OperationException) {
 				OperationException oe = (OperationException) e;
@@ -192,13 +194,13 @@ public class DynamicFlowManager {
 		String resubmitTransactionId = null;
 		
 		String backupPath = config.getBackupPath();
-		String mailFrom = config.getMailFrom();
+		//String mailFrom = config.getMailFrom();
 		
-		executeFlow(transactionName, transactionId.toString(), resubmitTransactionId, backupPath, mailFrom, logFile, executionDate, logger, executionFlowData, overrideMailDests, config);
+		executeFlow(transactionName, transactionId.toString(), resubmitTransactionId, backupPath, /*mailFrom,*/ logFile, executionDate, logger, executionFlowData, overrideMailDests, config);
 	}
 		
 
-	public void executeFlow(String transactionName, String transactionId, String resubmitTransactionId, String backupPath, String mailFrom,
+	public void executeFlow(String transactionName, String transactionId, String resubmitTransactionId, String backupPath,
 			String logFile, BigDecimal executionDate, Logger logger, ExecutionFlowData executionFlowData, List<String> overrideMailDests, FlowConfig config) throws Exception{
 		
 		logger.info(executionFlowData.toString());
@@ -216,13 +218,17 @@ public class DynamicFlowManager {
 
 		OperationParams inputParam = new OperationParams();
 		inputParam.setPathBackup(backupPath);
-		inputParam.setMailAccount(mailFrom);
+		//inputParam.setMailAccount(mailFrom);
 		inputParam.setTransactionId(new BigDecimal(transactionId));
 		inputParam.setTransactionName(transactionName);
 		inputParam.setListFile(transactionName + transactionId);
 		inputParam.setOverrideMailDests(overrideMailDests);
+		//TODO REIMPLEMENT
 		inputParam.setTmpLibrary(PropertiesUtils.get(PropertiesConstants.TMP_LIBRARY));
-		inputParam.setLegacyModernization(config.getLegacyModernization());
+		
+		inputParam.setIBMi(config.isIBMi());
+		//inputParam.setLegacyModernization(config.getLegacyModernization());
+		
 		if (exportFlowData != null) inputParam.setExportFileHeaders(exportFlowData.getExportTestata());
 		if (Optional.ofNullable(executionFlowData.getFlowAggNomiCol())
 				.filter(Constants.EXF::equals).isPresent()) inputParam.setExportFileHeaders(YesNo.YES);				

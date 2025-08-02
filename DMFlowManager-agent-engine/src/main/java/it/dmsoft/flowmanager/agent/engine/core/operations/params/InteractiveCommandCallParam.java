@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class InteractiveCommandCallParam extends GenericAS400Param {
+public class InteractiveCommandCallParam extends GenericConnectionParams {
 
 	private String command;
 

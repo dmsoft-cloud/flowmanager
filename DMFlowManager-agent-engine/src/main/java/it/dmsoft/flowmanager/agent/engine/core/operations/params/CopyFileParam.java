@@ -1,6 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class CopyFileParam extends GenericAS400Param {
+public class CopyFileParam extends GenericConnectionParams {
 
 	private String fromFile;
 	private String fromLibrary;

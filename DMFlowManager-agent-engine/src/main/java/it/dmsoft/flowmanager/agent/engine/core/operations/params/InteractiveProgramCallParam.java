@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class InteractiveProgramCallParam extends GenericAS400Param {
+public class InteractiveProgramCallParam extends GenericConnectionParams {
 
 	private String pgm;
 	private YesNo result;

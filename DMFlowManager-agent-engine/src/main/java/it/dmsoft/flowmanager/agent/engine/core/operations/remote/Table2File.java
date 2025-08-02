@@ -12,7 +12,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
@@ -46,7 +45,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
         }
 		
 		
-		Connection conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection();
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
 		StringBuilder sb = new StringBuilder();
 		
 		//imposto l'eventuale verifica sul file di export sul file temporaneo se previsto

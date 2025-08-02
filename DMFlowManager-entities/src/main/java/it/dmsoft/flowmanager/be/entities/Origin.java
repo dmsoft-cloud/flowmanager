@@ -28,7 +28,7 @@ public class Origin {
 	@Column(length = 20)
 	private String id;
 	@Column(length = 64)
-	private String ip;
+	private String host;
 	private Integer port;
 	@Column(length = 255)
 	private String description;
@@ -59,12 +59,12 @@ public class Origin {
 		this.id = id;
 	}
 
-	public String getIp() {
-		return ip;
+	public String getHost() {
+		return host;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setHost(String ip) {
+		this.host = ip;
 	}
 
 	public Integer getPort() {
@@ -138,5 +138,13 @@ public class Origin {
 	public void setJdbcCustomString(String jdbcCustomString) {
 		this.jdbcCustomString = jdbcCustomString;
 	}
+
+	@Override
+	public String toString() {
+		return "Origin [id=" + id + ", ip=" + host + ", port=" + port + ", description=" + description + ", note=" + note
+				+ ", enabled=" + enabled + ", dbType=" + dbType + ", user=" + user + ", password=" + password
+				+ ", secure=" + secure + ", jdbcCustomString=" + jdbcCustomString + "]";
+	}
+	
 
 }

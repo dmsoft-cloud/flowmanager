@@ -3,9 +3,7 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
@@ -58,13 +56,13 @@ public class ChkObj extends DependentOperation<ChkObjParam>{
 		*/
 		//controllo se devo utilizzare il file con le colonne rielaborate in ordine e intestazione
 		Connection conn = null;
-		conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection(); 
+		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
 		int counter=0;
 		String table;
 		String schema;
 		
 		//DBTypeEnum dbTypeEnum = DBTypeEnum.fromString(DbConstants.DB_TYPE);
-		String query = DBTypeEnum.fromString(DbConstants.DB_TYPE).getQueryCheckObj();
+		String query = DBTypeEnum.get(parameters.getDbType()).getQueryCheckObj();
 	
 		PreparedStatement ps = conn.prepareStatement(query);
 		logger.info(query);

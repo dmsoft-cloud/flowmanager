@@ -34,7 +34,7 @@ public class ChkDbFileEmpty extends Operation<ChkDbFileEmptyParam>{
 		
 		logger.debug("Count Query :  " + query);
 		
-		Connection conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection(); 
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
 
 		PreparedStatement ps = conn.prepareStatement(query);
 		ResultSet rs = ps.executeQuery();

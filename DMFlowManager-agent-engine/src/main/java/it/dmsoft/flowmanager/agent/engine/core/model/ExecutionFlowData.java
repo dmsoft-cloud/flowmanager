@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.common.model.EmailParmsData;
+import it.dmsoft.flowmanager.common.model.OriginData;
 
 public class ExecutionFlowData {
 	public static enum OtgffanaCoulmn {
@@ -113,7 +115,7 @@ public class ExecutionFlowData {
 	private String flowPgmControllo;
 	//private Type flowTipologiaConn;
 	private String flowHost;
-	private BigDecimal flowPort;
+	private Integer flowPort;
 	private String flowRemoteFolder;
 	private String flowRemoteFileName;
 	private String flowUtente;
@@ -161,6 +163,11 @@ public class ExecutionFlowData {
 	private BigDecimal flowFetchSize;
 	private String flowCharEmptySpace;
 	private YesNo flowTrustHost;
+	
+	//NEW FIELDS
+	private OriginData origin;
+	
+	private EmailParmsData mailParms;
 	
 	
 	public String getFlowId() {
@@ -327,10 +334,10 @@ public class ExecutionFlowData {
 	public void setFlowHost(String flowHost) {
 		this.flowHost = flowHost;
 	}
-	public BigDecimal getFlowPort() {
+	public Integer getFlowPort() {
 		return flowPort;
 	}
-	public void setFlowPort(BigDecimal flowPort) {
+	public void setFlowPort(Integer flowPort) {
 		this.flowPort = flowPort;
 	}
 	public String getFlowRemoteFolder() {
@@ -623,44 +630,54 @@ public class ExecutionFlowData {
 	public void setFlowTrustHost(YesNo flowTrustHost) {
 		this.flowTrustHost = flowTrustHost;
 	}
-	@Override
-	public String toString() {
-		return "Otgffana [flowId=" + flowId + ", flowDesc=" + flowDesc + ", flowGruppo=" + flowGruppo
-				+ ", flowCodInterfaccia=" + flowCodInterfaccia + ", flowStato=" + flowStato + ", flowTipFlusso="
-				+ flowTipFlusso + ", flowDirezione=" + flowDirezione + ", flowLibreria=" + flowLibreria
-				+ ", flowFile=" + flowFile + ", flowMembro=" + flowMembro + ", flowLibSource=" + flowLibSource
-				+ ", flowFileSource=" + flowFileSource + ", flowMembroSource=" + flowMembroSource
-				+ ", flowFolder=" + flowFolder + ", flowFileName=" + flowFileName + ", flowFormato="
-				+ flowFormato + ", flowDelimRecord=" + flowDelimRecord + ", flowDelimStringa="
-				+ flowDelimStringa + ", flowRimozSpazi=" + flowRimozSpazi + ", flowDelimCampo="
-				+ flowDelimCampo + ", flowRiempCampo=" + flowRiempCampo + ", flowCodepage=" + flowCodepage
-				+ ", flowModAcquisizione=" + flowModAcquisizione + ", flowFromCcsid=" + flowFromCcsid
-				+ ", flowPgmControllo=" + flowPgmControllo + ", flowHost=" + flowHost + ", flowPort=" + flowPort + ", flowRemoteFolder=" + flowRemoteFolder
-				+ ", flowRemoteFileName=" + flowRemoteFileName + ", flowUtente=" + flowUtente
-				+ ", flowPassword=" + flowPassword + ", flowUtenteSftp=" + flowUtenteSftp
-				+ ", flowIntergiryCheck=" + flowIntegrityCheck + ", flowFlNameSemaforo=" + flowFlNameSemaforo
-				+ ", flowNumTentaRicez=" + flowNumTentaRicez + ", flowIntervalloRetry=" + flowIntervalloRetry
-				+ ", flowRetention=" + flowRetention + ", flowCompression=" + flowCompression
-				+ ", flowDeCompression=" + flowDeCompression + ", flowBackup=" + flowBackup + ", flowInviaMail="
-				+ flowInviaMail + ", flowLetteraOk=" + flowLetteraOk + ", flowLetteraKo=" + flowLetteraKo
-				+ ", flowProgPerson=" + flowProgPerson + ", flowKnownHtFl=" + flowKnownHtFl + ", flowKeyFl="
-				+ flowKeyFl + ", flowModalitaPassiva=" + flowModalitaPassiva + ", flowJobDesc=" + flowJobDesc
-				+ ", flowLibJobDesc=" + flowLibJobDesc + ", flowCancellaFile=" + flowCancellaFile
-				+ ", flowRisottomettibile=" + flowRisottomettibile + ", flowLunghezzaFlFlat="
-				+ flowLunghezzaFlFlat + ", flowTipoTrasferimento=" + flowTipoTrasferimento
-				+ ", flowBypassQtemp=" + flowBypassQtemp + ", flowEsistenzaFile=" + flowEsistenzaFile
-				+ ", flowLetteraFlusso=" + flowLetteraFlusso + ", flowAggNomiCol=" + flowAggNomiCol
-				+ ", flowCreaVuoto=" + flowCreaVuoto + ", flowInternaz=" + flowInternaz + ", flowSostValNull="
-				+ flowSostValNull + ", flowElimNomCol=" + flowElimNomCol + ", flowFlagOkVuoto="
-				+ flowFlagOkVuoto + ", flowFtpSecure=" + flowFtpSecure + ", flowInteractiveType="
-				+ flowInteractiveType + ", flowInteractiveProgram=" + flowInteractiveProgram
-				+ ", flowInteractiveResult=" + flowInteractiveResult + ", flowInteractiveCommand="
-				+ flowInteractiveCommand + ", flowDelaySemaforo=" + flowDelaySemaforo + ", flowHashUnico="
-				+ flowHashUnico + ", flowExportFlag=" + flowExportFlag + ", flowExportCode=" + flowExportCode
-				+ ", flowFetchSize=" + flowFetchSize + ", flowcharemptyspace=" + flowCharEmptySpace + "]";
+	
+	public OriginData getOrigin() {
+		return origin;
+	}
+	public void setOrigin(OriginData origin) {
+		this.origin = origin;
 	}
 	
-
-	
+	public EmailParmsData getMailParms() {
+		return mailParms;
+	}
+	public void setMailParms(EmailParmsData mailParms) {
+		this.mailParms = mailParms;
+	}
+	@Override
+	public String toString() {
+		return "ExecutionFlowData [flowId=" + flowId + ", flowDesc=" + flowDesc + ", flowGruppo=" + flowGruppo
+				+ ", flowCodInterfaccia=" + flowCodInterfaccia + ", flowStato=" + flowStato + ", flowTipFlusso="
+				+ flowTipFlusso + ", flowDirezione=" + flowDirezione + ", flowLibreria=" + flowLibreria + ", flowFile="
+				+ flowFile + ", flowMembro=" + flowMembro + ", flowLibSource=" + flowLibSource + ", flowFileSource="
+				+ flowFileSource + ", flowMembroSource=" + flowMembroSource + ", flowFolder=" + flowFolder
+				+ ", flowFileName=" + flowFileName + ", flowFormato=" + flowFormato + ", flowDelimRecord="
+				+ flowDelimRecord + ", flowDelimStringa=" + flowDelimStringa + ", flowRimozSpazi=" + flowRimozSpazi
+				+ ", flowDelimCampo=" + flowDelimCampo + ", flowRiempCampo=" + flowRiempCampo + ", flowCodepage="
+				+ flowCodepage + ", flowModAcquisizione=" + flowModAcquisizione + ", flowFromCcsid=" + flowFromCcsid
+				+ ", flowPgmControllo=" + flowPgmControllo + ", flowHost=" + flowHost + ", flowPort=" + flowPort
+				+ ", flowRemoteFolder=" + flowRemoteFolder + ", flowRemoteFileName=" + flowRemoteFileName
+				+ ", flowUtente=" + flowUtente + ", flowPassword=" + flowPassword + ", flowUtenteSftp=" + flowUtenteSftp
+				+ ", flowIntegrityCheck=" + flowIntegrityCheck + ", flowFlNameSemaforo=" + flowFlNameSemaforo
+				+ ", flowNumTentaRicez=" + flowNumTentaRicez + ", flowIntervalloRetry=" + flowIntervalloRetry
+				+ ", flowRetention=" + flowRetention + ", flowCompression=" + flowCompression + ", flowDeCompression="
+				+ flowDeCompression + ", flowBackup=" + flowBackup + ", flowInviaMail=" + flowInviaMail
+				+ ", flowLetteraOk=" + flowLetteraOk + ", flowLetteraKo=" + flowLetteraKo + ", flowProgPerson="
+				+ flowProgPerson + ", flowKnownHtFl=" + flowKnownHtFl + ", flowKeyFl=" + flowKeyFl
+				+ ", flowModalitaPassiva=" + flowModalitaPassiva + ", flowJobDesc=" + flowJobDesc + ", flowLibJobDesc="
+				+ flowLibJobDesc + ", flowCancellaFile=" + flowCancellaFile + ", flowRisottomettibile="
+				+ flowRisottomettibile + ", flowLunghezzaFlFlat=" + flowLunghezzaFlFlat + ", flowTipoTrasferimento="
+				+ flowTipoTrasferimento + ", flowBypassQtemp=" + flowBypassQtemp + ", flowEsistenzaFile="
+				+ flowEsistenzaFile + ", flowLetteraFlusso=" + flowLetteraFlusso + ", flowAggNomiCol=" + flowAggNomiCol
+				+ ", flowCreaVuoto=" + flowCreaVuoto + ", flowInternaz=" + flowInternaz + ", flowSostValNull="
+				+ flowSostValNull + ", flowElimNomCol=" + flowElimNomCol + ", flowFlagOkVuoto=" + flowFlagOkVuoto
+				+ ", flowFtpSecure=" + flowFtpSecure + ", flowInteractiveType=" + flowInteractiveType
+				+ ", flowInteractiveProgram=" + flowInteractiveProgram + ", flowInteractiveResult="
+				+ flowInteractiveResult + ", flowInteractiveCommand=" + flowInteractiveCommand + ", flowDelaySemaforo="
+				+ flowDelaySemaforo + ", flowHashUnico=" + flowHashUnico + ", flowExportFlag=" + flowExportFlag
+				+ ", flowExportCode=" + flowExportCode + ", flowFetchSize=" + flowFetchSize + ", flowCharEmptySpace="
+				+ flowCharEmptySpace + ", flowTrustHost=" + flowTrustHost + ", origin=" + origin + ", mailParms="
+				+ mailParms + "]";
+	}
 	
 }

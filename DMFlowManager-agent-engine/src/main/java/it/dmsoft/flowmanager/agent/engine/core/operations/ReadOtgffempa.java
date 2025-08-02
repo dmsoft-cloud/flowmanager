@@ -1,22 +1,8 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations;
 
-import java.math.BigDecimal;
-
-import com.ibm.as400.access.AS400Text;
-import com.ibm.as400.access.AS400ZonedDecimal;
-import com.ibm.as400.access.ProgramParameter;
-
-import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
-import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.SendMailParam;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
-import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-
-public class ReadOtgffempa extends Operation<SendMailParam> {
-
+@Deprecated
+public class ReadOtgffempa /*extends Operation<SendMailParam>*/ {
+/*
 	private static Logger logger = Logger.getLogger(ReadOtgffempa.class);
 
 	@Override
@@ -79,5 +65,5 @@ public class ReadOtgffempa extends Operation<SendMailParam> {
 		logger.info("end execution of " + ReadOtgffempa.class.getName());
 		FlowLogUtils.endDetail(OperationType.READ_MAIL);
 	}
-
+*/
 }

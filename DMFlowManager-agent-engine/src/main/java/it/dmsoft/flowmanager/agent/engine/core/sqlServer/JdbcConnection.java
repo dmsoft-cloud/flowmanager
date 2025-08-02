@@ -5,9 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Optional;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
+import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -19,11 +18,11 @@ public class JdbcConnection {
 	
 	private static Connection conn = null;
 	
-	private static String currentLibrary;
+	//private static String currentLibrary;
 	
-	public static Connection get() throws Exception {
+	public static Connection get(GenericConnectionParams genericConnectionParams) throws Exception {
 		if (conn == null || conn.isClosed()) {
-			initialize();
+			initialize(genericConnectionParams);
 		}
 		
 		return conn;
@@ -40,6 +39,7 @@ public class JdbcConnection {
 		
 	}
 	
+	/*
 	public static String getCurrentLibrary() throws Exception {
 		if (conn == null) {
 			initialize();
@@ -47,21 +47,29 @@ public class JdbcConnection {
 		
 		return currentLibrary;
 	}
+	*/
 	
 	
-	private static void initialize() throws Exception {
+	private static void initialize(GenericConnectionParams genericConnectionParams) throws Exception {
 		
 		try {
 			// Carica le proprietà per la connessione dal file di configurazione
-            String dbUrl = DbConstants.DB_HOST;
-            String dbUser = DbConstants.USERNAME;
-            String dbPassword = DbConstants.PASSWORD;
-            if (!StringUtils.isNullOrEmpty(dbUser) && !StringUtils.isNullOrEmpty(dbPassword) && YesNo.YES.equals(DbConstants.SECURE_CONNECTION)) {
-            // Effettua la connessione al database SQL Server
-            dbUrl = dbUrl + Constants.SEMICOLON + "encrypt=true;trustServerCertificate=true";
+			
+			
+            String dbUrl = genericConnectionParams.getHost();
+            String dbUser = genericConnectionParams.getUser();
+            String dbPassword = genericConnectionParams.getPassword();
+            
+            if (!StringUtils.isNullOrEmpty(dbUser) && !StringUtils.isNullOrEmpty(dbPassword) && YesNo.YES.equals(genericConnectionParams.isSecure())) {
+            	// Effettua la connessione al database SQL Server
+            	dbUrl = dbUrl + Constants.SEMICOLON + "encrypt=true;trustServerCertificate=true";
             } else {
             	dbUrl = dbUrl + Constants.SEMICOLON + "encrypt=false;trustServerCertificate=true";             
             }
+            
+            //OVERRIDE JDBC CONNECTION STRING
+            if (StringUtils.isNullOrEmpty(genericConnectionParams.getJdbcCustomString()))
+            	dbUrl = genericConnectionParams.getJdbcCustomString();
             
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);

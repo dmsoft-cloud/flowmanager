@@ -21,7 +21,7 @@ public class TrasmissionParams {
 
 	private String host;
 	
-	private BigDecimal port;
+	private Integer port;
 	
 	private String remote_Folder;
 	
@@ -66,11 +66,11 @@ public class TrasmissionParams {
 		this.host = host;
 	}
 
-	public BigDecimal getPort() {
+	public Integer getPort() {
 		return port;
 	}
 
-	public void setPort(BigDecimal port) {
+	public void setPort(Integer port) {
 		this.port = port;
 	}
 

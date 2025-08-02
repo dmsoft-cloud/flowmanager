@@ -18,13 +18,15 @@ public class AgentPropertiesService {
 	private String logRotation;
 	@Value("${flowmanager.agent.properties.backupPath}")
 	private String backupPath;
-	@Value("${flowmanager.agent.properties.mailFrom}")
-	private String mailFrom;
+	//@Value("${flowmanager.agent.properties.mailFrom}")
+	//private String mailFrom;
 	@Value("${flowmanager.agent.properties.customer}")
 	private String customer;
+	@Value("${flowmanager.agent.properties.IBMi}")
+	private YesNo IBMi;
 	private String executionDateStr;
-	@Value("${flowmanager.agent.properties.legacyModernization}")
-	private YesNo legacyModernization;
+	//@Value("${flowmanager.agent.properties.legacyModernization}")
+	//private YesNo legacyModernization;
 	private String extJob;
 	private String extUser;
 	private String extNumber;
@@ -70,14 +72,6 @@ public class AgentPropertiesService {
 		this.backupPath = backupPath;
 	}
 
-	public String getMailFrom() {
-		return mailFrom;
-	}
-
-	public void setMailFrom(String mailFrom) {
-		this.mailFrom = mailFrom;
-	}
-
 	public String getCustomer() {
 		return customer;
 	}
@@ -92,14 +86,6 @@ public class AgentPropertiesService {
 
 	public void setExecutionDateStr(String executionDateStr) {
 		this.executionDateStr = executionDateStr;
-	}
-
-	public YesNo getLegacyModernization() {
-		return legacyModernization;
-	}
-
-	public void setLegacyModernization(YesNo legacyModernization) {
-		this.legacyModernization = legacyModernization;
 	}
 
 	public String getExtJob() {
@@ -134,4 +120,12 @@ public class AgentPropertiesService {
 		this.extTask = extTask;
 	}
 
+	public YesNo isIBMi() {
+		return IBMi;
+	}
+
+	public void setIBMi(YesNo iBMi) {
+		IBMi = iBMi;
+	}
+	
 }

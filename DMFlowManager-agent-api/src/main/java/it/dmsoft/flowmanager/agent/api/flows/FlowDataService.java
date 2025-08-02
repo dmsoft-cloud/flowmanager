@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.dmsoft.flowmanager.agent.api.flows.mapper.FlowDataMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.common.model.EmailData;
+import it.dmsoft.flowmanager.common.model.EmailParmsData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowsData;
@@ -59,8 +60,9 @@ public class FlowDataService {
 		InterfaceData _interface = flowsData.getInterfaces().stream().filter(x -> x.getId().equals(flow.getInterfaceId())).findAny().get();
 		ModelData model = flowsData.getModels().stream().filter(x -> x.getId().equals(flow.getModel())).findAny().get();
 		OriginData origin = flowsData.getOrigins().stream().filter(x -> x.getId().equals(flow.getOrigin())).findAny().orElse(null);
+		EmailParmsData mailParms = flowsData.getMailParms();
 		
-		FullFlowData fullFlowData = new FullFlowData(flow, group, emailOk, emailKo, _interface, model, origin);
+		FullFlowData fullFlowData = new FullFlowData(flow, group, emailOk, emailKo, _interface, model, origin, mailParms);
 		return fullFlowData;
 	}
 	

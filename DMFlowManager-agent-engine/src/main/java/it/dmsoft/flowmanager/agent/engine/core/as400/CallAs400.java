@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400Exception;
@@ -26,10 +25,9 @@ import com.ibm.as400.access.ProgramParameter;
 import com.ibm.as400.access.RequestNotSupportedException;
 import com.ibm.as400.access.SecureAS400;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.AS400ObjectNotFoundException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericAS400Param;
+import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -44,7 +42,7 @@ public class CallAs400 {
 	
 	private static final Logger logger = Logger.getLogger(CallAs400.class.getName());
 
-	private static Map<GenericAS400Param, CallAs400> instances = new HashMap<>();
+	private static Map<GenericConnectionParams, CallAs400> instances = new HashMap<>();
 	/**
 	 * Indica se l'oggetto è utilizzato
 	 */
@@ -61,13 +59,13 @@ public class CallAs400 {
 	 * @throws Exception
 	 */
 
-	public static CallAs400 get(GenericAS400Param genericAS400Param) throws Exception {
+	public static CallAs400 get(GenericConnectionParams genericConnectionParam) throws Exception {
 
-		logger.info("GenericAS400Param -> " + genericAS400Param.toString());
-		CallAs400 instance = instances.get(genericAS400Param);
+		logger.info("genericConnectionParam -> " + genericConnectionParam.toString());
+		CallAs400 instance = instances.get(genericConnectionParam);
 		if (instance == null) {
-			instance = new CallAs400(genericAS400Param);
-			instances.put(genericAS400Param, instance);
+			instance = new CallAs400(genericConnectionParam);
+			instances.put(genericConnectionParam, instance);
 		}
 
 		logger.info("Istanza CallAS400 -> " + instance.toString());
@@ -76,10 +74,6 @@ public class CallAs400 {
 		
 		
 		return instance;
-	}
-
-	private CallAs400(GenericAS400Param genericAS400Param) throws Exception {
-		this(genericAS400Param.getJobd(), genericAS400Param.getJobdLibrary(), genericAS400Param.getUser(), genericAS400Param.getPassword());
 	}
 
 	/*
@@ -91,26 +85,31 @@ public class CallAs400 {
 	 * Constants.QGPL); }
 	 */
 
-	private CallAs400(String jobdName, String library, String username, String password) throws Exception {
+	private CallAs400(GenericConnectionParams genericConnectionParam) throws Exception {
 		logger.debug("Tentativo di connessione all'as400");
 		//as400 = new SecureAS400("as400prod.ocsdom.lan","DIEGOA","DIENZWE17" );
 		
+		String username = genericConnectionParam.getUser();
+		String password = genericConnectionParam.getPassword();
+		
+		String host = genericConnectionParam.getHost();
+		YesNo secure = genericConnectionParam.isSecure();
+		
 		if(StringUtils.isNullOrEmpty(username) && StringUtils.isNullOrEmpty(password)) {
-			
 			as400 = new AS400();
-			
-		}
-		else if (!StringUtils.isNullOrEmpty(username) && !StringUtils.isNullOrEmpty(password) && Optional.ofNullable(DbConstants.SECURE_CONNECTION).filter(YesNo.YES::equals).isPresent()) {
-			as400 = new SecureAS400(DbConstants.DB_HOST,username,password );
+		} else if (!StringUtils.isNullOrEmpty(username) && !StringUtils.isNullOrEmpty(password) && YesNo.YES.equals(secure)) {
+			as400 = new SecureAS400(host,username,password.toCharArray());
 			//as400 = new SecureAS400("as400prod.ocsdom.lan","DIEGOA","DIENZWE21" );
 		}
 		else {
 			logger.info("Utilizzo dell'utente " + username + " per lancio del flusso");
 			//as400 = new AS400(Constants.LOCALHOST, username, password);
-			as400 = new AS400(DbConstants.DB_HOST, username, password);
+			as400 = new AS400(host, username, password.toCharArray());
 		}
 		
-
+		String jobdName = genericConnectionParam.getJobd();
+		String library = genericConnectionParam.getJobdLibrary();
+		
 		if (StringUtils.isNullOrEmpty(jobdName)) {
 			busy = false;
 			return;
@@ -126,11 +125,8 @@ public class CallAs400 {
 		for (String lib : jobd.getInitialLibraryList()) {
 			librariessb.append((librariessb.length() == 0 ? "" : Constants.SPACE) + lib);
 		}
-		String curlib = JdbcConnection.getCurrentLibrary();
-		
-		if (!StringUtils.isNullOrEmpty(DbConstants.GF_CURLIB)) {
-			curlib = DbConstants.GF_CURLIB;
-		}
+		String curlib = StringUtils.isNullOrEmpty(genericConnectionParam.getCurlib()) ? 
+								genericConnectionParam.getCurlib() : JdbcConnection.getCurrentLibrary(genericConnectionParam);
 
 		CommandCall commandCall = new CommandCall(as400);
 

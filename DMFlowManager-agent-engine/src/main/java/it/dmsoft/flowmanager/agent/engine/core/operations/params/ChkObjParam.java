@@ -1,8 +1,9 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 
-public class ChkObjParam extends GenericAS400Param {
+public class ChkObjParam extends GenericConnectionParams {
 
 	private String obj;
 	private String libreria;
@@ -52,7 +53,7 @@ public class ChkObjParam extends GenericAS400Param {
 
 	@Override
 	public String toString() {
-		return super.toString() + "\n ChkObjParam [obj=" + obj + ", libreria=" + libreria + ", objType=" + objType + ", mbr=" + mbr + ", aut="
+		return "ChkObjParam [obj=" + obj + ", libreria=" + libreria + ", objType=" + objType + ", mbr=" + mbr + ", aut="
 				+ aut + "]";
 	}
 

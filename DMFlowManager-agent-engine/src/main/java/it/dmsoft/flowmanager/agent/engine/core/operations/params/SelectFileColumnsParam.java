@@ -1,10 +1,13 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class SelectFileColumnsParam extends GenericAS400Param {
+import it.dmsoft.flowmanager.common.domain.Domains.DbType;
+
+public class SelectFileColumnsParam extends GenericConnectionParams {
 
 	private String pgmLibrary;
 	private String targetSchema;
 	private String targetTable;
+	private String schema;
 
 	public String getPgmLibrary() {
 		return pgmLibrary;
@@ -31,13 +34,18 @@ public class SelectFileColumnsParam extends GenericAS400Param {
 		this.targetTable = targetTable;
 	}
 
+	public String getSchema() {
+		return schema;
+	}
+
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
 	@Override
 	public String toString() {
 		return "SelectFileColumnsParam [pgmLibrary=" + pgmLibrary + ", targetSchema=" + targetSchema + ", targetTable="
-				+ targetTable + "]";
+				+ targetTable + ", schema=" + schema + "]";
 	}
 
-
-	
-	
 }

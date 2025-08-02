@@ -48,14 +48,14 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 		List<SpoolFile> spoolFiles = new ArrayList<SpoolFile>();
 		List<String> taskFileNames = new ArrayList<>();
 		
-		if(YesNo.YES.equals(parameters.getOperationParams().getLegacyModernization())) {
+		if(!YesNo.YES.equals(parameters.isIBMi())) {
 			//leggi il file degli spool con il codice lavoro e popola array file
 			Connection conn = null;
-			String queryString = "SELECT PDF_PATH, PDF_NAME FROM "+ DbConstants.SCHEMA + "ASMFFPDFDATA " +
+			String queryString = "SELECT PDF_PATH, PDF_NAME FROM "+ parameters.getSchema() + "ASMFFPDFDATA " +
 								 "where PDF_JOB_NAME = ? and PDF_JOB_USER = ? and PDF_JOB_NBR = ? " ;
 			logger.debug("query to be executed: " + queryString );
 			
-			conn = DBTypeEnum.fromString(DbConstants.DB_TYPE).getConnection(); 
+			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
 			
 			PreparedStatement ps = conn.prepareStatement(queryString);
 			ps.setString(1, parameters.getOperationParams().getExternalJob());
@@ -80,7 +80,7 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 			if (!StringUtils.isNullOrEmpty(parameters.getOperationParams().getExternalTask())) {
 				
 				logger.info("Start filter using OTGFFTSKID!");
-				String taskQuery = "SELECT OTGFTSK_FILE_NAME FROM " + DbConstants.SCHEMA + "OTGFFTSKID WHERE OTGFTSK_TASK_ID = ?";
+				String taskQuery = "SELECT OTGFTSK_FILE_NAME FROM " + parameters.getSchema() + "OTGFFTSKID WHERE OTGFTSK_TASK_ID = ?";
                 PreparedStatement taskPs = conn.prepareStatement(taskQuery);
                 taskPs.setString(1, parameters.getOperationParams().getExternalTask());
                 ResultSet taskRs = taskPs.executeQuery();

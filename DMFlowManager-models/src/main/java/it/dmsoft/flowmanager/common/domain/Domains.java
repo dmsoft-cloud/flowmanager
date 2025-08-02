@@ -36,6 +36,13 @@ public static final String Y = "S";
 			return CodeEnum.getCodeEnum(YesNo.class, code);
 		}
 		
+		public static YesNo getYesNo(Boolean bool) {
+			if (bool == null)
+					return null;
+
+			return bool ? YesNo.YES : YesNo.NO;
+		}
+		
 		
 	}
 	

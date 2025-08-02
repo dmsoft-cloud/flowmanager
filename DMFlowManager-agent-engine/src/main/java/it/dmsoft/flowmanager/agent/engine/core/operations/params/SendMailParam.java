@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import it.dmsoft.flowmanager.agent.engine.mailclient.utility.Allegato;
 
-public class SendMailParam extends GenericAS400Param{
+public class SendMailParam /*extends GenericConnectionParams*/{
 
 	private String pgmLibrary;
 	private String hostName;

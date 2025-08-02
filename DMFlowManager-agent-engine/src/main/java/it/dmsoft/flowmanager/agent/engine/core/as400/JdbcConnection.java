@@ -13,7 +13,7 @@ import com.ibm.as400.access.Job;
 import com.ibm.as400.access.ObjectDoesNotExistException;
 import com.ibm.as400.access.SecureAS400;
 
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericAS400Param;
+import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -28,9 +28,9 @@ public class JdbcConnection {
 	
 	private static String currentLibrary;
 	
-	public static Connection get() throws Exception {
+	public static Connection get(GenericConnectionParams genericConnectionParams) throws Exception {
 		if (conn == null) {
-			initialize();
+			initialize(genericConnectionParams);
 		}
 		
 		return conn;
@@ -50,28 +50,20 @@ public class JdbcConnection {
 		}
 	}
 	
-	public static String getCurrentLibrary() throws Exception {
+	public static String getCurrentLibrary(GenericConnectionParams genericConnectionParams) throws Exception {
 		if (conn == null) {
-			initialize();
+			initialize(genericConnectionParams);
 		}
 		
 		return currentLibrary;
 	}
 	
-	private static GenericAS400Param getGenericAS400Param() throws Exception {
-		GenericAS400Param genericAS400Param = new GenericAS400Param();
-		genericAS400Param.setUser(PropertiesUtils.get(Constants.USER));
-		genericAS400Param.setPassword(PropertiesUtils.get(Constants.PASSWORD, false));
-		
-		return genericAS400Param;
-	}
-	
-	private static void initialize() throws Exception {
+	private static void initialize(GenericConnectionParams genericConnectionParams) throws Exception {
 		AS400JDBCDriver a = new AS400JDBCDriver();
 		logger.info("driver -> " + a);
 		//AS400 as400 = new AS400();
 		
-		as400 = CallAs400.get(getGenericAS400Param()).getAs400();
+		as400 = CallAs400.get(genericConnectionParams).getAs400();
 		logger.info("as -> " + as400);			
 		try {
 			AS400JDBCConnection conn = (AS400JDBCConnection) a.connect(as400);		

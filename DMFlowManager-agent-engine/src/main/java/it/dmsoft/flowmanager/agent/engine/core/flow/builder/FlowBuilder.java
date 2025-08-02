@@ -13,9 +13,11 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.Flow;
+import it.dmsoft.flowmanager.agent.engine.core.mapper.DbConversionParamMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkDbFileEmpty;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkObj;
@@ -34,7 +36,6 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.FtpSend;
 import it.dmsoft.flowmanager.agent.engine.core.operations.InteractiveCommandCall;
 import it.dmsoft.flowmanager.agent.engine.core.operations.InteractiveProgramCall;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ReadFileNames;
-import it.dmsoft.flowmanager.agent.engine.core.operations.ReadOtgffempa;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ReadSpoolFiles;
 import it.dmsoft.flowmanager.agent.engine.core.operations.SendMail;
 import it.dmsoft.flowmanager.agent.engine.core.operations.SftpReceiver;
@@ -54,7 +55,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFilePar
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DbConversionParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DelayIntegrityCheckParams;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DeleteFileParam;
-import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericAS400Param;
+import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.InteractiveCommandCallParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.InteractiveProgramCallParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
@@ -71,7 +72,6 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.remote.Table2File;
 import it.dmsoft.flowmanager.agent.engine.core.operations.remote.Table2FileFixed;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.ConfigUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowIdNumeratorUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
@@ -82,14 +82,14 @@ import it.dmsoft.flowmanager.agent.engine.mailclient.utility.Allegato;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
 import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.entities.MailParms;
 import it.dmsoft.flowmanager.be.entities.Recipient;
 import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
-import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.common.model.EmailParmsData;
+import it.dmsoft.flowmanager.common.model.OriginData;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -98,13 +98,19 @@ public class FlowBuilder {
 
 	protected Flow flow;
 	
+	protected static FlowBuilder instance;
+	
 	@PersistenceContext
     protected EntityManager entityManager;
 	
 	protected EmailRepository emailRepository;
+	
+	@Autowired
+	protected DbConversionParamMapper dbConversionParamMapper;
 
 	public FlowBuilder() {
 		this.flow = new Flow();
+		FlowBuilder.instance = this;
 	}
 
 	public Flow build() {
@@ -120,7 +126,7 @@ public class FlowBuilder {
 		String fileName = operationParams.getFileNames().get(0);
 		readNameFilesParams.setFileName(fileName);
 		readNameFilesParams.setDefaultShell(PropertiesUtils.get(PropertiesConstants.DEFAULT_SHELL));
-		
+
 		
 		String folder = executionFlowData.getFlowFolder();
 		readNameFilesParams.setFolder(folder);
@@ -131,7 +137,7 @@ public class FlowBuilder {
 		readNameFilesParams.setOperationParams(operationParams);
 		readNameFilesParams.setLaunchErrorIfNoFileFound(YesNo.YES.equals(executionFlowData.getFlowEsistenzaFile()));
 		
-		updateGenericAs400(executionFlowData, readNameFilesParams);
+		updateGenericConnectionParams(executionFlowData, readNameFilesParams);
 
 		readNameFiles.setParameters(readNameFilesParams);
 
@@ -151,9 +157,14 @@ public class FlowBuilder {
 		String folder = executionFlowData.getFlowFolder();
 		readSpoolFilesParams.setFolder(folder);
 		
+		OriginData origin = executionFlowData.getOrigin();
+		readSpoolFilesParams.setDbType(origin.getDbType());
+		readSpoolFilesParams.setIBMi(operationParams.isIBMi());
+		readSpoolFilesParams.setSchema(executionFlowData.getFlowLibreria());
+		
 		readSpoolFilesParams.setOperationParams(operationParams);
 		
-		updateGenericAs400(executionFlowData, readSpoolFilesParams);
+		updateGenericConnectionParams(executionFlowData, readSpoolFilesParams);
 
 		readSpoolFiles.setParameters(readSpoolFilesParams);
 
@@ -169,7 +180,7 @@ public class FlowBuilder {
 		SubmitJobParam submitJobParams = new SubmitJobParam();
 
 		submitJobParams.setCommand(executionFlowData.getFlowPgmControllo());
-		updateGenericAs400(executionFlowData, submitJobParams);
+		updateGenericConnectionParams(executionFlowData, submitJobParams);
 
 		submitJob.setParameters(submitJobParams);
 
@@ -185,7 +196,7 @@ public class FlowBuilder {
 		InteractiveCommandCallParam intCmdParams = new InteractiveCommandCallParam();
 
 		intCmdParams.setCommand(executionFlowData.getFlowInteractiveCommand());
-		updateGenericAs400(executionFlowData, intCmdParams);
+		updateGenericConnectionParams(executionFlowData, intCmdParams);
 
 		intCmd.setParameters(intCmdParams);
 
@@ -202,7 +213,7 @@ public class FlowBuilder {
 
 		intPgmParams.setPgm(executionFlowData.getFlowInteractiveProgram());
 		intPgmParams.setResult(executionFlowData.getFlowInteractiveResult());
-		updateGenericAs400(executionFlowData, intPgmParams);
+		updateGenericConnectionParams(executionFlowData, intPgmParams);
 
 		intPgm.setParameters(intPgmParams);
 
@@ -226,7 +237,7 @@ public class FlowBuilder {
 		}
 		
 		Operation<SendMailParam> sendMail = new SendMail();
-		Operation<SendMailParam> readOtgffempa = new ReadOtgffempa();
+		//Operation<SendMailParam> readOtgffempa = new ReadOtgffempa();
 
 		ArrayList<String> tos = new ArrayList<String>();
 		ArrayList<String> ccs = new ArrayList<String>();
@@ -235,7 +246,7 @@ public class FlowBuilder {
 		
 		SendMailParam sendMailParam = new SendMailParam();
 
-		updateGenericAs400(executionFlowData, sendMailParam);
+		//updateGenericAs400(executionFlowData, sendMailParam);
 
 		Email mail = null;
 
@@ -283,7 +294,7 @@ public class FlowBuilder {
 		sendMailParam.setHostName("");
 		sendMailParam.setPort(BigDecimal.ZERO);
 		//sendMailParam.setSmtpUsername(operationParams.getMailAccount());
-		sendMailParam.setFrom(operationParams.getMailAccount());
+		//sendMailParam.setFrom(operationParams.getMailAccount());
 		sendMailParam.setTos(tos);
 		sendMailParam.setCcs(ccs);
 		sendMailParam.setBccs(bccs);
@@ -296,22 +307,27 @@ public class FlowBuilder {
 		
 		sendMailParam.setPgmLibrary(PropertiesUtils.get(Constants.PGM_LIBRARY_KEY));
 		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(YesNo.YES::equals).isPresent()) {
-		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {	
-			MailParms mp = ConfigUtils.getMailConfig();
-			sendMailParam.setSmtpUsername(mp.getSmtpUser());
-			sendMailParam.setSmtpPassword(mp.getSmtpPassword());
-			
-			sendMailParam.setPort(Optional.ofNullable(mp.getSmtpPort()).orElse(BigDecimal.valueOf(25)));
-			sendMailParam.setHostName(mp.getSmtpHost());
-			sendMailParam.setSecure(Optional.ofNullable(mp.getSmtpSecure()).orElse(YesNo.NO).getBool());
+		
+		EmailParmsData mailParms = executionFlowData.getMailParms();
+		sendMailParam.setSmtpUsername(mailParms.getSmtpUser());
+		sendMailParam.setFrom(mailParms.getSmtpUser());
+		sendMailParam.setSmtpPassword(mailParms.getSmtpPassword());
+		
+		BigDecimal smtpPort = mailParms.getSmtpPort();
+		if(smtpPort == null) {
+			smtpPort = BigDecimal.valueOf(YesNo.YES.equals(mailParms.getSmtpSecure()) ? 465 : 25);
 		}
 		
+		sendMailParam.setPort(smtpPort);
+		sendMailParam.setHostName(mailParms.getSmtpHost());
+		sendMailParam.setSecure(Optional.ofNullable(mailParms.getSmtpSecure()).orElse(YesNo.NO).getBool());
+		
 		sendMail.setParameters(sendMailParam);
-		readOtgffempa.setParameters(sendMailParam);
+		//readOtgffempa.setParameters(sendMailParam);
 		
 		List<Operation<?>> retList = new ArrayList<Operation<?>>();
 		//if(!Optional.ofNullable(operationParams.getLegacyModernization()).filter(YesNo.YES::equals).isPresent()) retList.add(readOtgffempa);
-		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) retList.add(readOtgffempa);
+		//if(!YesNo.YES.equals(operationParams.isIBMi())) retList.add(readOtgffempa);
 		
 		retList.add(sendMail);
 		
@@ -343,18 +359,23 @@ public class FlowBuilder {
 
 		return this;
 	}
+	
+	protected static DbConversionParam updateOriginParam(ExecutionFlowData executionFlowData) {
+		return FlowBuilder.instance.dbConversionParamMapper.convert(executionFlowData.getOrigin());
+	}
 
-	protected static void updateGenericAs400(ExecutionFlowData executionFlowData, GenericAS400Param genericAS400Param) {
+	protected static void updateGenericConnectionParams(ExecutionFlowData executionFlowData, GenericConnectionParams genericAS400Param) {
+		OriginData origin = executionFlowData.getOrigin();
 		genericAS400Param.setJobd(executionFlowData.getFlowJobDesc());
 		genericAS400Param.setJobdLibrary(executionFlowData.getFlowLibJobDesc());
-		try {
-			genericAS400Param.setUser(PropertiesUtils.get(Constants.USER));
-			genericAS400Param.setPassword(PropertiesUtils.get(Constants.PASSWORD));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		genericAS400Param.setHost(origin.getHost());
+		genericAS400Param.setPort(origin.getPort());
+		genericAS400Param.setUser(origin.getUser());
+		genericAS400Param.setPassword(origin.getPassword());
+		genericAS400Param.setCurlib(executionFlowData.getFlowLibreria());
+		genericAS400Param.setSecure(origin.getSecure());
+		genericAS400Param.setJdbcCustomString(origin.getJdbcCustomString());
+		genericAS400Param.setDbType(origin.getDbType());
 	}
 
 	public FlowBuilder createBackup(ExecutionFlowData executionFlowData, OperationParams operationParams) {
@@ -393,7 +414,7 @@ public class FlowBuilder {
 			operationParams.setLibrary(Constants.QTEMP);
 		}
 		
-		if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+		if(!YesNo.YES.equals(operationParams.isIBMi())) {
 			operationParams.setLibrary(executionFlowData.getFlowLibreria());
 		}
 		
@@ -533,7 +554,7 @@ public class FlowBuilder {
 			@Override
 			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				DependentOperation<DbConversionParam> file2Db ;
-				if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+				if (!YesNo.YES.equals(operationParams.isIBMi())) {
 					file2Db = ConversionOperation.CSV.equals(conversionOperation) ? new File2Table() : new File2TableFixed();
 					
 				} else {
@@ -559,7 +580,7 @@ public class FlowBuilder {
 				
 
 				ConstraintDependentOperation<DbConversionParam, Boolean> db2File;
-				if (StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+				if (YesNo.YES.equals(operationParams.isIBMi())) {
 					db2File = ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato()) ? new Table2FileFixed() : new Table2File();
 					
 				} else {
@@ -604,16 +625,15 @@ public class FlowBuilder {
 				CreateDbFileParam createDbFileParam = getCreateDbFileParam(executionFlowData, operationParams);
 				
 				Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
-				if (!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
-							createDbFileParam.setLibreria(DbConstants.SCHEMA);
-				} else {
-							createDbFileParam.setLibreria(Constants.QTEMP);
-				}	
-
+				
+				DbConversionParam dbConversionParam = updateOriginParam(executionFlowData);
+				
+				createDbFileParam.setLibreria( 
+						YesNo.YES.equals(operationParams.isIBMi()) ? executionFlowData.getFlowLibreria() : Constants.QTEMP);
+				
 				crtDbFile.setParameters(createDbFileParam);
 
-				DbConversionParam dbConversionParam = new DbConversionParam();
-				updateGenericAs400(executionFlowData, dbConversionParam);
+				updateGenericConnectionParams(executionFlowData, dbConversionParam);
 				dbConversionParam.setLibrary(StringUtils.setDefault(operationParams.getLibrary(), Constants.LIBL));
 				dbConversionParam.setFile(executionFlowData.getFlowFile());
 				dbConversionParam.setMember(executionFlowData.getFlowMembro());
@@ -644,7 +664,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-						&& !StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+						&& !YesNo.YES.equals(operationParams.isIBMi())) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -660,7 +680,7 @@ public class FlowBuilder {
 				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
 				List<Operation<?>> ret = new ArrayList<Operation<?>>();
 				
-				if(!Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
+				if(!Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!YesNo.YES.equals(operationParams.isIBMi()))
 				{
 					ret.add(crtDbFile);
 				}
@@ -675,12 +695,12 @@ public class FlowBuilder {
 			@Override
 			public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 
-				DbConversionParam dbConversionParam = new DbConversionParam();
-				updateGenericAs400(executionFlowData, dbConversionParam);
+				DbConversionParam dbConversionParam = updateOriginParam(executionFlowData);
+				updateGenericConnectionParams(executionFlowData, dbConversionParam);
 
 				dbConversionParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 				//se è remote allora la libreria non è qtemp ma lo schema principale se non è specificata nelle proprerties una libreria temporanea
-				if(!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {				
+				if(!YesNo.YES.equals(operationParams.isIBMi())) {				
 					dbConversionParam.setLibrary(executionFlowData.getFlowLibreria());
 				}
 								
@@ -715,7 +735,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-							&& !StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+							&& !YesNo.YES.equals(operationParams.isIBMi())) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -734,7 +754,7 @@ public class FlowBuilder {
 				
 				CopyFileParam copyFileParam= new CopyFileParam();
 				
-				updateGenericAs400(executionFlowData, copyFileParam);
+				updateGenericConnectionParams(executionFlowData, copyFileParam);
 				
 				copyFileParam.setMbrOpt(executionFlowData.getFlowModAcquisizione());
 				
@@ -744,7 +764,7 @@ public class FlowBuilder {
 				copyFile.setParameters(copyFileParam);
 				
 				//se non è remote creo il file temporaneo con crtpf e poi lo popolerò con cpyf
-				if(!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {				
+				if(!!YesNo.YES.equals(operationParams.isIBMi())) {				
 					ret.add(getCreateDbFile(executionFlowData, createDbFileParam));
 				}
 				
@@ -757,13 +777,13 @@ public class FlowBuilder {
 					copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
 					
 					ret.add(ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
-					if (!!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST))
+					if (YesNo.YES.equals(operationParams.isIBMi()))
 							ret.add(copyFile);
 				} else if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
 					copyFileParam.setFromLibrary(executionFlowData.getFlowLibreria());					
 					copyFileParam.setToLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					
-					if(!operationParams.getSkipCpyFrmFile() && !!StringUtils.isNullOrEmpty(DbConstants.REMOTE_HOST)) {
+					if(!operationParams.getSkipCpyFrmFile() && YesNo.YES.equals(operationParams.isIBMi())) {
 						ret.add(copyFile);
 					}
 					
@@ -773,7 +793,7 @@ public class FlowBuilder {
 				return ret;
 
 			}
-			
+
 		};
 
 		public abstract List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
@@ -1077,7 +1097,7 @@ public class FlowBuilder {
 	
 	private static Operation<CreateDbFileParam> getCreateDbFile(ExecutionFlowData executionFlowData, CreateDbFileParam createDbFileParam) {
 		Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
-		updateGenericAs400(executionFlowData, createDbFileParam);
+		updateGenericConnectionParams(executionFlowData, createDbFileParam);
 		crtDbFile.setParameters(createDbFileParam);		
 		return crtDbFile;
 	}
@@ -1091,7 +1111,7 @@ public class FlowBuilder {
 	protected static CreateDbFileParam getCreateDbFileParam(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		CreateDbFileParam createDbFileParam = new CreateDbFileParam();
 
-		updateGenericAs400(executionFlowData, createDbFileParam);
+		updateGenericConnectionParams(executionFlowData, createDbFileParam);
 		createDbFileParam.setFile(executionFlowData.getFlowFile());
 		createDbFileParam.setLibreria(StringUtils.setDefault(operationParams.getLibrary(), executionFlowData.getFlowLibreria()));
 		createDbFileParam.setSrcFile(executionFlowData.getFlowFileSource());
@@ -1124,7 +1144,7 @@ public class FlowBuilder {
 					BigDecimal.ZERO.compareTo(executionFlowData.getFlowDelaySemaforo()) != 0) {
 			
 			DelayIntegrityCheckParams delayParams = new DelayIntegrityCheckParams();
-			updateGenericAs400(executionFlowData, delayParams);
+			updateGenericConnectionParams(executionFlowData, delayParams);
 			delayParams.setDelaySecond(executionFlowData.getFlowDelaySemaforo());
 			Operation<DelayIntegrityCheckParams> dleayOperation = new DelayIntegrityCheck();
 			dleayOperation.setParameters(delayParams);
@@ -1369,10 +1389,11 @@ public class FlowBuilder {
 	
 	public FlowBuilder checkDb2Obj(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkObjParam chkObjParam = new ChkObjParam();
-		updateGenericAs400(executionFlowData, chkObjParam);
+		updateGenericConnectionParams(executionFlowData, chkObjParam);
 		chkObjParam.setObj(executionFlowData.getFlowFile());
 		chkObjParam.setLibreria(executionFlowData.getFlowLibreria());
 		chkObjParam.setMbr(executionFlowData.getFlowMembro());
+		chkObjParam.setDbType(executionFlowData.getOrigin().getDbType());
 		
 		DependentOperation<ChkObjParam> chOperation = new ChkObj();
 		chOperation.setParameters(chkObjParam);
@@ -1387,9 +1408,10 @@ public class FlowBuilder {
 	public FlowBuilder checkDbFileEmpty(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkDbFileEmptyParam chkDbFileEmptyParam = new ChkDbFileEmptyParam();
 		
-		updateGenericAs400(executionFlowData, chkDbFileEmptyParam);
+		updateGenericConnectionParams(executionFlowData, chkDbFileEmptyParam);
 		chkDbFileEmptyParam.setFile(executionFlowData.getFlowFile());
 		chkDbFileEmptyParam.setLibreria(executionFlowData.getFlowLibreria());
+		chkDbFileEmptyParam.setDbType(executionFlowData.getOrigin().getDbType());
 		
 		Operation<ChkDbFileEmptyParam> chOperation = new ChkDbFileEmpty();
 		chOperation.setParameters(chkDbFileEmptyParam);

@@ -4,9 +4,10 @@ import java.math.BigDecimal;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Value;
 
 import it.dmsoft.flowmanager.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.be.entities.MailParms;
+import it.dmsoft.flowmanager.be.entities.EmailParms;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
@@ -16,6 +17,9 @@ public class ConfigUtils {
 	
 	private static FlowConfig config;
 	Logger logger = null;
+	
+	@Value("${flowmanager.agent.properties.logPath}")
+	private String logPath;
 	
 	public static FlowConfig setConfig(String param) throws Exception {
 
@@ -31,7 +35,8 @@ public class ConfigUtils {
 	        config.setLogSizeMB((String)data.get(Constants.CONF_LOG_SIZE));
 	        config.setLogRotation((String)data.get(Constants.CONF_LOG_ROTATION));
 	        config.setBackupPath((String)data.get(Constants.CONF_BACKUP_PATH));
-	        config.setMailFrom((String)data.get(Constants.CONF_MAIL_FROM));
+	        
+	        //config.setMailFrom((String)data.get(Constants.CONF_MAIL_FROM));
 	        config.setCliente((String)data.get(Constants.CONF_CUSTOMER));
 	        
 	        config.setExecutionDateStr((String)data.get(Constants.CONF_EXECUTION_DATE));
@@ -47,9 +52,11 @@ public class ConfigUtils {
 		return config;
 	}
 	
-	public static MailParms getMailConfig() throws Exception {
+	/*
+	@Deprecated
+	public static EmailParms getMailConfig() throws Exception {
 		
-		MailParms mp = new MailParms();
+		EmailParms mp = new EmailParms();
 		mp.setSmtpHost(PropertiesUtils.get(PropertiesConstants.SMTP_HOST));
 		mp.setSmtpPort(new BigDecimal(PropertiesUtils.get(PropertiesConstants.SMTP_PORT)));
 		mp.setSmtpUser(PropertiesUtils.get(PropertiesConstants.SMTP_USER));
@@ -57,7 +64,7 @@ public class ConfigUtils {
 		mp.setSmtpSecure(YesNo.getYesNo(PropertiesUtils.get(PropertiesConstants.SMTP_SECURE)));
 		return mp ;
 	}
-	
+	*/
 
 }
 

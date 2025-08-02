@@ -71,9 +71,9 @@ public class OutboundFlowManager extends FlowManager {
 		handleOuputFileNames(outboundFlowBuilder, executionFlowData, operationParams);
 			
 		if(YesNo.YES.equals(executionFlowData.getFlowCreaVuoto()) ) {
-			if(Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && !YesNo.YES.equals(operationParams.getLegacyModernization())) {
+			if(Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && YesNo.YES.equals(operationParams.isIBMi())) {
 				outboundFlowBuilder.crtDb2FileIfNotExist(executionFlowData, operationParams);
-			} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && YesNo.YES.equals(operationParams.getLegacyModernization())) {
+			} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && !YesNo.YES.equals(operationParams.isIBMi())) {
 				System.out.println("impossibile creare db vuoto in questa modalità");
 			}
 			else {

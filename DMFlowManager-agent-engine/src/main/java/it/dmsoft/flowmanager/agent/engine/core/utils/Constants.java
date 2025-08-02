@@ -243,9 +243,9 @@ public class Constants {
 	
 	public static final String CFT_CL_PGM = "cftPgm";
 
-	public static final BigDecimal DEFAULT_FTP_PORT = BigDecimal.valueOf(21);
+	public static final Integer DEFAULT_FTP_PORT = 21;
 
-	public static final BigDecimal DEFAULT_SFTP_PORT = BigDecimal.valueOf(22);
+	public static final Integer DEFAULT_SFTP_PORT = 22;
 	
 	
 	//

@@ -59,7 +59,7 @@ public class InboundFlowBuilder extends FlowBuilder{
 		
 		CopyFileParam copyFileParam= new CopyFileParam();
 		
-		updateGenericAs400(executionFlowData, copyFileParam);
+		updateGenericConnectionParams(executionFlowData, copyFileParam);
 		copyFileParam.setFromLibrary(Constants.QTEMP);
 		copyFileParam.setFromFile(executionFlowData.getFlowFile());
 		copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
@@ -78,7 +78,7 @@ public class InboundFlowBuilder extends FlowBuilder{
 	public FlowBuilder checkIfsFileEmpty(ExecutionFlowData executionFlowData, OperationParams operationParams) {
 		ChkIfsFileEmptyParam chkIfsFileEmptyParam = new ChkIfsFileEmptyParam();	
 		
-		updateGenericAs400(executionFlowData, chkIfsFileEmptyParam);
+		updateGenericConnectionParams(executionFlowData, chkIfsFileEmptyParam);
 		
 		List<String> checkedFiles = new ArrayList<String>();
 

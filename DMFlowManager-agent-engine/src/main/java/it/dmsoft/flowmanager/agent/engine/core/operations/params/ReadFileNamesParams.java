@@ -1,6 +1,8 @@
 package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
-public class ReadFileNamesParams extends GenericAS400Param {
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+
+public class ReadFileNamesParams extends GenericConnectionParams {
 
 	private String folder;
 	private String listFileFolder;
@@ -72,8 +74,5 @@ public class ReadFileNamesParams extends GenericAS400Param {
 				+ ", fileName=" + fileName + ", defaultShell=" + defaultShell + ", operationParams=" + operationParams
 				+ ", launchErrorIfNoFileFound=" + launchErrorIfNoFileFound + "]";
 	}
-
-	
-
 
 }

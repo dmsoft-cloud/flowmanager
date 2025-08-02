@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.agent.engine.core.operations.params;
 
 import java.util.List;
 
-public class ChkIfsFileEmptyParam extends GenericAS400Param {
+public class ChkIfsFileEmptyParam extends GenericConnectionParams {
 
 	private List<String> checkedFiles;
 

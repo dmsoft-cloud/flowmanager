@@ -10,7 +10,7 @@ public class FlowConfig {
 	private String logSizeMB ;
 	private String logRotation;
 	private String backupPath;
-	private String mailFrom;
+	//private String mailFrom;
 	private String cliente ;
 	private String executionDateStr;
 	private YesNo legacyModernization;
@@ -19,6 +19,7 @@ public class FlowConfig {
 	private String extNumber;
 	private String extTask;
 	private String masterdataOverrides;
+	private YesNo IBMi;
 	
 	public String getTransactionName() {
 		return transactionName;
@@ -62,12 +63,16 @@ public class FlowConfig {
 	public void setBackupPath(String backupPath) {
 		this.backupPath = backupPath;
 	}
+	
+	/*
 	public String getMailFrom() {
 		return mailFrom;
 	}
 	public void setMailFrom(String mailFrom) {
 		this.mailFrom = mailFrom;
 	}
+	*/
+	
 	public String getCliente() {
 		return cliente;
 	}
@@ -118,16 +123,20 @@ public class FlowConfig {
 	public void setExtTask(String extTask) {
 		this.extTask = extTask;
 	}
+	public YesNo isIBMi() {
+		return IBMi;
+	}
+	public void setIBMi(YesNo iBMi) {
+		IBMi = iBMi;
+	}
 	@Override
 	public String toString() {
-		return "ConfigDto [transactionName=" + transactionName + ", transactionId=" + transactionId + ", logPath="
+		return "FlowConfig [transactionName=" + transactionName + ", transactionId=" + transactionId + ", logPath="
 				+ logPath + ", logLevel=" + logLevel + ", logSizeMB=" + logSizeMB + ", logRotation=" + logRotation
-				+ ", backupPath=" + backupPath + ", mailFrom=" + mailFrom + ", cliente=" + cliente
-				+ ", executionDateStr=" + executionDateStr + ", legacyModernization=" + legacyModernization
-				+ ", extJob=" + extJob + ", extUser=" + extUser + ", extNumber=" + extNumber + ", extTask=" + extTask
-				+ ", masterdataOverrides=" + masterdataOverrides + "]";
+				+ ", backupPath=" + backupPath + ", cliente=" + cliente + ", executionDateStr=" + executionDateStr
+				+ ", legacyModernization=" + legacyModernization + ", extJob=" + extJob + ", extUser=" + extUser
+				+ ", extNumber=" + extNumber + ", extTask=" + extTask + ", masterdataOverrides=" + masterdataOverrides
+				+ ", IBMi=" + IBMi + "]";
 	}
-	
-	
-	
+
 }
