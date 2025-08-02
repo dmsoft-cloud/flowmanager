@@ -59,7 +59,7 @@ public class SelectFileColumns extends ConstraintDependentOperation<SelectFileCo
         try {
 
         	Connection conn = null;
-    		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
+    		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema());
     		
         	executeQryInsertNewColumns(conn);
         	executeQryRemoveColumns(conn);

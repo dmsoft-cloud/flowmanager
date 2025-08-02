@@ -49,6 +49,8 @@ public class DbConversionParam extends GenericConnectionParams{
 	
 	private List<String> downloadedFiles;
 	
+	private String schema;
+	
 	public String getId() {
 		return id;
 	}
@@ -218,6 +220,14 @@ public class DbConversionParam extends GenericConnectionParams{
 		this.downloadedFiles = downloadedFiles;
 	}
 
+	public String getSchema() {
+		return schema;
+	}
+
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
 	@Override
 	public String toString() {
 		return "DbConversionParam [id=" + id + ", library=" + library + ", file=" + file + ", member=" + member
@@ -227,7 +237,7 @@ public class DbConversionParam extends GenericConnectionParams{
 				+ ", fromCcsid=" + fromCcsid + ", columnName=" + columnName + ", decimalPointer=" + decimalPointer
 				+ ", tabexpn=" + tabexpn + ", fieldFilling=" + fieldFilling + ", replaceNullVal=" + replaceNullVal
 				+ ", removeColName=" + removeColName + ", internazDelimiter=" + internazDelimiter + ", downloadedFiles="
-				+ downloadedFiles + "]";
+				+ downloadedFiles + ", schema=" + schema + "]";
 	}
 
 }

@@ -653,6 +653,7 @@ public class FlowBuilder {
 				dbConversionParam.setFieldFilling(executionFlowData.getFlowRiempCampo());
 				dbConversionParam.setReplaceNullVal(executionFlowData.getFlowSostValNull());
 				dbConversionParam.setRemoveColName(executionFlowData.getFlowElimNomCol());
+				dbConversionParam.setSchema(executionFlowData.getFlowLibreria());
 				
 				//Controllo CSV format IT
 				String csvFormat = PropertiesUtils.get(Constants.CSV_FORMAT);
@@ -722,6 +723,7 @@ public class FlowBuilder {
 				dbConversionParam.setFieldFilling(executionFlowData.getFlowRiempCampo());
 				dbConversionParam.setReplaceNullVal(executionFlowData.getFlowSostValNull());
 				dbConversionParam.setRemoveColName(executionFlowData.getFlowElimNomCol());
+				dbConversionParam.setSchema(executionFlowData.getFlowLibreria());
 				
 				if(Constants.FIXED.equals(executionFlowData.getFlowDelimRecord())) {
 					dbConversionParam.setTabexpn(Constants.NO_AS400);

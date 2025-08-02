@@ -43,7 +43,7 @@ public class Table2FileFixed extends ConstraintDependentOperation<DbConversionPa
 		
 		//qualora sia stato creato il file temporaneo di export lo devo cancellare
 		
-		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema());
 		StringBuilder sb = new StringBuilder();
 		
 		if(!StringUtils.isNullOrEmpty(operationParams.getExportTempTable())) {

@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkDbFileEmptyParam;
@@ -34,7 +33,7 @@ public class ChkDbFileEmpty extends Operation<ChkDbFileEmptyParam>{
 		
 		logger.debug("Count Query :  " + query);
 		
-		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getLibreria()); 
 
 		PreparedStatement ps = conn.prepareStatement(query);
 		ResultSet rs = ps.executeQuery();

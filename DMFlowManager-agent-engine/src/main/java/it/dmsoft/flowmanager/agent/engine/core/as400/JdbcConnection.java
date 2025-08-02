@@ -18,6 +18,7 @@ import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 
+@Deprecated
 public class JdbcConnection {
 	
 	private static final Logger logger = Logger.getLogger(JdbcConnection.class.getName());

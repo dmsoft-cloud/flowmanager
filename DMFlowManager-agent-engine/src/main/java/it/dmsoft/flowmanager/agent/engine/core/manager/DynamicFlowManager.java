@@ -164,9 +164,9 @@ public class DynamicFlowManager {
 			}
 			System.exit(1);
 
-		} finally {
+		} /*finally {
 			JdbcConnection.close();
-		}
+		}*/
 
 
 	}

@@ -6,14 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ReadSpoolFilesParams;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
@@ -55,7 +52,7 @@ public class ReadSpoolFiles extends Operation<ReadSpoolFilesParams> {
 								 "where PDF_JOB_NAME = ? and PDF_JOB_USER = ? and PDF_JOB_NBR = ? " ;
 			logger.debug("query to be executed: " + queryString );
 			
-			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
+			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema()); 
 			
 			PreparedStatement ps = conn.prepareStatement(queryString);
 			ps.setString(1, parameters.getOperationParams().getExternalJob());

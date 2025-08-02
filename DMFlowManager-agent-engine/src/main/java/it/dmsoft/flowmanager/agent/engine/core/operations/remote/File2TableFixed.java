@@ -59,7 +59,7 @@ public class File2TableFixed extends DependentOperation<DbConversionParam>{
 		Charset cs = StringUtils.getCharset(parameters.getCodepage().intValue());
 		String fieldDelimiter = parameters.getFieldDelimiter();
 		
-		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema());
 		
 		List<String> files = parameters.getDownloadedFiles();
 		

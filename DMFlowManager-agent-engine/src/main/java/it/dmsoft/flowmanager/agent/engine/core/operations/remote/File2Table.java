@@ -88,7 +88,7 @@ public class File2Table extends DependentOperation<DbConversionParam>{
 		//utilizzato per gestire il file in modalità *add/*replace
 		boolean appendMode = parameters.getMemberOptionAddReplace().equals("*ADD") ? true : false;
 		
-		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema());
 
         List<String> files = parameters.getDownloadedFiles();
         

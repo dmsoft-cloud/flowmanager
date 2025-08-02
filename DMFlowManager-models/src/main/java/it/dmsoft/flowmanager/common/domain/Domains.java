@@ -127,7 +127,8 @@ public static final String Y = "S";
     
     public enum DbType implements CodeEnum {
  		DB2_ISERIES("DB2"),
- 		MSSQLSERVER("MSSQL");
+ 		MSSQLSERVER("MSSQL"), 
+ 		MYSQL("MYSQL");
  		
  		private String code;
  		

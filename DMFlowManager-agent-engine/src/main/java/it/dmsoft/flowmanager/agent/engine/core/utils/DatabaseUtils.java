@@ -71,7 +71,10 @@ public class DatabaseUtils {
 	
 	//enum per i tipi di db ammessi
 	public enum DBTypeEnum {
-	    DB2(DbType.DB2_ISERIES){
+		
+		//TODO IMPLEMENT ENUM FOR MYSQL
+		
+		DB2_ISERIES(DbType.DB2_ISERIES){
 	    	@Override
 			public String escapeColumnName(String columnName) {
 	    		return "\"" + columnName.replace("\"", "\"\"") + "\"";
@@ -83,8 +86,8 @@ public class DatabaseUtils {
 	    	}
 
 			@Override
-			public Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception {
-				return it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection.get(genericConnectionParams);
+			public Connection getConnection(GenericConnectionParams genericConnectionParams, String schema) throws Exception {
+				return HibernateUtils.DB2_ISERIES.getConnection(genericConnectionParams, schema);
 			}
 
 			@Override
@@ -98,7 +101,7 @@ public class DatabaseUtils {
 	    	
 	    }
 	    ,
-	    SQLServer(DbType.MSSQLSERVER){
+	    MSSQLSERVER(DbType.MSSQLSERVER){
 	    	@Override
 			public String escapeColumnName(String columnName) {
 				return "[" + columnName.replace("]", "]]") + "]"; 
@@ -110,8 +113,8 @@ public class DatabaseUtils {
 	    	}
 
 			@Override
-			public Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception {
-				return it.dmsoft.flowmanager.agent.engine.core.sqlServer.JdbcConnection.get(genericConnectionParams);
+			public Connection getConnection(GenericConnectionParams genericConnectionParams, String schema) throws Exception {
+				return HibernateUtils.MSSQLSERVER.getConnection(genericConnectionParams, schema);
 			}
 
 			@Override
@@ -154,7 +157,7 @@ public class DatabaseUtils {
 	    public abstract String getQueryCheckObj();
 	    
 	    //ritorna query per la verifica dell'esistenza dell'oggetto
-	    public abstract Connection getConnection(GenericConnectionParams genericConnectionParams) throws Exception;
+	    public abstract Connection getConnection(GenericConnectionParams genericConnectionParams, String schema) throws Exception;
 	    
 	  //ritorna query per la creazione di una tabella vuota
 	    public abstract String getQueryCreateEmptyTable(String fileds, String newSchema, String newTable, String oldSchema, String oldTable);	

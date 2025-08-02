@@ -3,7 +3,6 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.DropTmpExportTableParam;
@@ -30,7 +29,7 @@ public class DropTmpExportTable extends DependentOperation<DropTmpExportTablePar
 		try {
 			//controllo se devo utilizzare il file con le colonne rielaborate in ordine e intestazione
 			Connection conn = null;
-			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
+			conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getLibrary()); 
 			
 			
 			String query = "DROP TABLE " + operationParams.getExportTempSchema() + Constants.DOT + operationParams.getExportTempTable();

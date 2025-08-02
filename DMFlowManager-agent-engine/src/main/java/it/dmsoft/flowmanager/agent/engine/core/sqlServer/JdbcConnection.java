@@ -12,6 +12,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
+@Deprecated
 public class JdbcConnection {
 	
 	private static final Logger logger = Logger.getLogger(JdbcConnection.class.getName());

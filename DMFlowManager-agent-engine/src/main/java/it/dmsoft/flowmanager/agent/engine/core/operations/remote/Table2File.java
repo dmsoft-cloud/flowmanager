@@ -45,7 +45,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
         }
 		
 		
-		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters);
+		Connection conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getSchema());
 		StringBuilder sb = new StringBuilder();
 		
 		//imposto l'eventuale verifica sul file di export sul file temporaneo se previsto

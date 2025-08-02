@@ -63,8 +63,8 @@ public class Origin {
 		return host;
 	}
 
-	public void setHost(String ip) {
-		this.host = ip;
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public Integer getPort() {

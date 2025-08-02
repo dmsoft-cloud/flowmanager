@@ -29,6 +29,7 @@ import it.dmsoft.flowmanager.agent.engine.core.exception.AS400ObjectNotFoundExce
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
+import it.dmsoft.flowmanager.agent.engine.core.utils.HibernateUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
@@ -125,8 +126,11 @@ public class CallAs400 {
 		for (String lib : jobd.getInitialLibraryList()) {
 			librariessb.append((librariessb.length() == 0 ? "" : Constants.SPACE) + lib);
 		}
-		String curlib = StringUtils.isNullOrEmpty(genericConnectionParam.getCurlib()) ? 
-								genericConnectionParam.getCurlib() : JdbcConnection.getCurrentLibrary(genericConnectionParam);
+		
+		//TODO CHECK IF CORRECT THIS COMMAND FORCE THE LOAD OF CURRENT LIBRARY IN genericConnectionParam
+		HibernateUtils.DB2_ISERIES.getConnection(genericConnectionParam, library);
+		
+		String curlib = genericConnectionParam.getCurlib();
 
 		CommandCall commandCall = new CommandCall(as400);
 

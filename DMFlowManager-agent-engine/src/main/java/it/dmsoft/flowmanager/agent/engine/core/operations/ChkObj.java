@@ -56,7 +56,7 @@ public class ChkObj extends DependentOperation<ChkObjParam>{
 		*/
 		//controllo se devo utilizzare il file con le colonne rielaborate in ordine e intestazione
 		Connection conn = null;
-		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters); 
+		conn = DBTypeEnum.get(parameters.getDbType()).getConnection(parameters, parameters.getLibreria()); 
 		int counter=0;
 		String table;
 		String schema;
