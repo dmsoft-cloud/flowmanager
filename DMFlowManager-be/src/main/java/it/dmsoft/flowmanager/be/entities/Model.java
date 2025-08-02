@@ -3,11 +3,15 @@ package it.dmsoft.flowmanager.be.entities;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Direction;
 import it.dmsoft.flowmanager.be.common.BaseEntity.FileFormat;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Locale;
+import it.dmsoft.flowmanager.be.common.BaseEntity.RecordDelimiterType;
+import it.dmsoft.flowmanager.be.common.BaseEntity.StringDelimiterType;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Type;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 import it.dmsoft.flowmanager.be.converter.DirectionConverter;
 import it.dmsoft.flowmanager.be.converter.FileFormatConverter;
 import it.dmsoft.flowmanager.be.converter.LocaleConverter;
+import it.dmsoft.flowmanager.be.converter.RecordDelimiterTypeConverter;
+import it.dmsoft.flowmanager.be.converter.StringDelimiterTypeConverter;
 import it.dmsoft.flowmanager.be.converter.TypeConverter;
 import it.dmsoft.flowmanager.be.converter.YesNoConverter;
 import jakarta.persistence.Column;
@@ -101,12 +105,14 @@ public class Model extends BaseEntity {
 	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo header;
+	@Convert(converter = RecordDelimiterTypeConverter.class)
 	@Column(length = 6)
-	private String recordDelimiter;
+	private RecordDelimiterType recordDelimiter;
 	@Column(length = 6)
 	private String fieldDelimiter;
+	@Convert(converter = StringDelimiterTypeConverter.class)
 	@Column(length = 9)
-	private String stringDelimiter;
+	private StringDelimiterType stringDelimiter;
 
 	@Column(length = 9)
 	private String removingSpaces;
@@ -297,12 +303,20 @@ public class Model extends BaseEntity {
 		this.header = header;
 	}
 
-	public String getRecordDelimiter() {
+	public RecordDelimiterType getRecordDelimiter() {
 		return recordDelimiter;
 	}
 
-	public void setRecordDelimiter(String recordDelimiter) {
+	public void setRecordDelimiter(RecordDelimiterType recordDelimiter) {
 		this.recordDelimiter = recordDelimiter;
+	}
+
+	public StringDelimiterType getStringDelimiter() {
+		return stringDelimiter;
+	}
+
+	public void setStringDelimiter(StringDelimiterType stringDelimiter) {
+		this.stringDelimiter = stringDelimiter;
 	}
 
 	public String getFieldDelimiter() {
@@ -312,15 +326,6 @@ public class Model extends BaseEntity {
 	public void setFieldDelimiter(String fieldDelimiter) {
 		this.fieldDelimiter = fieldDelimiter;
 	}
-
-	public String getStringDelimiter() {
-		return stringDelimiter;
-	}
-
-	public void setStringDelimiter(String stringDelimiter) {
-		this.stringDelimiter = stringDelimiter;
-	}
-
 
 
 	public String getRemovingSpaces() {

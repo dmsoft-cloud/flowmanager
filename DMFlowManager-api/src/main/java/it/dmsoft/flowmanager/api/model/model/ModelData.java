@@ -4,6 +4,8 @@ import it.dmsoft.flowmanager.api.base.BaseModel;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Direction;
 import it.dmsoft.flowmanager.be.common.BaseEntity.FileFormat;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Locale;
+import it.dmsoft.flowmanager.be.common.BaseEntity.RecordDelimiterType;
+import it.dmsoft.flowmanager.be.common.BaseEntity.StringDelimiterType;
 import it.dmsoft.flowmanager.be.common.BaseEntity.Type;
 import it.dmsoft.flowmanager.be.common.BaseEntity.YesNo;
 
@@ -62,9 +64,9 @@ public class ModelData extends BaseModel {
 	private String destCharset;
 	private FileFormat fileFormat;
 	private YesNo header;
-	private String recordDelimiter;
+	private RecordDelimiterType recordDelimiter;
 	private String fieldDelimiter;
-	private String stringDelimiter;
+	private StringDelimiterType stringDelimiter;
 	private String removingSpaces;
 	private String numericFilling;
 	private YesNo integrityCheck;
@@ -246,12 +248,20 @@ public class ModelData extends BaseModel {
 		this.header = header;
 	}
 
-	public String getRecordDelimiter() {
+	public RecordDelimiterType getRecordDelimiter() {
 		return recordDelimiter;
 	}
 
-	public void setRecordDelimiter(String recordDelimiter) {
+	public void setRecordDelimiter(RecordDelimiterType recordDelimiter) {
 		this.recordDelimiter = recordDelimiter;
+	}
+
+	public StringDelimiterType getStringDelimiter() {
+		return stringDelimiter;
+	}
+
+	public void setStringDelimiter(StringDelimiterType stringDelimiter) {
+		this.stringDelimiter = stringDelimiter;
 	}
 
 	public String getFieldDelimiter() {
@@ -260,14 +270,6 @@ public class ModelData extends BaseModel {
 
 	public void setFieldDelimiter(String fieldDelimiter) {
 		this.fieldDelimiter = fieldDelimiter;
-	}
-
-	public String getStringDelimiter() {
-		return stringDelimiter;
-	}
-
-	public void setStringDelimiter(String stringDelimiter) {
-		this.stringDelimiter = stringDelimiter;
 	}
 
 	public String getRemovingSpaces() {

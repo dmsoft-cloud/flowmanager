@@ -90,7 +90,8 @@ public class BaseEntity {
     
     public enum Locale implements CodeEnum {
  		IT("IT"),
- 		US("US");
+ 		US("US"),
+ 		BLANK("");
  		
  		private String code;
  		
@@ -98,6 +99,7 @@ public class BaseEntity {
  			this.code = code;
  		}
  		
+ 		@JsonValue
  		public String getCode() {
  			return this.code;
  		}
@@ -109,7 +111,8 @@ public class BaseEntity {
     
     public enum FileFormat implements CodeEnum {
  		CSV("*CSV"),
- 		FIXED("*FIXED");
+ 		FIXED("*FIXED"),
+ 		BLANK("");
  		
  		private String code;
  		
@@ -129,7 +132,9 @@ public class BaseEntity {
     
     public enum DbType implements CodeEnum {
  		DB2_ISERIES("DB2"),
- 		MSSQLSERVER("MSSQL");
+ 		MSSQLSERVER("MSSQL"),
+    	POSTGRESSQL("POSTGRES"),
+    	MYSQL("MYSQL");
  		
  		private String code;
  		
@@ -189,6 +194,49 @@ public class BaseEntity {
  		
  		public static RecipientType geRecipientType(String code) {
  			return CodeEnum.getCodeEnum(RecipientType.class, code);
+ 		}
+ 	}
+    
+    public enum StringDelimiterType implements CodeEnum {
+ 		NONE("*NONE"),
+ 		DOUBLEQUOTE("*DBLQUOTE"),
+ 		BLANK("");
+ 		
+ 		private String code;
+ 		
+ 		private StringDelimiterType(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static StringDelimiterType getStringDelimiterType(String code) {
+ 			return CodeEnum.getCodeEnum(StringDelimiterType.class, code);
+ 		}
+ 	}
+    
+    public enum RecordDelimiterType implements CodeEnum {
+ 		CRLF("*CRLF"),
+ 		LF("*LF"),
+ 		CR("*CR"),
+ 		BLANK("");
+ 		
+ 		private String code;
+ 		
+ 		private RecordDelimiterType(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static RecordDelimiterType getRecordDelimiterType(String code) {
+ 			return CodeEnum.getCodeEnum(RecordDelimiterType.class, code);
  		}
  	}
     
