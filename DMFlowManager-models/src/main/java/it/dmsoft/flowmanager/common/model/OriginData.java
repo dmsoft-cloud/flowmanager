@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.common.model;
 import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class OriginData {
+public class OriginData extends BaseModel {
 
 	// IP
 	// PORTA

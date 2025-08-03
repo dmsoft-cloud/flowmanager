@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class ConfigurationGroup {
+public class ConfigurationGroup extends BaseEntity {
 	
 	//id
 	//descrizione

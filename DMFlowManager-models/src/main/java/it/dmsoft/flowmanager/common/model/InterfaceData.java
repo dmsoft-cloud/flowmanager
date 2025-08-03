@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.common.model;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class InterfaceData {
+public class InterfaceData extends BaseModel  {
 
 	// NOME
 	// DESCRIZIONE

@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.common.model;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class FlowData {
+public class FlowData extends BaseModel {
 
 	// NOME
 	// DESCRIZIONE

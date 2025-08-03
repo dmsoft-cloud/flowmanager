@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.common.model;
 
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class GroupData {
+public class GroupData extends BaseModel {
 	
 	private String id;
 	private String description;

@@ -3,10 +3,12 @@ package it.dmsoft.flowmanager.common.model;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
 import it.dmsoft.flowmanager.common.domain.Domains.Locale;
+import it.dmsoft.flowmanager.common.domain.Domains.RecordDelimiterType;
+import it.dmsoft.flowmanager.common.domain.Domains.StringDelimiterType;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
-public class ModelData {
+public class ModelData extends BaseModel {
 
 	// NOME
 	// DESCRIZIONE
@@ -61,9 +63,9 @@ public class ModelData {
 	private String destCharset;
 	private FileFormat fileFormat;
 	private YesNo header;
-	private String recordDelimiter;
+	private RecordDelimiterType recordDelimiter;
 	private String fieldDelimiter;
-	private String stringDelimiter;
+	private StringDelimiterType stringDelimiter;
 	private String removingSpaces;
 	private String numericFilling;
 	private YesNo integrityCheck;
@@ -245,12 +247,23 @@ public class ModelData {
 		this.header = header;
 	}
 
-	public String getRecordDelimiter() {
+
+
+	public RecordDelimiterType getRecordDelimiter() {
 		return recordDelimiter;
 	}
 
-	public void setRecordDelimiter(String recordDelimiter) {
+	public void setRecordDelimiter(RecordDelimiterType recordDelimiter) {
 		this.recordDelimiter = recordDelimiter;
+	}
+
+	public void setStringDelimiter(StringDelimiterType stringDelimiter) {
+		this.stringDelimiter = stringDelimiter;
+	}
+
+	
+	public StringDelimiterType getStringDelimiter() {
+		return stringDelimiter;
 	}
 
 	public String getFieldDelimiter() {
@@ -259,14 +272,6 @@ public class ModelData {
 
 	public void setFieldDelimiter(String fieldDelimiter) {
 		this.fieldDelimiter = fieldDelimiter;
-	}
-
-	public String getStringDelimiter() {
-		return stringDelimiter;
-	}
-
-	public void setStringDelimiter(String stringDelimiter) {
-		this.stringDelimiter = stringDelimiter;
 	}
 
 	public String getRemovingSpaces() {

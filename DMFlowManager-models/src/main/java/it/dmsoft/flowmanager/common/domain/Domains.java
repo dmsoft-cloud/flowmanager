@@ -1,10 +1,11 @@
 package it.dmsoft.flowmanager.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Domains {
 
-public static final String Y = "S";
+	public static final String Y = "S";
 	
 	public static final String N = "N";
 	
@@ -30,6 +31,11 @@ public static final String Y = "S";
 		
 		public boolean getBool() {
 			return this.bool;
+		}
+		
+		@JsonCreator
+		public static YesNo fromCode(String code) {
+		    return getYesNo(code); // usa già CodeEnum.getCodeEnum
 		}
 		
 		public static YesNo getYesNo(String code) {
@@ -61,6 +67,11 @@ public static final String Y = "S";
 			return this.code;
 		}
 		
+		@JsonCreator
+		public static Type fromCode(String code) {
+		    return getType(code); // usa già CodeEnum.getCodeEnum
+		}
+		
 		public static Type getType(String code) {
 			return CodeEnum.getCodeEnum(Type.class, code);
 		}
@@ -81,6 +92,11 @@ public static final String Y = "S";
 			return this.code;
 		}
 		
+		@JsonCreator
+		public static Direction fromCode(String code) {
+		    return getDirection(code); // usa già CodeEnum.getCodeEnum
+		}
+		
 		public static Direction getDirection(String code) {
 			return CodeEnum.getCodeEnum(Direction.class, code);
 		}
@@ -88,7 +104,8 @@ public static final String Y = "S";
     
     public enum Locale implements CodeEnum {
  		IT("IT"),
- 		US("US");
+ 		US("US"),
+ 		BLANK("");
  		
  		private String code;
  		
@@ -96,6 +113,7 @@ public static final String Y = "S";
  			this.code = code;
  		}
  		
+ 		@JsonValue
  		public String getCode() {
  			return this.code;
  		}
@@ -107,7 +125,9 @@ public static final String Y = "S";
     
     public enum FileFormat implements CodeEnum {
  		CSV("*CSV"),
- 		FIXED("*FIXED");
+ 		FIXED("*FIXED"),
+ 		BLANK("");
+ 		
  		
  		private String code;
  		
@@ -127,8 +147,9 @@ public static final String Y = "S";
     
     public enum DbType implements CodeEnum {
  		DB2_ISERIES("DB2"),
- 		MSSQLSERVER("MSSQL"), 
- 		MYSQL("MYSQL");
+ 		MSSQLSERVER("MSSQL"),
+    	POSTGRESSQL("POSTGRES"),
+    	MYSQL("MYSQL");
  		
  		private String code;
  		
@@ -211,5 +232,49 @@ public static final String Y = "S";
  			return CodeEnum.getCodeEnum(Status.class, code);
  		}
  	}
+    
+    public enum StringDelimiterType implements CodeEnum {
+ 		NONE("*NONE"),
+ 		DOUBLEQUOTE("*DBLQUOTE"),
+ 		BLANK("");
+ 		
+ 		private String code;
+ 		
+ 		private StringDelimiterType(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static StringDelimiterType getStringDelimiterType(String code) {
+ 			return CodeEnum.getCodeEnum(StringDelimiterType.class, code);
+ 		}
+ 	}
+    
+    public enum RecordDelimiterType implements CodeEnum {
+ 		CRLF("*CRLF"),
+ 		LF("*LF"),
+ 		CR("*CR"),
+ 		BLANK("");
+ 		
+ 		private String code;
+ 		
+ 		private RecordDelimiterType(String code) {
+ 			this.code = code;
+ 		}
+ 		
+ 		@JsonValue
+ 		public String getCode() {
+ 			return this.code;
+ 		}
+ 		
+ 		public static RecordDelimiterType getRecordDelimiterType(String code) {
+ 			return CodeEnum.getCodeEnum(RecordDelimiterType.class, code);
+ 		}
+ 	}
+
     
 }

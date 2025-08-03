@@ -54,7 +54,14 @@ public abstract class DefaultBaseService<X, Y, Z> implements BaseService<X, Y, Z
      */
     @Override
     public Y getById(Z id) {
-        return populateData(getRepository().findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found")));
+        try {
+            return getRepository().findById(id)
+                .map(this::populateData)
+                .orElse(null); // Se non trovato, ritorna null
+        } catch (RuntimeException e) {
+            // Se c'è un errore DB o altro problema, rilancia
+            throw new RuntimeException("Error getting the entity", e);
+        }
     }
 
     /**

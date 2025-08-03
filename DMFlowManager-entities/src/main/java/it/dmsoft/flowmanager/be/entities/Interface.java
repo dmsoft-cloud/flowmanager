@@ -10,7 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Interface {
+public class Interface extends BaseEntity  {
 
 	// NOME
 	// DESCRIZIONE
