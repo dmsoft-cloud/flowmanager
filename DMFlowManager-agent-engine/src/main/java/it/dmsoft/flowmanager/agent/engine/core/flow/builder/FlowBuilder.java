@@ -86,9 +86,11 @@ import it.dmsoft.flowmanager.be.entities.Recipient;
 import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
 import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.common.model.EmailParmsData;
+import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -98,7 +100,7 @@ public class FlowBuilder {
 
 	protected Flow flow;
 	
-	protected static FlowBuilder instance;
+	//protected static FlowBuilder instance;
 	
 	@PersistenceContext
     protected EntityManager entityManager;
@@ -110,7 +112,7 @@ public class FlowBuilder {
 
 	public FlowBuilder() {
 		this.flow = new Flow();
-		FlowBuilder.instance = this;
+		//FlowBuilder.instance = this;
 	}
 
 	public Flow build() {
@@ -159,7 +161,7 @@ public class FlowBuilder {
 		
 		OriginData origin = executionFlowData.getOrigin();
 		readSpoolFilesParams.setDbType(origin.getDbType());
-		readSpoolFilesParams.setIBMi(operationParams.isIBMi());
+		readSpoolFilesParams.setIBMi(operationParams.getIBMi());
 		readSpoolFilesParams.setSchema(executionFlowData.getFlowLibreria());
 		
 		readSpoolFilesParams.setOperationParams(operationParams);
@@ -308,19 +310,19 @@ public class FlowBuilder {
 		sendMailParam.setPgmLibrary(PropertiesUtils.get(Constants.PGM_LIBRARY_KEY));
 		//if(Optional.ofNullable(operationParams.getLegacyModernization()).filter(YesNo.YES::equals).isPresent()) {
 		
-		EmailParmsData mailParms = executionFlowData.getMailParms();
-		sendMailParam.setSmtpUsername(mailParms.getSmtpUser());
-		sendMailParam.setFrom(mailParms.getSmtpUser());
-		sendMailParam.setSmtpPassword(mailParms.getSmtpPassword());
+		InterfaceData mailInterface = executionFlowData.getMailInterface();
+		sendMailParam.setSmtpUsername(mailInterface.getUser());
+		sendMailParam.setFrom(mailInterface.getUser());
+		sendMailParam.setSmtpPassword(mailInterface.getPassword());
 		
-		BigDecimal smtpPort = mailParms.getSmtpPort();
+		Integer smtpPort = mailInterface.getPort();
 		if(smtpPort == null) {
-			smtpPort = BigDecimal.valueOf(YesNo.YES.equals(mailParms.getSmtpSecure()) ? 465 : 25);
+			smtpPort = YesNo.YES.equals(mailInterface.getSecure()) ? 465 : 25;
 		}
 		
-		sendMailParam.setPort(smtpPort);
-		sendMailParam.setHostName(mailParms.getSmtpHost());
-		sendMailParam.setSecure(Optional.ofNullable(mailParms.getSmtpSecure()).orElse(YesNo.NO).getBool());
+		sendMailParam.setPort(BigDecimal.valueOf(smtpPort));
+		sendMailParam.setHostName(mailInterface.getHost());
+		sendMailParam.setSecure(Optional.ofNullable(mailInterface.getSecure()).orElse(YesNo.NO).getBool());
 		
 		sendMail.setParameters(sendMailParam);
 		//readOtgffempa.setParameters(sendMailParam);
@@ -360,8 +362,8 @@ public class FlowBuilder {
 		return this;
 	}
 	
-	protected static DbConversionParam updateOriginParam(ExecutionFlowData executionFlowData) {
-		return FlowBuilder.instance.dbConversionParamMapper.convert(executionFlowData.getOrigin());
+	protected DbConversionParam updateOriginParam(ExecutionFlowData executionFlowData) {
+		return dbConversionParamMapper.convert(executionFlowData.getOrigin());
 	}
 
 	protected static void updateGenericConnectionParams(ExecutionFlowData executionFlowData, GenericConnectionParams genericAS400Param) {
@@ -414,12 +416,12 @@ public class FlowBuilder {
 			operationParams.setLibrary(Constants.QTEMP);
 		}
 		
-		if(!YesNo.YES.equals(operationParams.isIBMi())) {
+		if(!YesNo.YES.equals(operationParams.getIBMi())) {
 			operationParams.setLibrary(executionFlowData.getFlowLibreria());
 		}
 		
-		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(executionFlowData.getFlowFormato())
-				.get(executionFlowData , operationParams);
+		List<Operation<?>> conversionOperations = ConversionOperation.getConversionOperation(executionFlowData.getFlowFormato())
+				.get(this, executionFlowData , operationParams);
 		
 		operationParams.setLibrary(library);
 		flow.addOperations(conversionOperations);
@@ -428,8 +430,8 @@ public class FlowBuilder {
 	}
 	
 	public FlowBuilder conversion(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		List<Operation<?>> conversionOperations = ConversionOperation.valueOf(executionFlowData.getFlowFormato())
-				.get(executionFlowData, operationParams);
+		List<Operation<?>> conversionOperations = ConversionOperation.getConversionOperation(executionFlowData.getFlowFormato())
+				.get(this, executionFlowData, operationParams);
 		flow.addOperations(conversionOperations);
 		return this;
 	}
@@ -554,7 +556,7 @@ public class FlowBuilder {
 			@Override
 			public Operation<DbConversionParam> get(ConversionOperation conversionOperation, DbConversionParam dbConversionParam, ExecutionFlowData executionFlowData, OperationParams operationParams) {
 				DependentOperation<DbConversionParam> file2Db ;
-				if (!YesNo.YES.equals(operationParams.isIBMi())) {
+				if (!YesNo.YES.equals(operationParams.getIBMi())) {
 					file2Db = ConversionOperation.CSV.equals(conversionOperation) ? new File2Table() : new File2TableFixed();
 					
 				} else {
@@ -575,13 +577,13 @@ public class FlowBuilder {
 				//TODO VALUTARE DI ESTENDERE A FILE2DBFIXED ANCHE PER I FLUSSI FIXED NON SU THEMA
 				ConnectionType transferTypeCode = executionFlowData.getFlowTipoTrasferimento();
 				
-				boolean doCpytostmf = (ConnectionType.SPAZIO.equals(transferTypeCode) || Constants.FIXED.contentEquals(executionFlowData.getFlowDelimRecord()))
-											&& ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato());
+				boolean doCpytostmf = (ConnectionType.SPAZIO.equals(transferTypeCode) || 
+											(executionFlowData.getFlowDelimRecord() != null && Constants.FIXED.contentEquals(executionFlowData.getFlowDelimRecord())))
+											&& FileFormat.FIXED.equals(executionFlowData.getFlowFormato());
 				
-
 				ConstraintDependentOperation<DbConversionParam, Boolean> db2File;
-				if (YesNo.YES.equals(operationParams.isIBMi())) {
-					db2File = ConversionOperation.FIXED.name().equals(executionFlowData.getFlowFormato()) ? new Table2FileFixed() : new Table2File();
+				if (!YesNo.YES.equals(operationParams.getIBMi())) {
+					db2File = FileFormat.FIXED.equals(executionFlowData.getFlowFormato()) ? new Table2FileFixed() : new Table2File();
 					
 				} else {
 					db2File = doCpytostmf ? new Db2FileFixed() : new Db2File();
@@ -618,23 +620,23 @@ public class FlowBuilder {
 
 	public enum ConversionOperation {
 
-		CSV {
+		CSV(FileFormat.CSV) {
 			@Override
-			public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 				
 				CreateDbFileParam createDbFileParam = getCreateDbFileParam(executionFlowData, operationParams);
 				
 				Operation<CreateDbFileParam> crtDbFile = new CrtDbFile();
 				
-				DbConversionParam dbConversionParam = updateOriginParam(executionFlowData);
+				DbConversionParam dbConversionParam = flowBuilder.updateOriginParam(executionFlowData);
 				
 				createDbFileParam.setLibreria( 
-						YesNo.YES.equals(operationParams.isIBMi()) ? executionFlowData.getFlowLibreria() : Constants.QTEMP);
+						YesNo.YES.equals(operationParams.getIBMi()) ? executionFlowData.getFlowLibreria() : Constants.QTEMP);
 				
 				crtDbFile.setParameters(createDbFileParam);
 
 				updateGenericConnectionParams(executionFlowData, dbConversionParam);
-				dbConversionParam.setLibrary(StringUtils.setDefault(operationParams.getLibrary(), Constants.LIBL));
+				dbConversionParam.setLibrary(StringUtils.setDefault(executionFlowData.getFlowLibreria(), Constants.LIBL));
 				dbConversionParam.setFile(executionFlowData.getFlowFile());
 				dbConversionParam.setMember(executionFlowData.getFlowMembro());
 				
@@ -653,7 +655,8 @@ public class FlowBuilder {
 				dbConversionParam.setFieldFilling(executionFlowData.getFlowRiempCampo());
 				dbConversionParam.setReplaceNullVal(executionFlowData.getFlowSostValNull());
 				dbConversionParam.setRemoveColName(executionFlowData.getFlowElimNomCol());
-				dbConversionParam.setSchema(executionFlowData.getFlowLibreria());
+				//TODO IMPELMENT
+				dbConversionParam.setSchema(null);
 				
 				//Controllo CSV format IT
 				String csvFormat = PropertiesUtils.get(Constants.CSV_FORMAT);
@@ -665,7 +668,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-						&& !YesNo.YES.equals(operationParams.isIBMi())) {
+						&& !YesNo.YES.equals(operationParams.getIBMi())) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -681,7 +684,7 @@ public class FlowBuilder {
 				Operation<?> dbConversionOperation = (Operation<?>) ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams);
 				List<Operation<?>> ret = new ArrayList<Operation<?>>();
 				
-				if(!Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!YesNo.YES.equals(operationParams.isIBMi()))
+				if(!Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione()) && !!YesNo.YES.equals(operationParams.getIBMi()))
 				{
 					ret.add(crtDbFile);
 				}
@@ -692,16 +695,16 @@ public class FlowBuilder {
 			}			
 			
 		},
-		FIXED {
+		FIXED(FileFormat.FIXED) {
 			@Override
-			public List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
+			public List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 
-				DbConversionParam dbConversionParam = updateOriginParam(executionFlowData);
+				DbConversionParam dbConversionParam = flowBuilder.updateOriginParam(executionFlowData);
 				updateGenericConnectionParams(executionFlowData, dbConversionParam);
 
 				dbConversionParam.setLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 				//se è remote allora la libreria non è qtemp ma lo schema principale se non è specificata nelle proprerties una libreria temporanea
-				if(!YesNo.YES.equals(operationParams.isIBMi())) {				
+				if(!YesNo.YES.equals(operationParams.getIBMi())) {				
 					dbConversionParam.setLibrary(executionFlowData.getFlowLibreria());
 				}
 								
@@ -737,7 +740,7 @@ public class FlowBuilder {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_COMMA);
 					}
 					if(Constants.CSV_FORMAT_NO.equals(executionFlowData.getFlowInternaz())
-							&& !YesNo.YES.equals(operationParams.isIBMi())) {
+							&& !YesNo.YES.equals(operationParams.getIBMi())) {
 						dbConversionParam.setDecimalPointer(Constants.CSV_FORMAT_NONE);		
 					}
 				}
@@ -766,7 +769,7 @@ public class FlowBuilder {
 				copyFile.setParameters(copyFileParam);
 				
 				//se non è remote creo il file temporaneo con crtpf e poi lo popolerò con cpyf
-				if(!!YesNo.YES.equals(operationParams.isIBMi())) {				
+				if(!!YesNo.YES.equals(operationParams.getIBMi())) {				
 					ret.add(getCreateDbFile(executionFlowData, createDbFileParam));
 				}
 				
@@ -779,13 +782,13 @@ public class FlowBuilder {
 					copyFileParam.setToLibrary(executionFlowData.getFlowLibreria());
 					
 					ret.add(ConversionDirection.getConversionDirection(executionFlowData.getFlowDirezione()).get(this, dbConversionParam, executionFlowData, operationParams));
-					if (YesNo.YES.equals(operationParams.isIBMi()))
+					if (YesNo.YES.equals(operationParams.getIBMi()))
 							ret.add(copyFile);
 				} else if (Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())) {	
 					copyFileParam.setFromLibrary(executionFlowData.getFlowLibreria());					
 					copyFileParam.setToLibrary(StringUtils.isNullOrEmpty(operationParams.getTmpLibrary()) ? Constants.QTEMP : operationParams.getTmpLibrary());
 					
-					if(!operationParams.getSkipCpyFrmFile() && YesNo.YES.equals(operationParams.isIBMi())) {
+					if(!operationParams.getSkipCpyFrmFile() && YesNo.YES.equals(operationParams.getIBMi())) {
 						ret.add(copyFile);
 					}
 					
@@ -798,9 +801,26 @@ public class FlowBuilder {
 
 		};
 
-		public abstract List<Operation<?>> get(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
-
+		private FileFormat fileFormat;
 		
+		private ConversionOperation(FileFormat fileFormat) {
+			this.fileFormat = fileFormat;
+		}
+		
+		public abstract List<Operation<?>> get(FlowBuilder flowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception;
+
+		public FileFormat getFileFormat() {
+			return this.fileFormat;
+		}
+		
+		public static ConversionOperation getConversionOperation(FileFormat fileFormat) {
+			for (ConversionOperation co : ConversionOperation.values()) {
+				if (co.getFileFormat().equals(fileFormat))
+					return co;
+			}
+			
+			return null;
+		}
 	}
 
 	public enum SftpDirection {
@@ -1347,7 +1367,7 @@ public class FlowBuilder {
 	}
 	
 	public FlowBuilder addDbProgressiveSequenceId(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso())) {
+		if (Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso())) {
 			//operationParams.setTrasmissionFiles(Arrays.asList(replaceLocal));
 			//operationParams.setFileNames
 			String fileName = operationParams.getFileNames().get(0);
@@ -1358,7 +1378,7 @@ public class FlowBuilder {
 				fileName = getProgressiveWildcard(fileName, 0, startProgr, getProgressiveWildCardFillSize(fileName));
 				operationParams.setFileNames(Arrays.asList(fileName));
 				
-				if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowTipFlusso())) {
+				if (executionFlowData.getFlowTipFlusso() != null) {
 					operationParams.setTrasmissionFiles(Arrays.asList(fileName));
 				} 
 			}

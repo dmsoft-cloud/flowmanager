@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
-import it.dmsoft.flowmanager.common.model.EmailParmsData;
+import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 
 public class ExecutionFlowData {
@@ -93,7 +95,7 @@ public class ExecutionFlowData {
 	private String flowGruppo;
 	private String flowCodInterfaccia;
 	private YesNo flowStato;
-	private String flowTipFlusso;
+	private Type flowTipFlusso;
 	private Direction flowDirezione;
 	private String flowLibreria;
 	private String flowFile;
@@ -103,7 +105,7 @@ public class ExecutionFlowData {
 	private String flowMembroSource;
 	private String flowFolder;
 	private String flowFileName;
-	private String flowFormato;
+	private FileFormat flowFormato;
 	private String flowDelimRecord;
 	private String flowDelimStringa;
 	private String flowRimozSpazi;
@@ -167,7 +169,7 @@ public class ExecutionFlowData {
 	//NEW FIELDS
 	private OriginData origin;
 	
-	private EmailParmsData mailParms;
+	private InterfaceData mailInterface;
 	
 	
 	public String getFlowId() {
@@ -200,10 +202,10 @@ public class ExecutionFlowData {
 	public void setFlowStato(YesNo flowStato) {
 		this.flowStato = flowStato;
 	}
-	public String getFlowTipFlusso() {
+	public Type getFlowTipFlusso() {
 		return flowTipFlusso;
 	}
-	public void setFlowTipFlusso(String flowTipFlusso) {
+	public void setFlowTipFlusso(Type flowTipFlusso) {
 		this.flowTipFlusso = flowTipFlusso;
 	}
 	public Direction getFlowDirezione() {
@@ -260,10 +262,10 @@ public class ExecutionFlowData {
 	public void setFlowFileName(String flowFileName) {
 		this.flowFileName = flowFileName;
 	}
-	public String getFlowFormato() {
+	public FileFormat getFlowFormato() {
 		return flowFormato;
 	}
-	public void setFlowFormato(String flowFormato) {
+	public void setFlowFormato(FileFormat flowFormato) {
 		this.flowFormato = flowFormato;
 	}
 	public String getFlowDelimRecord() {
@@ -638,11 +640,11 @@ public class ExecutionFlowData {
 		this.origin = origin;
 	}
 	
-	public EmailParmsData getMailParms() {
-		return mailParms;
+	public InterfaceData getMailInterface() {
+		return mailInterface;
 	}
-	public void setMailParms(EmailParmsData mailParms) {
-		this.mailParms = mailParms;
+	public void setMailInterface(InterfaceData mailInterface) {
+		this.mailInterface = mailInterface;
 	}
 	@Override
 	public String toString() {
@@ -676,8 +678,8 @@ public class ExecutionFlowData {
 				+ flowInteractiveResult + ", flowInteractiveCommand=" + flowInteractiveCommand + ", flowDelaySemaforo="
 				+ flowDelaySemaforo + ", flowHashUnico=" + flowHashUnico + ", flowExportFlag=" + flowExportFlag
 				+ ", flowExportCode=" + flowExportCode + ", flowFetchSize=" + flowFetchSize + ", flowCharEmptySpace="
-				+ flowCharEmptySpace + ", flowTrustHost=" + flowTrustHost + ", origin=" + origin + ", mailParms="
-				+ mailParms + "]";
+				+ flowCharEmptySpace + ", flowTrustHost=" + flowTrustHost + ", origin=" + origin + ", mailInterface="
+				+ mailInterface + "]";
 	}
 	
 }

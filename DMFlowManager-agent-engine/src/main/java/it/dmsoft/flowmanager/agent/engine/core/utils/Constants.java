@@ -80,7 +80,7 @@ public class Constants {
 	
 	public static final String AS400_FORMAT = "*AS400";
 	
-	public static final String DB2 = "D";
+	//public static final String DB2 = "D";
 
 	//public static final String INBOUND = "I";
 	

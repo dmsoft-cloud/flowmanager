@@ -2,6 +2,8 @@ package it.dmsoft.flowmanager.agent.engine.core.flow.builder;
 
 import java.util.Arrays;
 
+import org.springframework.stereotype.Service;
+
 import it.dmsoft.flowmanager.agent.engine.core.manager.FlowManager.Replacer;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CheckFileHash;
@@ -27,6 +29,7 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
+@Service("outboundFlowBuilder")
 public class OutboundFlowBuilder extends FlowBuilder {
 
 	public FlowBuilder createFile(ExecutionFlowData executionFlowData, OperationParams operationParams) {

@@ -27,7 +27,7 @@ public class InterfaceData extends BaseModel  {
 	private String description;
 	private ConnectionType connectionType;
 	private YesNo passiveMode;
-	private YesNo secureFtp;
+	private YesNo secure;
 	private String host;
 	private Integer port;
 	private String user;
@@ -88,12 +88,12 @@ public class InterfaceData extends BaseModel  {
 		this.passiveMode = passiveMode;
 	}
 
-	public YesNo getSecureFtp() {
-		return secureFtp;
+	public YesNo getSecure() {
+		return secure;
 	}
 
-	public void setSecureFtp(YesNo secureFtp) {
-		this.secureFtp = secureFtp;
+	public void setSecure(YesNo secure) {
+		this.secure = secure;
 	}
 
 	public String getHost() {

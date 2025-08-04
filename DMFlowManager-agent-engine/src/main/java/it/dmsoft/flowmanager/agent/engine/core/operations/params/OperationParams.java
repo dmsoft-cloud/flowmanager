@@ -260,7 +260,7 @@ public class OperationParams {
 	}
 	
 
-	public YesNo isIBMi() {
+	public YesNo getIBMi() {
 		return ibmi;
 	}
 

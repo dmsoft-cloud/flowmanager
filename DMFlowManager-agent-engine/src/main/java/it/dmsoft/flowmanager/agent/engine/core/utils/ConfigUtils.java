@@ -1,16 +1,11 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
-import java.math.BigDecimal;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 
-import it.dmsoft.flowmanager.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.be.entities.EmailParms;
-import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
-import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.be.entities.FlowConfig;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class ConfigUtils {	

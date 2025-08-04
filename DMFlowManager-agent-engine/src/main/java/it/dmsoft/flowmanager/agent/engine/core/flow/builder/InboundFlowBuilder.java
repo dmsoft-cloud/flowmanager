@@ -3,6 +3,8 @@ package it.dmsoft.flowmanager.agent.engine.core.flow.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.CheckFileHash;
 import it.dmsoft.flowmanager.agent.engine.core.operations.ChkIfsFileEmpty;
@@ -20,6 +22,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
+@Service("inboundFlowBuilder")
 public class InboundFlowBuilder extends FlowBuilder{
 
 	/*public InboundFlowBuilder db2File(ExecutionFlowData executionFlowData) {

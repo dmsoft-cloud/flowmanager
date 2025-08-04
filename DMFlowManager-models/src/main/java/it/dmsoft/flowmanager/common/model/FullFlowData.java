@@ -16,14 +16,14 @@ public class FullFlowData {
 
 	private OriginData origin;
 	
-	private EmailParmsData mailParms;
+	private InterfaceData mailInterface;
 	
 	public FullFlowData() {
 		super();
 	}
 
 	public FullFlowData(FlowData flow, GroupData group, EmailData emailOk, EmailData emailKo, InterfaceData _interface,
-			ModelData model, OriginData origin, EmailParmsData mailParms) {
+			ModelData model, OriginData origin, InterfaceData mailInterface) {
 		this.flow = flow;
 		this.group = group;
 		this.emailOk = emailOk;
@@ -31,7 +31,7 @@ public class FullFlowData {
 		this._interface = _interface;
 		this.model = model;
 		this.origin = origin;
-		this.mailParms = mailParms;
+		this.mailInterface = mailInterface;
 	}
 
 	public EmailData getEmailOk() {
@@ -90,19 +90,19 @@ public class FullFlowData {
 		this.origin = origin;
 	}
 
-	public EmailParmsData getMailParms() {
-		return mailParms;
+	public InterfaceData getMailOrigin() {
+		return mailInterface;
 	}
 
-	public void setMailParms(EmailParmsData mailParms) {
-		this.mailParms = mailParms;
+	public void setMailOrigin(InterfaceData mailInterface) {
+		this.mailInterface = mailInterface;
 	}
 
 	@Override
 	public String toString() {
 		return "FullFlowData [emailOk=" + emailOk + ", emailKo=" + emailKo + ", flow=" + flow + ", group=" + group
-				+ ", _interface=" + _interface + ", model=" + model + ", origin=" + origin + ", mailParms=" + mailParms
-				+ "]";
+				+ ", _interface=" + _interface + ", model=" + model + ", origin=" + origin + ", mailInterface="
+				+ mailInterface + "]";
 	}
-	
+
 }

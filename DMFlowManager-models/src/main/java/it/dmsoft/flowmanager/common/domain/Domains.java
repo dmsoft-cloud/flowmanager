@@ -54,7 +54,8 @@ public class Domains {
 	
     public enum Type implements CodeEnum {
 		ORIGIN("D"),
-		FILESYSTEM("I");
+		FILESYSTEM("I"),
+    	SPOOL("S");
 		
 		private String code;
 		

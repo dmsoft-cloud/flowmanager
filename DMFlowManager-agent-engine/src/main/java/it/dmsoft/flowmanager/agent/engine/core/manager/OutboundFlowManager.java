@@ -7,9 +7,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
-import it.dmsoft.flowmanager.common.domain.Domains.Direction;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ZipOperation;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.OutboundFlowBuilder;
@@ -20,8 +17,10 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowIdNumeratorUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("outboundFlowManager")
 public class OutboundFlowManager extends FlowManager {
@@ -33,7 +32,7 @@ public class OutboundFlowManager extends FlowManager {
 
 	public void handleOuputFileNames(OutboundFlowBuilder outboundFlowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		//CERCO FILE SU IFS
-		if(Constants.IFS.equals(executionFlowData.getFlowTipFlusso())) {
+		if(Type.FILESYSTEM.equals(executionFlowData.getFlowTipFlusso())) {
 			FlowBuilder readOutboundFlowBuilder = new FlowBuilder();
 			readOutboundFlowBuilder.readFileNames(executionFlowData, operationParams);
 			readOutboundFlowBuilder.build().execute();
@@ -47,13 +46,13 @@ public class OutboundFlowManager extends FlowManager {
 				operationParams.setDayStartProgressiveIndex(startProgr);				
 				outboundFlowBuilder.addProgressiveSequenceId(executionFlowData, operationParams);			
 			} 
-		} else if (Constants.SPOOL.equals(executionFlowData.getFlowTipFlusso()) && Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())){
+		} else if (Type.SPOOL.equals(executionFlowData.getFlowTipFlusso()) && Direction.OUTBOUND.equals(executionFlowData.getFlowDirezione())){
 			FlowBuilder readOutboundFlowBuilder = new FlowBuilder();
 			readOutboundFlowBuilder.readSpoolFiles(executionFlowData, operationParams);
 			readOutboundFlowBuilder.build().execute();
 			
 			
-		} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso())) {
+		} else if (Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso())) {
 			outboundFlowBuilder.addDbProgressiveSequenceId(executionFlowData, operationParams);
 		} 
 		
@@ -62,7 +61,7 @@ public class OutboundFlowManager extends FlowManager {
 	@Override
 	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		super.process(executionFlowData, operationParams);
-		OutboundFlowBuilder outboundFlowBuilder = new OutboundFlowBuilder();
+		OutboundFlowBuilder outboundFlowBuilder = (OutboundFlowBuilder) applicationContext.getBean("outboundFlowBuilder");
 		
 		String fileListFolder = PropertiesUtils.get(Constants.FILE_LIST_FOLDER);
 		fileListFolder = StringUtils.isNullOrEmpty(fileListFolder) ? executionFlowData.getFlowFolder() : fileListFolder;
@@ -71,9 +70,9 @@ public class OutboundFlowManager extends FlowManager {
 		handleOuputFileNames(outboundFlowBuilder, executionFlowData, operationParams);
 			
 		if(YesNo.YES.equals(executionFlowData.getFlowCreaVuoto()) ) {
-			if(Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && YesNo.YES.equals(operationParams.isIBMi())) {
+			if(Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso()) && YesNo.YES.equals(operationParams.getIBMi())) {
 				outboundFlowBuilder.crtDb2FileIfNotExist(executionFlowData, operationParams);
-			} else if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) && !YesNo.YES.equals(operationParams.isIBMi())) {
+			} else if (Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso()) && !YesNo.YES.equals(operationParams.getIBMi())) {
 				System.out.println("impossibile creare db vuoto in questa modalità");
 			}
 			else {
@@ -84,7 +83,7 @@ public class OutboundFlowManager extends FlowManager {
 		// converto opzionale - indica se devo esportare da db
 		boolean bypassConversion = /*operationParams.isBypassConversion() ||*/
 									StringUtils.isNullOrEmpty(executionFlowData.getFlowFile()) ||
-									 !Constants.DB2.equals(executionFlowData.getFlowTipFlusso());
+									 !Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso());
 
 		if (!bypassConversion) {
 
@@ -168,7 +167,7 @@ public class OutboundFlowManager extends FlowManager {
 		outboundFlowBuilder.deleteSources(deleteFiles, executionFlowData, operationParams);
 		
 		if(!StringUtils.isNullOrEmpty(executionFlowData.getFlowExportCode()) 
-				&& Constants.DB2.equals(executionFlowData.getFlowTipFlusso())
+				&& Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso())
 				&& Optional.ofNullable(executionFlowData.getFlowAggNomiCol()).filter(Constants.EXF::equals).isPresent()){
 			outboundFlowBuilder.dropTmpExportTable(executionFlowData, operationParams);
 		}

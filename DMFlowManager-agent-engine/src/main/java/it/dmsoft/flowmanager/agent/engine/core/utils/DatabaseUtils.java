@@ -99,8 +99,8 @@ public class DatabaseUtils {
 	    	
 			
 	    	
-	    }
-	    ,
+	    },
+		
 	    MSSQLSERVER(DbType.MSSQLSERVER){
 	    	@Override
 			public String escapeColumnName(String columnName) {
@@ -130,6 +130,33 @@ public class DatabaseUtils {
 	    	
 			
 	    	
+	    },
+	    
+	    MYSQL(DbType.MYSQL){
+	    	@Override
+			public String escapeColumnName(String columnName) {
+				return "[" + columnName.replace("]", "]]") + "]"; 
+			}
+
+			@Override
+	    	public String getQueryCheckObj() {
+	    		return "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? "; 
+	    	}
+
+			@Override
+			public Connection getConnection(GenericConnectionParams genericConnectionParams, String schema) throws Exception {
+				return HibernateUtils.MYSQL.getConnection(genericConnectionParams, schema);
+			}
+
+			@Override
+			public String getQueryCreateEmptyTable(String fileds, String newSchema, String newTable, String oldSchema, String oldTable) {
+				String createQuery = "SELECT TOP 0  ";
+				String strFrom = "INTO " + newSchema + Constants.DOT + newTable + " FROM "
+									+ oldSchema + Constants.DOT + oldTable + " WHERE 1 = 0 ";
+				
+				return createQuery + fileds + strFrom;
+			}
+			
 	    };
 	    
 	    private DbType dbType;

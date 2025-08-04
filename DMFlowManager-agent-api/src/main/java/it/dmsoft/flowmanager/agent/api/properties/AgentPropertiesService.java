@@ -120,7 +120,7 @@ public class AgentPropertiesService {
 		this.extTask = extTask;
 	}
 
-	public YesNo isIBMi() {
+	public YesNo getIBMi() {
 		return IBMi;
 	}
 

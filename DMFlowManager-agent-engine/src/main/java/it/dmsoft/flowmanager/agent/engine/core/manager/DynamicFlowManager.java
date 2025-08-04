@@ -226,7 +226,7 @@ public class DynamicFlowManager {
 		//TODO REIMPLEMENT
 		inputParam.setTmpLibrary(PropertiesUtils.get(PropertiesConstants.TMP_LIBRARY));
 		
-		inputParam.setIBMi(config.isIBMi());
+		inputParam.setIBMi(config.getIBMi());
 		//inputParam.setLegacyModernization(config.getLegacyModernization());
 		
 		if (exportFlowData != null) inputParam.setExportFileHeaders(exportFlowData.getExportTestata());

@@ -123,7 +123,7 @@ public class FlowConfig {
 	public void setExtTask(String extTask) {
 		this.extTask = extTask;
 	}
-	public YesNo isIBMi() {
+	public YesNo getIBMi() {
 		return IBMi;
 	}
 	public void setIBMi(YesNo iBMi) {

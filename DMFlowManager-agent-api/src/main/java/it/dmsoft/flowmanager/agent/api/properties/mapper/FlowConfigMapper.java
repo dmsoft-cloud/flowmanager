@@ -15,6 +15,7 @@ public interface FlowConfigMapper {
 	@Mapping(target = "transactionName", source = "fullFlowData.flow.id")
 	@Mapping(target = "transactionId", source = "fullFlowData.flow.description")
 	@Mapping(target = "cliente", source = "agentPropertiesService.customer")
+	@Mapping(target = "IBMi", source = "agentPropertiesService.IBMi")
 	FlowConfig convert(AgentPropertiesService agentPropertiesService, FullFlowData fullFlowData);
 
 }

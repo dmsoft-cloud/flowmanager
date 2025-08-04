@@ -32,7 +32,7 @@ public interface FlowDataMapper {
 	//OK
 	@Mapping(target = "flowDirezione", source = "fullFlowData.model.direction")
 	//OK
-	@Mapping(target = "flowLibreria", source = "fullFlowData.model.schema")
+	@Mapping(target = "flowLibreria", source = "fullFlowData.model.database")
 	//OK
 	@Mapping(target = "flowFile", source = "fullFlowData.flow.dbTable")
 	//AL MOMENTO NON IMPLEMENTATO
@@ -144,7 +144,7 @@ public interface FlowDataMapper {
 	//AL MOMENTO NON PARAMETRIZZATO MA IMPLEMENTATO
 	//@Mapping(target = "flowFlagOkVuoto", source = "")
     //OK
-	@Mapping(target = "flowFtpSecure", source = "fullFlowData._interface.secureFtp")
+	@Mapping(target = "flowFtpSecure", source = "fullFlowData._interface.secure")
 	//AL MOMENTO NON IMPLEMENTATO
 	//@Mapping(target = "flowInteractiveType", source = "")
 	//AL MOMENTO NON IMPLEMENTATO

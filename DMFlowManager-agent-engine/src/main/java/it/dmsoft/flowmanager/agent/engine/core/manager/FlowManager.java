@@ -34,6 +34,9 @@ public abstract class FlowManager {
 	
 	protected ScheduleDateRepository scheduleDateRepository;
 	
+	@Autowired
+    protected ApplicationContext applicationContext;
+	
 	public FlowManager(ScheduleDateRepository scheduleDateRepository) {
 		this.scheduleDateRepository = scheduleDateRepository;
 	}
@@ -42,7 +45,7 @@ public abstract class FlowManager {
 	public static void main(String[] args) throws Exception {
 		ExecutionFlowData executionFlowData = new ExecutionFlowData();
 		executionFlowData.setFlowDirezione(Direction.OUTBOUND);
-		executionFlowData.setFlowTipFlusso(Constants.DB2);
+		executionFlowData.setFlowTipFlusso(Type.ORIGIN);
 	
 		OperationParams operationParams = new OperationParams();
 		

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 
 		
 		//utilizzato per gestire il file in modalità *add/*replace
-		boolean appendMode = parameters.getMemberOptionAddReplace().equals("*ADD") ? true : false;
+		boolean appendMode = parameters.getMemberOptionAddReplace() != null && parameters.getMemberOptionAddReplace().equals("*ADD");
         File file = new File(Constants.PATH_DELIMITER + parameters.getFolderIfs() + Constants.PATH_DELIMITER + parameters.getFileNameIfs());
         if (!file.exists()) {
             appendMode = false;
@@ -71,7 +72,7 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 		/*if (columnCount > 0 && "ROWID".equalsIgnoreCase(rsmd.getColumnName(columnCount))) {
 		    columnCount--;  
 		}*/
-		Charset cs = StringUtils.getCharset(parameters.getCodepage().intValue());
+		Charset cs = parameters.getCodepage() == null ? StandardCharsets.UTF_8 : StringUtils.getCharset(parameters.getCodepage().intValue());
 		
 		// Scrittura su file con buffering
 		/*
@@ -80,26 +81,26 @@ public class Table2File extends ConstraintDependentOperation<DbConversionParam, 
 		//uso un buffer di byte
 		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(Constants.PATH_DELIMITER + parameters.getFolderIfs() + Constants.PATH_DELIMITER + parameters.getFileNameIfs(), appendMode));
 
-		
-		
 		//dichiaro il fine riga da usare e il separatore
 		/*String endLine = StringUtils.convertCharset(parameters.getCodepage().intValue(), EndOfLine.fromString(parameters.getRecordDelimiter()).getEndLine());
 		String fieldDelimiter = StringUtils.convertCharset(parameters.getCodepage().intValue(), parameters.getFieldDelimiter());
-		*/
-		String endLine = EndOfLine.fromString(parameters.getRecordDelimiter()).getEndLine();
-		byte[] endLineByteEbcdic = EndOfLine.fromString(parameters.getRecordDelimiter()).getEndLineEbcdic();
+		*/ 
+		
+		String endLine = parameters.getRecordDelimiter() == null ? System.getProperty("line.separator") : EndOfLine.fromString(parameters.getRecordDelimiter()).getEndLine();
 		byte[] endLineByte;
 		
 		//valuto se tenere il fine riga base o quello ebcdic
-		if (StringUtils.isCharsetSupported(parameters.getCodepage().intValue())) {
-			endLineByte = endLineByteEbcdic;
-		} else endLineByte = endLine.getBytes(cs);
+		if (parameters.getCodepage() != null && StringUtils.isCharsetSupported(parameters.getCodepage().intValue())) {
+			endLineByte = EndOfLine.fromString(parameters.getRecordDelimiter()).getEndLineEbcdic();
+		} else {
+			endLineByte = endLine.getBytes(cs);
+		}
 		
-		String fieldDelimiter = parameters.getFieldDelimiter();
+		String fieldDelimiter = parameters.getFieldDelimiter() == null ? Constants.COMMA : parameters.getFieldDelimiter();
 		
 		// Scrivi l'intestazione (nomi delle colonne)
-		if ((parameters.getColumnName().equals("*SQL") || parameters.getColumnName().equals("*SYS") 
-					|| parameters.getColumnName().equals(Constants.EXF) ) && !appendMode ) {
+		if (("*SQL".equals(parameters.getColumnName()) || "*SYS".equals(parameters.getColumnName()) 
+					|| Constants.EXF.equals(parameters.getColumnName()) ) && !appendMode ) {
 	        for (int i = 1; i <= columnCount; i++) {
 	        	/*String rst = StringUtils.convertCharset(parameters.getCodepage().intValue(), rsmd.getColumnName(i));
 	        	System.out.println("Stringa pre write" + rst);

@@ -61,7 +61,7 @@ public class FlowLog {
 	private Direction logDirezione;
 	@Column(length = 10)
 	private String logLibreria;
-	@Column(length = 10)
+	@Column(length = 64)
 	private String logFile;
 	@Column(length = 10)
 	private String logMembro;

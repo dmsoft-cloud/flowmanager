@@ -3,11 +3,9 @@ package it.dmsoft.flowmanager.agent.engine.core.manager;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.agent.engine.core.db.DbConstants;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ConversionOperation;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder.ZipOperation;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.InboundFlowBuilder;
@@ -16,6 +14,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("inboundFlowManager")
@@ -28,7 +27,7 @@ public class InboundFlowManager extends FlowManager {
 
 	@Override
 	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
-		InboundFlowBuilder inboundFlowBuilder = new InboundFlowBuilder();
+		InboundFlowBuilder inboundFlowBuilder = (InboundFlowBuilder) applicationContext.getBean("inboundFlowBuilder");
 		
 		super.process(executionFlowData, operationParams);
 		
@@ -52,7 +51,7 @@ public class InboundFlowManager extends FlowManager {
 		// converto opzionale
 		boolean bypassConversion = operationParams.isBypassConversion() ||
 									StringUtils.isNullOrEmpty(executionFlowData.getFlowFile()) ||
-									 !Constants.DB2.equals(executionFlowData.getFlowTipFlusso());
+									 !Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso());
 		
 		
 		
@@ -62,7 +61,7 @@ public class InboundFlowManager extends FlowManager {
 			// vado a forzare il parametro bypassConversion a true in esecuzione del flow 
 			// se file vuoto
 			if(YesNo.YES.equals(executionFlowData.getFlowFlagOkVuoto()) && 
-					Constants.DB2.equals(executionFlowData.getFlowTipFlusso()) ) {
+					Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso()) ) {
 				inboundFlowBuilder.checkIfsFileEmpty(executionFlowData, operationParams);
 				
 			}
@@ -72,7 +71,7 @@ public class InboundFlowManager extends FlowManager {
 
 			// TRAVASO IN FILE DESTINAZIONE
 			if(!YesNo.YES.equals(executionFlowData.getFlowBypassQtemp()) 
-					&& YesNo.YES.equals(operationParams.isIBMi())
+					&& YesNo.YES.equals(operationParams.getIBMi())
 					&& ConversionOperation.CSV.name().equals(executionFlowData.getFlowFormato())) {
 				inboundFlowBuilder.fromQtempToDestinationFileOperation(executionFlowData, operationParams);
 				inboundFlowBuilder.cpyFile(executionFlowData, operationParams);
@@ -112,7 +111,7 @@ public class InboundFlowManager extends FlowManager {
 		List<String> deleteFiles = new ArrayList<String>();
 
 		if (!StringUtils.isNullOrEmpty(trasmissionFile)) {
-			if (Constants.DB2.equals(executionFlowData.getFlowTipFlusso())
+			if (Type.ORIGIN.equals(executionFlowData.getFlowTipFlusso())
 					&& YesNo.YES.equals(executionFlowData.getFlowCancellaFile())) {
 				deleteFiles.add(executionFlowData.getFlowFolder() + Constants.PATH_DELIMITER + trasmissionFile);
 			}

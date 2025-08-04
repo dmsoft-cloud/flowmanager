@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service;
 import it.dmsoft.flowmanager.be.entities.Agent;
 import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.entities.EmailParms;
 import it.dmsoft.flowmanager.be.entities.Flow;
 import it.dmsoft.flowmanager.be.entities.Interface;
 import it.dmsoft.flowmanager.be.entities.Model;
 import it.dmsoft.flowmanager.be.entities.Origin;
 import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.common.model.EmailData;
-import it.dmsoft.flowmanager.common.model.EmailParmsData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FullFlowsData;
 import it.dmsoft.flowmanager.common.model.GroupData;
@@ -50,9 +48,6 @@ public class SynchronizeDataService {
     
     @Resource(name = "originService")
     private BaseService<Origin, OriginData, String> originService;
-    
-    @Resource(name = "emailParmsService")
-    private BaseService<EmailParms, EmailParmsData, String> emailParmsService;
 
 	public FullFlowsData synchronizeFullFlowsData() {
 		List<AgentData> agents = agentService.getAll();
@@ -89,8 +84,7 @@ public class SynchronizeDataService {
 	private FullFlowsData retrieveFullFlowsData() {
 		FullFlowsData fullFlowsData = new FullFlowsData(
 				emailService.getAll(), flowService.getAll(), groupService.getAll(), 
-				interfaceService.getAll(), modelService.getAll(), originService.getAll(), 
-				emailParmsService.getAll().stream().findAny().orElse(null));
+				interfaceService.getAll(), modelService.getAll(), originService.getAll());
 		
 		return fullFlowsData;
 	}

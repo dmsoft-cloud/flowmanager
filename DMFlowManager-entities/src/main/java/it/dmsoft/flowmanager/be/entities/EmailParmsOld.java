@@ -8,7 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class EmailParms {
+@Deprecated
+public class EmailParmsOld {
 
 	@Id
 	@Column(length = 128)
