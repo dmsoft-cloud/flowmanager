@@ -43,7 +43,7 @@ public class Interface extends BaseEntity  {
 	private YesNo passiveMode;
 	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
-	private YesNo secureFtp;
+	private YesNo secure;
 	@Column(length = 255)
 	private String host;
 	private Integer port;
@@ -114,12 +114,12 @@ public class Interface extends BaseEntity  {
 		this.passiveMode = passiveMode;
 	}
 
-	public YesNo getSecureFtp() {
-		return secureFtp;
+	public YesNo getSecure() {
+		return secure;
 	}
 
-	public void setSecureFtp(YesNo secureFtp) {
-		this.secureFtp = secureFtp;
+	public void setSecure(YesNo secure) {
+		this.secure = secure;
 	}
 
 	public String getHost() {
