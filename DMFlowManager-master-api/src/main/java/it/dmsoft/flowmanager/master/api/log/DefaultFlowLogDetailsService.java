@@ -1,0 +1,61 @@
+package it.dmsoft.flowmanager.master.api.log;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.model.FlowLogData;
+import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
+import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
+import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
+import it.dmsoft.flowmanager.master.api.log.mapper.FlowLogDetailsMapper;
+import it.dmsoft.flowmanager.master.api.log.mapper.FlowLogMapper;
+import it.dmsoft.flowmanager.be.entities.FlowLog;
+import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
+import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
+import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
+import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
+
+
+
+
+@Service("flowLogDetailsService")
+public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDetails, FlowLogDetailsData, FlowLogDetailsId> {
+
+	@Autowired
+	private FlowLogDetailsRepository flowLogDetailsRepository;
+    
+    @Autowired
+    private FlowLogDetailsMapper modelMapper;
+
+    
+    public DefaultFlowLogDetailsService(FlowLogRepository flowLogRepository) {
+		super();
+		this.flowLogDetailsRepository = flowLogDetailsRepository;
+	}
+
+	@Override
+	protected BaseMapper<FlowLogDetails, FlowLogDetailsData> getMapper() {
+		return modelMapper;
+	}
+
+	@Override
+	protected JpaRepository<FlowLogDetails, FlowLogDetailsId> getRepository() {
+		return flowLogDetailsRepository;
+	}
+	
+	public List<FlowLogDetailsData> findByProgrLog(BigDecimal logProgrLog) {
+        return flowLogDetailsRepository
+            .findByFlowLogDetailsIdLogProgrLog(logProgrLog)
+            .stream()
+            .map(logDetail -> modelMapper.convertEntity(logDetail))
+            .collect(Collectors.toList());
+    }
+
+	    
+}
