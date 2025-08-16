@@ -50,11 +50,13 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 	}
 	
 	public List<FlowLogDetailsData> findByProgrLog(BigDecimal logProgrLog) {
-        return flowLogDetailsRepository
+		List<FlowLogDetailsData> lst =
+		 flowLogDetailsRepository
             .findByFlowLogDetailsIdLogProgrLog(logProgrLog)
             .stream()
             .map(logDetail -> modelMapper.convertEntity(logDetail))
             .collect(Collectors.toList());
+		return lst;
     }
 
 	    
