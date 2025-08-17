@@ -45,10 +45,12 @@ public class Flow extends BaseEntity {
 	
 	@Column(length = 20)
 	private String model;
-	@Column(length = 20)
+	@Column(length = 20)	
 	private String origin;
 	@Column(length = 20)
 	private String interfaceId;
+	@Column(length = 20)
+	private String agent;
 	
 	@Column(length = 20)
 	private String notificationFlow;
@@ -113,6 +115,12 @@ public class Flow extends BaseEntity {
 	}
 	public void setInterfaceId(String interfaceId) {
 		this.interfaceId = interfaceId;
+	}	
+	public String getAgent() {
+		return agent;
+	}
+	public void setAgent(String agent) {
+		this.agent = agent;
 	}
 	public String getNotificationFlow() {
 		return notificationFlow;

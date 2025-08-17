@@ -14,7 +14,7 @@ public class Agent {
 	@Column(length = 20)
 	private String id;
 	@Column(length = 64)
-	private String ip;
+	private String host;
 	private Integer port;
 	@Column(length = 255)
 	private String description;
@@ -32,12 +32,12 @@ public class Agent {
 		this.id = id;
 	}
 
-	public String getIp() {
-		return ip;
+	public String getHost() {
+		return host;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public Integer getPort() {

@@ -7,6 +7,7 @@ public class FlowFilterDTO {
     private String model;
     private String origin;
     private String interfaceId;
+    private String agent;
     private String direction;
     private String  enabled;
     
@@ -34,6 +35,12 @@ public class FlowFilterDTO {
 	}
 	public void setInterfaceId(String interfaceId) {
 		this.interfaceId = interfaceId;
+	}	
+	public String getAgent() {
+		return agent;
+	}
+	public void setAgent(String agent) {
+		this.agent = agent;
 	}
 	public String getDirection() {
 		return direction;

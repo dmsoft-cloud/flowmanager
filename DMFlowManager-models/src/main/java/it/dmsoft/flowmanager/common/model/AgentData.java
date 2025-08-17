@@ -9,7 +9,7 @@ public class AgentData {
 				Constants.DEFAULT_AGENT_DESCRIPTION, null, YesNo.YES);
 	
 	private String id;
-	private String ip;
+	private String host;
 	private Integer port;
 	private String description;
 	private String note;
@@ -19,10 +19,10 @@ public class AgentData {
 		super();
 	}
 
-	public AgentData(String id, String ip, Integer port, String description, String note, YesNo enabled) {
+	public AgentData(String id, String host, Integer port, String description, String note, YesNo enabled) {
 		super();
 		this.id = id;
-		this.ip = ip;
+		this.host = host;
 		this.port = port;
 		this.description = description;
 		this.note = note;
@@ -37,12 +37,12 @@ public class AgentData {
 		this.id = id;
 	}
 
-	public String getIp() {
-		return ip;
+	public String getHost() {
+		return host;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public Integer getPort() {

@@ -31,7 +31,7 @@ public class FlowData extends BaseModel {
 	private String model;
 	private String origin;
 	private String interfaceId;
-
+	private String agent;
 	private String notificationFlow;
 	private String notificationOk;
 	private String notificationKo;
@@ -98,6 +98,14 @@ public class FlowData extends BaseModel {
 
 	public void setInterfaceId(String interfaceId) {
 		this.interfaceId = interfaceId;
+	}
+
+	public String getAgent() {
+		return agent;
+	}
+
+	public void setAgent(String agent) {
+		this.agent = agent;
 	}
 
 	public String getNotificationFlow() {

@@ -27,6 +27,9 @@ public class FlowSpecifications {
             if (filter.getInterfaceId() != null && !filter.getInterfaceId().isEmpty()) {
                 predicate = cb.and(predicate, cb.equal(root.get("interfaceId"), filter.getInterfaceId()));
             }
+            if (filter.getAgent() != null && !filter.getAgent().isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("agent"), filter.getAgent()));
+            }
             if (filter.getEnabled() != null && !filter.getEnabled().trim().isEmpty()) {            	
             		YesNo enabledEnum = YesNo.getYesNo(filter.getEnabled().trim());
             		predicate = cb.and(predicate, cb.equal(root.get("enabled"), filter.getEnabled()));

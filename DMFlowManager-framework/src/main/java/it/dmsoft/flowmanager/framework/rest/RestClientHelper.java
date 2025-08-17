@@ -13,7 +13,7 @@ public class RestClientHelper {
 	
 	public static RestClient getAgentRestClient(AgentData agentData) {
 		return RestClient.builder()
-			    .baseUrl("http://" + agentData.getIp() + ":" + agentData.getPort())
+			    .baseUrl("http://" + agentData.getHost() + ":" + agentData.getPort())
 			    .build();
 
 	}
