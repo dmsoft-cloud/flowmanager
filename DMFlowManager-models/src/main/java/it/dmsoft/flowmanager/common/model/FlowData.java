@@ -25,7 +25,6 @@ public class FlowData extends BaseModel {
 	private String id;
 	private String description;
 	private String groupId;
-	private String agentId;
 	private String note;
 	private YesNo enabled;
 	private String model;
@@ -194,14 +193,6 @@ public class FlowData extends BaseModel {
 
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
-	}
-
-	public String getAgentId() {
-		return agentId;
-	}
-
-	public void setAgentId(String agentId) {
-		this.agentId = agentId;
 	}
 
 }

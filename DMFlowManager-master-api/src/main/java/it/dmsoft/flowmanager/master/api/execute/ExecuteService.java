@@ -25,7 +25,7 @@ public class ExecuteService {
 
 	public FlowExecutionOutcome synch(String flowId, FullFlowData fullFlowData) {
 		FlowData flowData = flowService.getById(flowId);
-		AgentData agent = flowData.getAgentId() != null ? agentService.getById(flowData.getAgentId()) : null;
+		AgentData agent = flowData.getAgent() != null ? agentService.getById(flowData.getAgent()) : null;
 		
 		RestClient rc = agent != null ? RestClientHelper.getAgentRestClient(agent) : RestClientHelper.getDefaultAgentRestClient();
 		

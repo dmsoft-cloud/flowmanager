@@ -15,6 +15,7 @@ public class FlowDataWithDirection extends FlowData {
         this.setEnabled(flowData.getEnabled());
         this.setModel(flowData.getModel());
         this.setOrigin(flowData.getOrigin());
+        this.setAgent(flowData.getAgent());
         this.setInterfaceId(flowData.getInterfaceId());
         this.setNotificationFlow(flowData.getNotificationFlow());
         this.setNotificationOk(flowData.getNotificationOk());
