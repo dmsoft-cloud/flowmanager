@@ -1,6 +1,7 @@
 package it.dmsoft.flowmanager.be.keys;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -28,7 +29,22 @@ public class FlowIdNumeratorId {
 	public void setFlowId(String flowId) {
 		this.flowId = flowId;
 	}
-	
-	
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(date, flowId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FlowIdNumeratorId other = (FlowIdNumeratorId) obj;
+		return Objects.equals(date, other.date) && Objects.equals(flowId, other.flowId);
+	}
+	
 }

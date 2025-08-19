@@ -3,13 +3,10 @@ package it.dmsoft.flowmanager.agent.api.flows;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.dmsoft.flowmanager.agent.api.flows.mapper.FlowDataMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
@@ -21,6 +18,7 @@ import it.dmsoft.flowmanager.common.model.GroupData;
 import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.common.model.OriginData;
+import it.dmsoft.flowmanager.framework.json.UtilityJson;
 
 @Service("flowDataService")
 public class FlowDataService {
@@ -37,12 +35,10 @@ public class FlowDataService {
 	private static FullFlowsData flowsData;
 
 	public FullFlowsData storeFullFlowsData(final FullFlowsData fullFlowsData) {
-		ObjectMapper om = new ObjectMapper();
-		om.findAndRegisterModules();
 
 		try {
 			File file = new File(dataFile);
-			om.writeValue(file, fullFlowsData);
+			UtilityJson.getMapper().writeValue(file, fullFlowsData);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -86,12 +82,9 @@ public class FlowDataService {
 	
 	
 	private FullFlowsData loadFullFlowsData() {
-		ObjectMapper om = new ObjectMapper();
-		om.findAndRegisterModules();
-
 		try {
 			File file = new File(dataFile);
-			return om.readValue(file, FullFlowsData.class);
+			return UtilityJson.readValue(file, FullFlowsData.class);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

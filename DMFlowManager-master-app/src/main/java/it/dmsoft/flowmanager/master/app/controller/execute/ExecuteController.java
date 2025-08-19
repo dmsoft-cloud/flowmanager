@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.master.api.execute.ExecuteService;
 import jakarta.annotation.Resource;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/execute")
@@ -30,5 +29,10 @@ public class ExecuteController {
 	@PostMapping("/synch/{flowId}")
 	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId) {
 		return executeService.synch(flowId, null);
+	}
+	
+	@PostMapping("/asynch/{flowId}")
+	public FlowExecutionOutcome asynch(@PathVariable(value = "flowId") String flowId) {
+		return executeService.asynch(flowId, null);
 	}
 }

@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.origin.mapper.OriginMapper;
+import it.dmsoft.flowmanager.master.repositories.OriginRepository;
 import it.dmsoft.flowmanager.be.entities.Origin;
-import it.dmsoft.flowmanager.be.repositories.OriginRepository;
 
 @Service("originService")
 public class DefaultOriginService extends DefaultBaseService<Origin, OriginData, String> {

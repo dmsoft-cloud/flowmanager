@@ -1,21 +1,33 @@
 package it.dmsoft.flowmanager.agent.engine.core.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
 
 import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.be.entities.FlowLog;
-import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
-import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
-import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
-import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
+import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse.Outcome;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
+import it.dmsoft.flowmanager.common.engine.FlowConfig;
+import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
+import it.dmsoft.flowmanager.common.model.FlowLogData;
+import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
+import it.dmsoft.flowmanager.framework.json.UtilityJson;
 
 @Service("flowLogUtils")
 public class FlowLogUtils {
@@ -23,87 +35,122 @@ public class FlowLogUtils {
 	private static FlowLogUtils instance = null;
 	
 	@Autowired
-    private FlowLogMapper flowLogMapper;
+    private FlowLogMapper flowLogMapper;	
 	
-	private FlowLogRepository flowLogRepository;
+	private static ThreadLocal<FlowExecutionOutcome> threadLocalExecStatus = new ThreadLocal<>();
 	
-	private FlowLogDetailsRepository flowLogDetailsRepository;
+	private static ThreadLocal<WebSocketSession> threadLocalWebSocket = new ThreadLocal<>();
 	
-	private BigDecimal transactionId;
-	
-	private BigDecimal phaseProg;
-	
-	public FlowLogUtils(FlowLogRepository flowLogRepository, FlowLogDetailsRepository flowLogDetailsRepository) {
+	public FlowLogUtils() {
 		instance = this;
-		
-		this.flowLogDetailsRepository = flowLogDetailsRepository;
-		this.flowLogRepository = flowLogRepository;
-
 	}
 	
-	public static FlowLog insertFlowLog(ExecutionFlowData executionFlowData) {
-		FlowLog flowLog = instance.writeFlowLog(executionFlowData);
-		instance.transactionId = flowLog.getLogProgrLog();
-		instance.phaseProg = BigDecimal.ZERO;
-		return flowLog;
+	public static FlowLogData headLog(BigDecimal flowProg, ExecutionFlowData executionFlowData, FlowConfig flowConfig, WebSocketSession webSocketSession) {
+		FlowLogData fld = instance.getFlowLog(executionFlowData);
+		fld.setLogProgrLog(flowProg);
+		
+		FlowExecutionOutcome fes = new FlowExecutionOutcome();
+		fes.setLogData(fld);
+		fes.setLogDetailsData(new ArrayList<FlowLogDetailsData>());
+		
+		threadLocalExecStatus.set(fes);
+		threadLocalWebSocket.set(webSocketSession);
+		
+		return fld;
 	}
 
 	public static void startDetail(OperationType operation) throws Exception {		
-		instance.writeFlowLogDetails(operation, Constants.START_PHASE_DESCR, Constants.OK);
+		instance.addFlowLogDetail(operation, Constants.START_PHASE_DESCR, Constants.OK);
 	}
 	
 	public static void endDetail(OperationType operation) throws Exception {
-		instance.writeFlowLogDetails(operation, Constants.END_PHASE_DESCR, Constants.OK);
+		instance.addFlowLogDetail(operation, Constants.END_PHASE_DESCR, Constants.OK);
 	}
 	
 	public static void koDetail() throws Exception {
-		instance.writeFlowLogDetails(null, Constants.KO_DESCR, Constants.KO);
+		instance.addFlowLogDetail(null, Constants.KO_DESCR, Constants.KO);
 	}
 	
-	public static FlowLog updateLogPath(FlowLog flowLog, String logFile) {
-		FlowLog flowLogDb = instance.flowLogRepository.getReferenceById(flowLog.getLogProgrLog());
-		flowLogDb.setLogLogFile(logFile);
-		return instance.flowLogRepository.save(flowLogDb);
+	public static void updateLogPath(String logFile) throws StreamWriteException, DatabindException, IOException {
+		FlowLogData fld = threadLocalExecStatus.get().getLogData();
+		fld.setLogLogFile(logFile);
+		
+		//CREATE FOLDER WITH FLOW PROGR
+		String logDirectory = logFile + Constants.UNDERSCORE;
+		Files.createDirectories(Paths.get(logDirectory));
+		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogData.class.getSimpleName());
+		UtilityJson.getMapper().writeValue(file, fld);
+		
+		notifyOnWebSocketIfNecessary(fld);
 	}
 	
 	public static void updateBackupPath(BigDecimal transactionId, String destFile) {
-		FlowLog flowLog = instance.flowLogRepository.getReferenceById(transactionId);
-		flowLog.setLogBackup(destFile);
-		instance.flowLogRepository.save(flowLog);
+		FlowLogData fld = threadLocalExecStatus.get().getLogData();
+		fld.setLogBackup(destFile);
 	}
 
-	private void writeFlowLogDetails(OperationType operation, String phaseDescr, String outcome) throws Exception {
-		FlowLogDetails flowDetails = getFlowLogDetail(operation, phaseDescr, outcome);
-		flowLogDetailsRepository.save(flowDetails);
-	}
-
-	private FlowLogDetails getFlowLogDetail(OperationType operation, String phaseDescr, String outcome) {
+	private FlowLogDetailsData addFlowLogDetail(OperationType operation, String phaseDescr, String outcome) throws StreamWriteException, DatabindException, IOException {
 		Date date= new Date();
 		
-		phaseProg = phaseProg.add(BigDecimal.ONE);
-		FlowLogDetails flowLogDetails = new FlowLogDetails();
+		FlowExecutionOutcome fes = threadLocalExecStatus.get();
+		FlowLogData fld = fes.getLogData();
+		List<FlowLogDetailsData> flowDetailsData = fes.getLogDetailsData();
 		
-		FlowLogDetailsId id = new FlowLogDetailsId();
-		id.setLogProgrLog(transactionId);
-		id.setLogProgrFase(phaseProg);
+		BigDecimal lastProg = flowDetailsData.size() == 0 ? BigDecimal.ZERO : flowDetailsData.get(flowDetailsData.size() - 1).getLogProgrFase();
 		
-		flowLogDetails.setFlowLogDetailsId(id);
-		flowLogDetails.setLogDetEsito(Status.getStatus(outcome));
-		flowLogDetails.setLogDetFase(operation != null ? operation.name() : Constants.SPACE);
-		flowLogDetails.setLogDetNote(phaseDescr + (operation != null ? Constants.SPACE + operation.getDescription() : ""));
-		flowLogDetails.setLogDetTs(new Timestamp(date.getTime()));
+		BigDecimal phaseProg = lastProg.add(BigDecimal.ONE);
+		FlowLogDetailsData fldd = new FlowLogDetailsData();
 		
-		return flowLogDetails;
+		fldd.setLogProgrLog(fld.getLogProgrLog());
+		fldd.setLogProgrFase(phaseProg);
+		fldd.setLogDetEsito(Status.getStatus(outcome));
+		fldd.setLogDetFase(operation != null ? operation.name() : Constants.SPACE);
+		fldd.setLogDetNote(phaseDescr + (operation != null ? Constants.SPACE + operation.getDescription() : ""));
+		fldd.setLogDetTs(new Timestamp(date.getTime()));
+		
+		threadLocalExecStatus.get().getLogDetailsData().add(fldd);
+		
+		//CREATE FOLDER WITH FLOW PROGR
+		String logDirectory = fld.getLogLogFile() + Constants.UNDERSCORE;
+		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogDetailsData.class.getSimpleName() + phaseDescr + operation);
+		UtilityJson.getMapper().writeValue(file, fld);
+		
+		notifyOnWebSocketIfNecessary(fldd);
+		return fldd;
+	}
+
+	private static void notifyOnWebSocketIfNecessary(Object data) {
+		notifyOnWebSocketIfNecessary(data, false);
+	}
+	private static void notifyOnWebSocketIfNecessary(Object data, boolean lastMsg) {
+		WebSocketSession wss = threadLocalWebSocket.get();
+		
+		if(wss == null)
+			return;
+		
+		try {
+    		TextMessage textMessage = new TextMessage(UtilityJson.writeValueAsString(data));
+			wss.sendMessage(textMessage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
-	private FlowLog writeFlowLog(ExecutionFlowData executionFlowData) {
-		FlowLog flowLog = getFlowLog(executionFlowData);
-		return flowLogRepository.save(flowLog);
+	//TODO ADD WRITE FLOWLOGDATA OF THE FLOW OUTCOME EXECUTION AND NOTIFY IT ON WEBSOCKET SO YOU CAN CLOSE THE WEBSOCKET
+	//LAST ADD SYNCH METHOD FOR LOGS RETRIEVE
+	public static void updateOutcome(Outcome outcome) throws StreamWriteException, DatabindException, IOException {
+		FlowLogData fld = threadLocalExecStatus.get().getLogData();
+		
+		String logDirectory = fld.getLogLogFile() + Constants.UNDERSCORE;
+		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogData.class.getSimpleName());
+		UtilityJson.getMapper().writeValue(file, fld);
+		notifyOnWebSocketIfNecessary(fld, true);
 	}
-	
-	private FlowLog getFlowLog(ExecutionFlowData executionFlowData) {
-		FlowLog flowLog = flowLogMapper.convert(executionFlowData);
-		return flowLog;
+
+	private FlowLogData getFlowLog(ExecutionFlowData executionFlowData) {
+		return flowLogMapper.convert(executionFlowData);
 	}
 
 }

@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import it.dmsoft.flowmanager.be.entities.Email;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.framework.json.UtilityJson;
 import jakarta.annotation.Resource;
 
 @RestController
@@ -52,8 +51,7 @@ public class EmailController {
     @PostMapping("/email")
     public EmailData saveEmail(final @RequestBody EmailData emailData) {
     	try {
-    	        ObjectMapper objectMapper = new ObjectMapper();
-    	        String jsonInput = objectMapper.writeValueAsString(emailData);
+    	        String jsonInput = UtilityJson.writeValueAsString(emailData);
     	        System.out.println("Received JSON: " + jsonInput);
     	    } catch (Exception e) {
     	        e.printStackTrace();

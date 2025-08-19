@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import it.dmsoft.flowmanager.be.entities.Flow;
+import it.dmsoft.flowmanager.be.entities.Model;
+import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowDataWithDirection;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.flow.mapper.FlowMapper;
-import it.dmsoft.flowmanager.be.entities.Flow;
-import it.dmsoft.flowmanager.be.entities.Model;
-import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
-import it.dmsoft.flowmanager.be.repositories.FlowRepository;
-import it.dmsoft.flowmanager.be.repositories.ModelRepository;
-import it.dmsoft.flowmanager.be.repositories.specification.FlowSpecifications;
+import it.dmsoft.flowmanager.master.repositories.FlowRepository;
+import it.dmsoft.flowmanager.master.repositories.ModelRepository;
+import it.dmsoft.flowmanager.master.repositories.specification.FlowSpecifications;
 
 
 @Service("flowService")

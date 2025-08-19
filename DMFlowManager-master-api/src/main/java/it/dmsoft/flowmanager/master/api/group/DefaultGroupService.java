@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.GroupData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.group.mapper.GroupMapper;
+import it.dmsoft.flowmanager.master.repositories.ConfigurationGroupRepository;
 import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
-import it.dmsoft.flowmanager.be.repositories.ConfigurationGroupRepository;
 
 
 @Service("groupService")

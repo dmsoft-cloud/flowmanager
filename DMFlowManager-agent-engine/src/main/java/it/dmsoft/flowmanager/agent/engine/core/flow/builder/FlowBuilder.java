@@ -70,6 +70,7 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.remote.File2Table;
 import it.dmsoft.flowmanager.agent.engine.core.operations.remote.File2TableFixed;
 import it.dmsoft.flowmanager.agent.engine.core.operations.remote.Table2File;
 import it.dmsoft.flowmanager.agent.engine.core.operations.remote.Table2FileFixed;
+import it.dmsoft.flowmanager.agent.engine.core.persistence.HibernateSessionFactory;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
@@ -83,7 +84,6 @@ import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse;
 import it.dmsoft.flowmanager.be.entities.Email;
 import it.dmsoft.flowmanager.be.entities.Recipient;
-import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
@@ -93,7 +93,7 @@ import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+//import jakarta.persistence.PersistenceContext;
 
 
 public class FlowBuilder {
@@ -102,10 +102,10 @@ public class FlowBuilder {
 	
 	//protected static FlowBuilder instance;
 	
-	@PersistenceContext
-    protected EntityManager entityManager;
+//	@PersistenceContext
+    //protected EntityManager entityManager;
 	
-	protected EmailRepository emailRepository;
+//	protected EmailRepository emailRepository;
 	
 	@Autowired
 	protected DbConversionParamMapper dbConversionParamMapper;
@@ -252,7 +252,8 @@ public class FlowBuilder {
 
 		Email mail = null;
 
-		mail = emailRepository.getReferenceById(letterCode);
+		EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+		mail = entityManager.find(Email.class, letterCode);
 		if (mail == null) {
 			throw new ParameterException("Mail " + letterCode + " not  found");
 		}
@@ -332,6 +333,8 @@ public class FlowBuilder {
 		//if(!YesNo.YES.equals(operationParams.isIBMi())) retList.add(readOtgffempa);
 		
 		retList.add(sendMail);
+		
+		entityManager.close();
 		
 		return retList;
 	}
@@ -1372,6 +1375,7 @@ public class FlowBuilder {
 			//operationParams.setFileNames
 			String fileName = operationParams.getFileNames().get(0);
 			if(fileName.matches(Constants.REGEXP_WILDCARD + Constants.$PR__REGEXP + Constants.REGEXP_WILDCARD)) {
+				EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
 				BigDecimal startProgr = FlowIdNumeratorUtils.getNextId(executionFlowData.getFlowId(), FormatUtils.date(operationParams.getExecutionDate()), 
 						BigDecimal.valueOf(operationParams.getFileNames().size()), entityManager);
 				
@@ -1381,6 +1385,8 @@ public class FlowBuilder {
 				if (executionFlowData.getFlowTipFlusso() != null) {
 					operationParams.setTrasmissionFiles(Arrays.asList(fileName));
 				} 
+				
+				entityManager.close();
 			}
 			
 		}

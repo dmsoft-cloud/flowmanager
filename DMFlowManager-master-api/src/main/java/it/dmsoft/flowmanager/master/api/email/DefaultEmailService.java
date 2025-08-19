@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.email.mapper.EmailMapper;
+import it.dmsoft.flowmanager.master.repositories.EmailRepository;
 import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.repositories.EmailRepository;
 
 @Service("emailService")
 public class DefaultEmailService extends DefaultBaseService<Email, EmailData, String> {

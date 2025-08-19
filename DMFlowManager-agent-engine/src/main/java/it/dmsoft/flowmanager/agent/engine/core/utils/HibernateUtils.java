@@ -3,9 +3,12 @@ package it.dmsoft.flowmanager.agent.engine.core.utils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -24,10 +27,10 @@ import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public enum HibernateUtils {
 	
-	DB2_ISERIES(DbType.DB2_ISERIES) {
+	DB2_ISERIES(DbType.DB2_ISERIES, "com.ibm.as400.access.AS400JDBCDriver") {
 
 		@Override
-		public SessionFactory getSessionFactory(GenericConnectionParams gcp, String schema) {
+		public SessionFactory getSessionFactory(List<Class<?>> entityClasses, GenericConnectionParams gcp, String schema) {
 			if (db2iseriesSessionFactory == null) {
 	        	//Integer port = gcp.getPort() == null ? 3306 : gcp.getPort();
 	        	String ssl = (YesNo.YES.equals(gcp.isSecure()) ? Boolean.TRUE : Boolean.FALSE).toString();
@@ -35,10 +38,9 @@ public enum HibernateUtils {
 	        	
 	        	String jdbcConnectionString = StringUtils.isNullOrEmpty(gcp.getJdbcCustomString()) 
 	        			? "jdbc:as400://" + gcp.getHost() + "/" +  db + ";naming=sql;secure=" + ssl : gcp.getJdbcCustomString();
-	        	String jdbcDriver = "com.mysql.cj.jdbc.Driver";
-	        	String hibernateDialect = "org.hibernate.dialect.MySQLDialect";
+	        	String hibernateDialect = "org.hibernate.dialect.DB2400Dialect";
 	        	
-	        	db2iseriesSessionFactory = createSessionFactory(gcp, jdbcConnectionString, jdbcDriver, hibernateDialect);
+	        	db2iseriesSessionFactory = createSessionFactory(entityClasses, gcp, jdbcConnectionString, getJdbcClassName(), hibernateDialect);
 	        }
 	        return db2iseriesSessionFactory;	
 				
@@ -78,9 +80,9 @@ public enum HibernateUtils {
 		
 	},
 	
-	MYSQL(DbType.MYSQL) {
+	MYSQL(DbType.MYSQL, "com.mysql.cj.jdbc.Driver") {
 		
-	    public SessionFactory getSessionFactory(GenericConnectionParams gcp, String schema) {
+	    public SessionFactory getSessionFactory(List<Class<?>> entityClasses, GenericConnectionParams gcp, String schema) {
 	        if (mysqlSessionFactory == null) {
 	        	Integer port = gcp.getPort() == null ? 3306 : gcp.getPort();
 	        	String ssl = (YesNo.YES.equals(gcp.isSecure()) ? Boolean.TRUE : Boolean.FALSE).toString();
@@ -88,29 +90,27 @@ public enum HibernateUtils {
 	        	
 	        	String jdbcConnectionString = StringUtils.isNullOrEmpty(gcp.getJdbcCustomString()) 
 	        			? "jdbc:mysql://" + gcp.getHost() + ":" + port + db + "?useSSL=" + ssl : gcp.getJdbcCustomString();
-	        	String jdbcDriver = "com.mysql.cj.jdbc.Driver";
 	        	String hibernateDialect = "org.hibernate.dialect.MySQLDialect";
 	        	
-	        	mysqlSessionFactory = createSessionFactory(gcp, jdbcConnectionString, jdbcDriver, hibernateDialect);
+	        	mysqlSessionFactory = createSessionFactory(entityClasses, gcp, jdbcConnectionString, getJdbcClassName(), hibernateDialect);
 	        }
 	        return mysqlSessionFactory;
 	    }
 		
 	},
 	
-	MSSQLSERVER(DbType.MSSQLSERVER) {
+	MSSQLSERVER(DbType.MSSQLSERVER, "com.microsoft.sqlserver.jdbc.SQLServerDriver") {
 		
-	    public SessionFactory getSessionFactory(GenericConnectionParams gcp, String schema) {
+	    public SessionFactory getSessionFactory(List<Class<?>> entityClasses, GenericConnectionParams gcp, String schema) {
 	        if (mssqlserverSessionFactory == null) {
 	        	Integer port = gcp.getPort() == null ? 1433 : gcp.getPort();
 	        	String ssl = (YesNo.YES.equals(gcp.isSecure()) ? Boolean.TRUE : Boolean.FALSE).toString();
 	        	String db = StringUtils.isNullOrEmpty(schema) ? "" : ";DatabaseName=" + schema;
 	        	String jdbcConnectionString = StringUtils.isNullOrEmpty(gcp.getJdbcCustomString()) 
 	        			? "jdbc:sqlserver://" + gcp.getHost() + ":" + port + db + "?encrypt=" + ssl + ";trustServerCertificate=true" : gcp.getJdbcCustomString();
-	        	String jdbcDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	        	String hibernateDialect = "org.hibernate.dialect.SQLServerDialect";
 	        	
-	        	mssqlserverSessionFactory = createSessionFactory(gcp, jdbcConnectionString, jdbcDriver, hibernateDialect);
+	        	mssqlserverSessionFactory = createSessionFactory(entityClasses, gcp, jdbcConnectionString, getJdbcClassName(), hibernateDialect);
 	        }
 	        return mssqlserverSessionFactory;
 	    }
@@ -125,18 +125,37 @@ public enum HibernateUtils {
 	
 	private DbType dbType;
 	
-	private HibernateUtils(DbType dbType) {
+	private String jdbcClassName;
+	
+	private HibernateUtils(DbType dbType, String jdbcClassName) {
 		this.dbType = dbType;
+		this.jdbcClassName = jdbcClassName;
 	}
 	
 	public DbType getDbType() {
 		return this.dbType;
 	}
 	
-	private static SessionFactory createSessionFactory(GenericConnectionParams gcp, String jdbcConnectionString, String jdbcDriver, String hibernateDialect) {
+	public String getJdbcClassName() {
+		return jdbcClassName;
+	}
+	
+	public abstract SessionFactory getSessionFactory(List<Class<?>> entityClasses, GenericConnectionParams gcp, String schema);	
+	
+	public SessionFactory getSessionFactory(GenericConnectionParams gcp, String schema) {
+		return getSessionFactory(null, gcp, schema);
+	}
+	
+	
+	private static SessionFactory createSessionFactory(List<Class<?>> entityClasses, GenericConnectionParams gcp, String jdbcConnectionString, String jdbcDriver, String hibernateDialect) {
 		try {
             Configuration configuration = new Configuration();
-
+            
+            if (entityClasses != null) {
+            	for(Class<?> entityClass : entityClasses)
+            		configuration.addAnnotatedClass(entityClass);
+            }
+            
             // Hibernate settings
             Properties settings = new Properties();
             settings.put("hibernate.connection.driver_class", jdbcDriver);
@@ -146,9 +165,10 @@ public enum HibernateUtils {
             settings.put("hibernate.dialect", hibernateDialect);
             settings.put("hibernate.show_sql", "true");
             settings.put("hibernate.hbm2ddl.auto", "update");
-
+            settings.put("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+            configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
             configuration.setProperties(settings);
-
+            
             StandardServiceRegistryBuilder serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties());
 
@@ -159,8 +179,6 @@ public enum HibernateUtils {
 		
 	}
 	
-	public abstract SessionFactory getSessionFactory(GenericConnectionParams gcp, String schema);	
-	
 	public Connection getConnection(GenericConnectionParams gcp, String schema) {
 		SessionFactoryImpl sessionFactoryImplementation = (SessionFactoryImpl) getSessionFactory(gcp, schema);
 		try {
@@ -169,6 +187,16 @@ public enum HibernateUtils {
 			throw new RuntimeException(e);
 		}
 		
+	}
+	
+	public static HibernateUtils getHibernateUtils(String jdbcClassName) {
+		for(HibernateUtils hu : HibernateUtils.values()) {
+			if(hu.getJdbcClassName().equals(jdbcClassName)) {
+				return hu;
+			}
+		}
+		
+		return null;
 	}
 
 }

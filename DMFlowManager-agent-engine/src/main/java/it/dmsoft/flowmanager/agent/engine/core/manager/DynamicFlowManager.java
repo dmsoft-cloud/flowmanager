@@ -1,7 +1,6 @@
 package it.dmsoft.flowmanager.agent.engine.core.manager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -11,37 +10,31 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
 
-import it.dmsoft.flowmanager.be.entities.ExportFlowData;
-import it.dmsoft.flowmanager.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.be.entities.FlowLog;
-import it.dmsoft.flowmanager.be.repositories.ExportFlowDataRepository;
-import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
-import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
-import it.dmsoft.flowmanager.common.domain.Domains.Direction;
-import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.agent.engine.core.Main;
-import it.dmsoft.flowmanager.agent.engine.core.as400.JdbcConnection;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.model.MasterdataOverride;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
+import it.dmsoft.flowmanager.agent.engine.core.persistence.HibernateSessionFactory;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesConstants;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.ConfigUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowMasterDataUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse.Outcome;
+import it.dmsoft.flowmanager.be.entities.ExportFlowData;
+import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.common.engine.FlowConfig;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 
 @Service("dynamicFlowManager")
 public class DynamicFlowManager {
@@ -54,8 +47,6 @@ public class DynamicFlowManager {
 	 */
 	
 	//private FlowIdNumeratorRepository flowIdNumeratorRepository;
-	@PersistenceContext
-    private EntityManager entityManager;
 
 	@Resource(name = "flowLogUtils")
 	private FlowLogUtils flowLogUtils;
@@ -67,7 +58,7 @@ public class DynamicFlowManager {
 	
 	//private FlowLogDetailsRepository flowLogDetailsRepository;
 	
-	private ExportFlowDataRepository exportFlowDataRepository;
+	//private EntityManager entityManager;
 	
 	public void main(String[] args, ExecutionFlowData executionFlowData)throws IOException  {
 		Logger logger = null;
@@ -162,26 +153,27 @@ public class DynamicFlowManager {
 				//System.out.println(e.getMessage());
 				logger.error("Error on log details write", e);
 			}
+			FlowLogUtils.updateOutcome(Outcome.KO);
 			System.exit(1);
 
 		} /*finally {
 			JdbcConnection.close();
 		}*/
-
+		FlowLogUtils.updateOutcome(Outcome.OK);
 
 	}
 	
 
-	public void executeFlow(ExecutionFlowData executionFlowData, List<String> overrideMailDests, FlowConfig config) throws Exception{
+	public void executeFlow(BigDecimal flowProgr, ExecutionFlowData executionFlowData, List<String> overrideMailDests, FlowConfig config, WebSocketSession webSocketSession) throws Exception{
 		
 		String transactionName = executionFlowData.getFlowId();
 		
 		
 		BigDecimal executionDate = FormatUtils.todayDateBigDec();
 				
-		FlowLog headLog = FlowLogUtils.insertFlowLog(executionFlowData);
-		BigDecimal transactionId = headLog.getLogProgrLog();
-		config.setTransactionId(transactionId.toString());
+		FlowLogUtils.headLog(flowProgr, executionFlowData, config, webSocketSession);
+		
+		config.setTransactionId(flowProgr.toString());
 		
 		String logFile = config.getLogPath() + Constants.PATH_DELIMITER + config.getTransactionName() + Constants.PATH_DELIMITER
 				+ config.getTransactionId();
@@ -189,14 +181,14 @@ public class DynamicFlowManager {
 		Logger logger = Logger.getLogger(config.getLogRotation(), config.getLogSizeMB(), logFile, config.getLogLevel(), config.getTransactionId(), Main.class.getName(),
 				config.getCliente(), Constants.GESTOREFLUSSI);
 		
-		FlowLogUtils.updateLogPath(headLog, logFile);
+		FlowLogUtils.updateLogPath(logFile);
 		
 		String resubmitTransactionId = null;
 		
 		String backupPath = config.getBackupPath();
 		//String mailFrom = config.getMailFrom();
 		
-		executeFlow(transactionName, transactionId.toString(), resubmitTransactionId, backupPath, /*mailFrom,*/ logFile, executionDate, logger, executionFlowData, overrideMailDests, config);
+		executeFlow(transactionName, flowProgr.toString(), resubmitTransactionId, backupPath, /*mailFrom,*/ logFile, executionDate, logger, executionFlowData, overrideMailDests, config);
 	}
 		
 
@@ -209,11 +201,15 @@ public class DynamicFlowManager {
 			executionFlowData = resubmit(executionFlowData, resubmitTransactionId);
 		}
 		
+		HibernateSessionFactory.init(config);
+		
 		ExportFlowData exportFlowData = null;
 		//verifico se c'è un export e se è di tipo new o old. in tal caso devo vedere se applicare la selezione colonne
 		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowExportCode()) 
 				&& (executionFlowData.getFlowExportFlag().equals("S") || executionFlowData.getFlowExportFlag().equals("O")) ) {
-				exportFlowData = exportFlowDataRepository.findById(executionFlowData.getFlowExportCode()).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+			EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+			exportFlowData = entityManager.getReference(ExportFlowData.class, executionFlowData.getFlowExportCode());
+			entityManager.close();
 		}
 
 		OperationParams inputParam = new OperationParams();
@@ -250,6 +246,7 @@ public class DynamicFlowManager {
 			InboundFlowManager inboundManager = (InboundFlowManager) applicationContext.getBean("inboundFlowManager");
 			inboundManager.process(executionFlowData, inputParam);
 		}
+		
 	}
 	
 	private static ExecutionFlowData resubmit(ExecutionFlowData executionFlowData, String resubmitTransactionId) throws Exception {

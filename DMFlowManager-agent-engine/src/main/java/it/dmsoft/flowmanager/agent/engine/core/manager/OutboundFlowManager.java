@@ -17,18 +17,12 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowIdNumeratorUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
-import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("outboundFlowManager")
 public class OutboundFlowManager extends FlowManager {
-	
-	public OutboundFlowManager(ScheduleDateRepository scheduleDateRepository) {
-		super(scheduleDateRepository);
-		// TODO Auto-generated constructor stub
-	}
 
 	public void handleOuputFileNames(OutboundFlowBuilder outboundFlowBuilder, ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {
 		//CERCO FILE SU IFS

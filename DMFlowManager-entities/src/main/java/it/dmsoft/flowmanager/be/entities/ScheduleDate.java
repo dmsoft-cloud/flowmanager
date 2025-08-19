@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class ScheduleDate {
+public class ScheduleDate extends BaseEntity {
 
 	@Id
 	@Column(length = 8)
