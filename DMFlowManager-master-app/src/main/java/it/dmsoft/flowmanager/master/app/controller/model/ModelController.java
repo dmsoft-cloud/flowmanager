@@ -2,6 +2,7 @@ package it.dmsoft.flowmanager.master.app.controller.model;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.dmsoft.flowmanager.be.entities.Model;
 import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.Model;
 import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/models")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class ModelController {
 
     @Resource(name = "modelService")

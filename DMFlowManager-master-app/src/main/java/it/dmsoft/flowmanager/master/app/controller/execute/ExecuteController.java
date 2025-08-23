@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.app.controller.execute;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/execute")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class ExecuteController {
 	
 	@Resource(name = "executeService")

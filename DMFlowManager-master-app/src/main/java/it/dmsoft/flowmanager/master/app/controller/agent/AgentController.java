@@ -3,6 +3,7 @@ package it.dmsoft.flowmanager.master.app.controller.agent;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import jakarta.annotation.Resource;
 //@CrossAgent(agents = "#{'${cors.allowed.agents}'}")
 @RestController
 @RequestMapping("/agents")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class AgentController {
 	
 	//@Value("${cors.allowed.agents}")

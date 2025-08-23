@@ -3,6 +3,7 @@ package it.dmsoft.flowmanager.master.app.controller.origin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,15 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.dmsoft.flowmanager.be.entities.Origin;
 import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.Origin;
 import jakarta.annotation.Resource;
 
 //@CrossOrigin(origins = "http://localhost:4200") 
 //@CrossOrigin(origins = "#{'${cors.allowed.origins}'}")
 @RestController
 @RequestMapping("/origins")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class OriginController {
 	
 	@Value("${cors.allowed.origins}")
