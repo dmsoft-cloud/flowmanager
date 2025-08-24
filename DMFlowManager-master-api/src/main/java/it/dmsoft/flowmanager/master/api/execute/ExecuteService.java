@@ -20,6 +20,7 @@ import it.dmsoft.flowmanager.common.model.FlowLogData;
 import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
+import it.dmsoft.flowmanager.framework.oauth.SecurityConfig;
 import it.dmsoft.flowmanager.framework.rest.RestClientHelper;
 import it.dmsoft.flowmanager.master.api.websocket.WebSocketHelper;
 import jakarta.annotation.Resource;
@@ -41,7 +42,7 @@ public class ExecuteService {
 
     @Autowired
     private ExecuteWebSocketClient executeWebSocketClient;
-    
+//    
     public FlowExecutionOutcome synch(String flowId, FullFlowData fullFlowData) {
     	return execute(flowId, fullFlowData, false);
     }
@@ -100,6 +101,7 @@ public class ExecuteService {
 			      .path(flowProgr.toString())
 			      .build())
 				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + SecurityConfig.threadLocalJwt.get().getTokenValue())
 				//.body(fullFlowData)
 				.retrieve()
 				.body(FlowExecutionOutcome.class);

@@ -12,6 +12,7 @@ import it.dmsoft.flowmanager.agent.api.properties.AgentPropertiesService;
 import it.dmsoft.flowmanager.agent.api.properties.mapper.FlowConfigMapper;
 import it.dmsoft.flowmanager.agent.engine.core.manager.DynamicFlowManager;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.common.engine.FlowConfig;
 import it.dmsoft.flowmanager.common.model.FlowData;
@@ -36,10 +37,10 @@ public class ExecuteService {
 	private FlowConfigMapper flowConfigMapper;
 	
 	public FlowExecutionOutcome synch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
-		return synch(flowId, flowProgr, fullFlowData, false);
+		return execute(flowId, flowProgr, fullFlowData, false);
 	}
 	
-	private FlowExecutionOutcome synch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData, boolean asynch) {
+	private FlowExecutionOutcome execute(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData, boolean asynch) {
 		//CARICARE il FLUSSO DA JSON
 		//FARE IL MERGE CON QUANTO ARRIVATO IN INPUT
 		if (fullFlowData == null) {
@@ -68,10 +69,9 @@ public class ExecuteService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 		
-		return null;
+		return FlowLogUtils.getFlowExecutionOutcome();
 	}
 	
 	private FlowConfig getFlowConfig(FullFlowData storedFullFlowData) {
@@ -82,7 +82,7 @@ public class ExecuteService {
 
 	@Async
 	public void asynch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
-		synch(flowId, flowProgr, fullFlowData, true);
+		execute(flowId, flowProgr, fullFlowData, true);
 	}
 
 }

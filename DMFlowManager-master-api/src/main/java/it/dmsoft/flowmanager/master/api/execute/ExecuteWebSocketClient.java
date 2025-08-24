@@ -21,6 +21,8 @@ import it.dmsoft.flowmanager.framework.json.UtilityJson;
 import jakarta.annotation.Resource;
 import jakarta.websocket.ClientEndpoint;
 import jakarta.websocket.ContainerProvider;
+import jakarta.websocket.Endpoint;
+import jakarta.websocket.EndpointConfig;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -29,7 +31,7 @@ import jakarta.websocket.WebSocketContainer;
 
 @ClientEndpoint
 @Component("executeWebSocketClient")
-public class ExecuteWebSocketClient {
+public class ExecuteWebSocketClient extends Endpoint{
 	
 	private boolean firstMessage = false;
 
@@ -100,5 +102,10 @@ public class ExecuteWebSocketClient {
         }
         
     }
+
+	@Override
+	public void onOpen(Session session, EndpointConfig config) {
+		onOpen(session);
+	}
 
 }

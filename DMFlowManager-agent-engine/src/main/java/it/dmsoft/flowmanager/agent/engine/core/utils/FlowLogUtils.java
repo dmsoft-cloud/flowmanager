@@ -152,5 +152,9 @@ public class FlowLogUtils {
 	private FlowLogData getFlowLog(ExecutionFlowData executionFlowData) {
 		return flowLogMapper.convert(executionFlowData);
 	}
+	
+	public static FlowExecutionOutcome getFlowExecutionOutcome() {
+		return threadLocalExecStatus.get();
+	}
 
 }

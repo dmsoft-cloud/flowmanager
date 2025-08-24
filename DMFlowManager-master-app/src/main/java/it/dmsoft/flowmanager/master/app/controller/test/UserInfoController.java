@@ -49,6 +49,7 @@ public class UserInfoController {
 	}*/
 
 	@GetMapping("/me")
+	@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 	public UserInfoDto getGretting(JwtAuthenticationToken auth) {
 		//jwtAuthenticationConverter().andThen(auth);
 		return null;
@@ -58,6 +59,7 @@ public class UserInfoController {
 	}
 	
 	@GetMapping("/me2")
+	@PreAuthorize("hasAnyAuthority('flowmanager_use2')")
 	public UserInfoDto getGretting2(JwtAuthenticationToken auth) {
 		//jwtAuthenticationConverter().andThen(auth);
 		return null;
