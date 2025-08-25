@@ -40,7 +40,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/execute/**", "/flow-websocket/**", "/flow-websocket").fullyAuthenticated();
+                    auth.requestMatchers("/execute/**", "/flow-websocket/**", "/flow-websocket").hasAnyAuthority("flowmanager_use");
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
@@ -52,7 +52,7 @@ public class SecurityConfig {
         // The following code configures message-level authorization rules.
     	//SecurityContext sc = SecurityContextHolder.getContext();
         //sc.setAuthentication(auth);
-    	messages.simpDestMatchers("/flow-websocket", "/flow-websocket/**").fullyAuthenticated();
+    	messages.simpDestMatchers("/flow-websocket", "/flow-websocket/**").hasAnyAuthority("flowmanager_use");// fullyAuthenticated();
             // Specify that messages with destination "/user/**" should have the "USER" role.
             //.simpDestMatchers("/user/**").hasRole("USER");
 

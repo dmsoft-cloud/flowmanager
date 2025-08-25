@@ -1,14 +1,12 @@
-package it.dmsoft.flowmanager.agent.api.execute;
+package it.dmsoft.flowmanager.agent.app.controller.execute;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import it.dmsoft.flowmanager.agent.api.execute.ExecuteService;
 import it.dmsoft.flowmanager.common.websocket.FlowExecutionRequest;
 import it.dmsoft.flowmanager.framework.json.UtilityJson;
 import jakarta.annotation.Resource;
@@ -18,8 +16,6 @@ public class ExecuteWebSocketHandler extends TextWebSocketHandler {
 	
 	@Resource(name = "executeService")
     private ExecuteService executeService;
-
-	public static Map<BigDecimal, WebSocketSession> sessionsMap = new HashMap<>();
 
 	//private static Set<WebSocketSession> sessions = new HashSet<>(); 
 	
@@ -32,7 +28,7 @@ public class ExecuteWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
     	System.out.println(message.getPayload());
     	FlowExecutionRequest fer = UtilityJson.readValue(message.getPayload(), FlowExecutionRequest.class);
-    	sessionsMap.put(fer.getFlowProgr(), session);
+    	ExecuteService.sessionsMap.put(fer.getFlowProgr(), session);
     	executeService.asynch(fer.getFlowId(), fer.getFlowProgr(), fer.getFullFlowData());
     }
     

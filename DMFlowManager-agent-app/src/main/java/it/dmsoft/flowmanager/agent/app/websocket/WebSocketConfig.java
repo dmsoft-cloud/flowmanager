@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import it.dmsoft.flowmanager.agent.api.execute.ExecuteWebSocketHandler;
+import it.dmsoft.flowmanager.agent.app.controller.execute.ExecuteWebSocketHandler;
 
 @Configuration
 @EnableWebSocket

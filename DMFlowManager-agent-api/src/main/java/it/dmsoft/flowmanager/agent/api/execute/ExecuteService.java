@@ -1,6 +1,8 @@
 package it.dmsoft.flowmanager.agent.api.execute;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -36,6 +38,8 @@ public class ExecuteService {
 	@Autowired
 	private FlowConfigMapper flowConfigMapper;
 	
+	public static Map<BigDecimal, WebSocketSession> sessionsMap = new HashMap<>();
+	
 	public FlowExecutionOutcome synch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
 		return execute(flowId, flowProgr, fullFlowData, false);
 	}
@@ -58,7 +62,7 @@ public class ExecuteService {
 		
 		FlowConfig flowConfig = getFlowConfig(storedFullFlowData);
 		
-		WebSocketSession wss = ExecuteWebSocketHandler.sessionsMap.get(flowProgr);
+		WebSocketSession wss = sessionsMap.get(flowProgr);
 		
 		if (wss == null && asynch) {
 			throw new RuntimeException("WebSocket is null in asunch flow");
