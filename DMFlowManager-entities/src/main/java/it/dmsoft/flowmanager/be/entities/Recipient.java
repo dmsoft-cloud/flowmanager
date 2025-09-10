@@ -2,6 +2,8 @@ package it.dmsoft.flowmanager.be.entities;
 
 import it.dmsoft.flowmanager.be.keys.RecipientId;
 import it.dmsoft.flowmanager.common.domain.Domains.RecipientType;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@Access(value=AccessType.FIELD)
 @IdClass(RecipientId.class) // Chiave composta
 public class Recipient {
 

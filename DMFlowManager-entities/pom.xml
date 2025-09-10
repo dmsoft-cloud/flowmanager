@@ -15,14 +15,19 @@
 
 	<dependencies>
 		<dependency>
-		  <groupId>jakarta.persistence</groupId>
-		  <artifactId>jakarta.persistence-api</artifactId>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>org.hibernate</groupId>
-		  <artifactId>hibernate-core-jakarta</artifactId>
-		  <version>5.6.15.Final</version>
-		  <scope>provided</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.6.27.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-graalvm</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>

@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.agent.app.persistence;
+package it.dmsoft.flowmanager.agent.app.persistence.example;
 
 import java.util.Arrays;
 import java.util.HashMap;

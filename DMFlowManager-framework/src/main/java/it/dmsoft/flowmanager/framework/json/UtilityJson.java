@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -72,9 +74,13 @@ public class UtilityJson {
 
 	private static void initJson() {
 		if(!init) {
+			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			mapper.findAndRegisterModules();
+			mapperGenerico.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			mapperGenerico.findAndRegisterModules();
+			prettyMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			mapperIgnoreUnkonwn.findAndRegisterModules();
+			prettyMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			prettyMapper.findAndRegisterModules();
 		}
 		
