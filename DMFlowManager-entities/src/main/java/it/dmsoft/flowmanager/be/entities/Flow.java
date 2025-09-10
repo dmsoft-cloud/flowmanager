@@ -59,7 +59,7 @@ public class Flow extends BaseEntity {
 	@Column(length = 20)
 	private String notificationKo;
 	
-	@Column(length = 20)
+	@Column(length = 255)
 	private String integrityFileName;	
 	@Column(length = 50)
 	private String dbTable;	

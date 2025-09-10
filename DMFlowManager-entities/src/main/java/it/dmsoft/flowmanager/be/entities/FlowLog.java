@@ -101,8 +101,8 @@ public class FlowLog {
 	private String logUtenteSftp;
 	@Column(length = 1)
 	private YesNo logIntegrityCheck;
-	@Column(length = 1)
-	private YesNo logFlNameSemaforo;
+	@Column(length = 255)
+	private String logFlNameSemaforo;
 	@Column(length = 3)
 	private BigDecimal logNumTentaRicez;
 	@Column(length = 5)
@@ -606,11 +606,11 @@ public class FlowLog {
 		this.logIntegrityCheck = logIntegrityCheck;
 	}
 
-	public YesNo getLogFlNameSemaforo() {
+	public String getLogFlNameSemaforo() {
 		return logFlNameSemaforo;
 	}
 
-	public void setLogFlNameSemaforo(YesNo logFlNameSemaforo) {
+	public void setLogFlNameSemaforo(String logFlNameSemaforo) {
 		this.logFlNameSemaforo = logFlNameSemaforo;
 	}
 
