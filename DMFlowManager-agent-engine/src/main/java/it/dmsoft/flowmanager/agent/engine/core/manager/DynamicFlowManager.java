@@ -35,6 +35,7 @@ import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.common.engine.FlowConfig;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service("dynamicFlowManager")
 public class DynamicFlowManager {
@@ -58,7 +59,8 @@ public class DynamicFlowManager {
 	
 	//private FlowLogDetailsRepository flowLogDetailsRepository;
 	
-	//private EntityManager entityManager;
+	@PersistenceContext
+    protected EntityManager entityManager;
 	
 	public void main(String[] args, ExecutionFlowData executionFlowData)throws IOException  {
 		Logger logger = null;
@@ -201,15 +203,15 @@ public class DynamicFlowManager {
 			executionFlowData = resubmit(executionFlowData, resubmitTransactionId);
 		}
 		
-		HibernateSessionFactory.init(config);
+		//HibernateSessionFactory.init(config);
 		
 		ExportFlowData exportFlowData = null;
 		//verifico se c'è un export e se è di tipo new o old. in tal caso devo vedere se applicare la selezione colonne
 		if (!StringUtils.isNullOrEmpty(executionFlowData.getFlowExportCode()) 
 				&& (executionFlowData.getFlowExportFlag().equals("S") || executionFlowData.getFlowExportFlag().equals("O")) ) {
-			EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+			//EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
 			exportFlowData = entityManager.getReference(ExportFlowData.class, executionFlowData.getFlowExportCode());
-			entityManager.close();
+			//entityManager.close();
 		}
 
 		OperationParams inputParam = new OperationParams();

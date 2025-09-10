@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 //import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ import it.dmsoft.flowmanager.common.websocket.FlowExecutionRequest;
 
 @ComponentScan({"it.dmsoft.flowmanager.agent.app.*", "it.dmsoft.flowmanager.agent.api.*", "it.dmsoft.flowmanager.agent.engine.*", "it.dmsoft.flowmanager.be.*", "it.dmsoft.flowmanager.framework.*"})
 //@EnableJpaRepositories("it.dmsoft.flowmanager.be.repositories")
-//@EntityScan("it.dmsoft.flowmanager.be.entities")
+@EntityScan("it.dmsoft.flowmanager.be.entities")
 @RegisterReflectionForBinding({FlowExecutionOutcome.class, FlowLogData.class, FlowLogDetailsData.class, 
 	FlowExecutionRequest.class, FullFlowData.class, EmailData.class, RecipientData.class, FlowData.class, 
 	GroupData.class, InterfaceData.class, ConnectionType.class, ModelData.class, OriginData.class, DbType.class,  YesNo.class})

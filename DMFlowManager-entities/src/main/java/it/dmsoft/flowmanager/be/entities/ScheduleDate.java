@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-@Access(value=AccessType.FIELD)
 public class ScheduleDate extends BaseEntity {
 
 	@Id

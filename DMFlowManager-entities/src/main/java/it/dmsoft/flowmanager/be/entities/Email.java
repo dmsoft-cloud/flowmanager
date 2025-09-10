@@ -15,7 +15,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 @Entity
-@Access(value=AccessType.FIELD)
 public class Email extends BaseEntity {
 
 	@Id

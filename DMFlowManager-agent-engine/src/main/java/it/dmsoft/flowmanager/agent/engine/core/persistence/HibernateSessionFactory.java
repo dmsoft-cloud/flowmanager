@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.agent.engine.core.persistence;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
+//import org.hibernate.SessionFactory;
 
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.GenericConnectionParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.HibernateUtils;
@@ -14,7 +14,7 @@ import it.dmsoft.flowmanager.be.entities.ScheduleDate;
 import it.dmsoft.flowmanager.common.engine.FlowConfig;
 
 public class HibernateSessionFactory {
-
+/*
 	private static SessionFactory instance;
 	
 	public static void init(FlowConfig flowConfig) {
@@ -44,4 +44,5 @@ public class HibernateSessionFactory {
 		
 		return gcp;
 	}
+*/
 }

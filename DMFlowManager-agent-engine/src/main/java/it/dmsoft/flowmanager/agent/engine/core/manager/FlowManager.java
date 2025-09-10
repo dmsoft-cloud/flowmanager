@@ -285,7 +285,7 @@ public abstract class FlowManager {
 			throw new OperationException("Transaction " + executionFlowData.getFlowId() + " not enabled");
 		}
 
-		EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+		//EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
 		List<ScheduleDate> entities = entityManager.createQuery("select e from " + ScheduleDate.class.getSimpleName() + " e", ScheduleDate.class).getResultList();
         entityManager.close();
         

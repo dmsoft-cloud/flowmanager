@@ -14,7 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Access(value=AccessType.FIELD)
 @IdClass(RecipientId.class) // Chiave composta
 public class Recipient {
 

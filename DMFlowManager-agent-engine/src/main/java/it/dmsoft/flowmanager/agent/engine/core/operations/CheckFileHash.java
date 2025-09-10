@@ -13,10 +13,14 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.be.entities.FlowHash;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, Boolean> {
 	
 	private static final Logger logger = Logger.getLogger(CheckFileHash.class.getName());
+	
+	@PersistenceContext
+    protected EntityManager entityManager;
 	
     @Override
     public void updateParameters() throws Exception {
@@ -50,7 +54,7 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                 
                 logger.info("hash for " + fileName + "--> " + fileHash );
 
-                EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+                //EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
                 FlowHash flowHash = entityManager.getReference(FlowHash.class, fileHash);
 
                 if (flowHash != null) {
@@ -84,7 +88,7 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                 	entityManager.merge(flowHash);
                 }
                 
-                entityManager.close();
+                //entityManager.close();
             }
             
             logger.info("end execution of " + CheckFileHash.class.getName());
