@@ -21,7 +21,7 @@ public class WebSocketHelper {
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 	
 		String token = SecurityConfig.threadLocalJwt.get().getTokenValue();
-        String uri = "ws://" + agentData.getIp() + ":" + agentData.getPort() + "/flow-websocket"; // Example WebSocket server
+        String uri = "ws://" + agentData.getHost() + ":" + agentData.getPort() + "/flow-websocket"; // Example WebSocket server
         
         Builder configBuilder = ClientEndpointConfig.Builder.create();
         configBuilder.configurator(new Configurator() {

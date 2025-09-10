@@ -8,18 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.common.domain.Domains.Direction;
-import it.dmsoft.flowmanager.common.model.FlowLogData;
+import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
+import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
 import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.log.mapper.FlowLogDetailsMapper;
-import it.dmsoft.flowmanager.master.api.log.mapper.FlowLogMapper;
-import it.dmsoft.flowmanager.be.entities.FlowLog;
-import it.dmsoft.flowmanager.be.entities.FlowLogDetails;
-import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
-import it.dmsoft.flowmanager.be.repositories.FlowLogDetailsRepository;
-import it.dmsoft.flowmanager.be.repositories.FlowLogRepository;
+import it.dmsoft.flowmanager.master.repositories.FlowLogDetailsRepository;
+import it.dmsoft.flowmanager.master.repositories.FlowLogRepository;
+
 
 
 
@@ -54,7 +51,7 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 		 flowLogDetailsRepository
             .findByFlowLogDetailsIdLogProgrLog(logProgrLog)
             .stream()
-            .map(logDetail -> modelMapper.convertEntity(logDetail))
+            .map(logDetail -> flowLogDetailsMapper.convertEntity(logDetail))
             .collect(Collectors.toList());
 		return lst;
     }
