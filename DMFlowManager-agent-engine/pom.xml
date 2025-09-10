@@ -24,6 +24,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>
 			<artifactId>DMFlowManager-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -43,15 +48,15 @@
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-api</artifactId>
-	        <scope>provided</scope>
-        </dependency>
-        <dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-core</artifactId>
-	        <scope>provided</scope>
-        </dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!--
 		<dependency>
 			<groupId>log4j</groupId>
@@ -93,10 +98,17 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.55</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>com.github.mwiede</groupId>
+			<artifactId>jsch</artifactId>
+			<version>2.27.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -124,51 +136,72 @@
 			<version>1.10.15</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-		    <version>1.4.7</version>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcprov-jdk18on</artifactId>
-		    <version>1.81</version>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>1.81</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcmail-jdk18on</artifactId>
-		    <version>1.81</version>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk18on</artifactId>
+			<version>1.81</version>
 		</dependency>
 		<dependency>
-		    <groupId>net.sf.jt400</groupId>
-		    <artifactId>jt400</artifactId>
-		    <version>21.0.4</version>
+			<groupId>net.sf.jt400</groupId>
+			<artifactId>jt400</artifactId>
+			<version>21.0.4</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.mapstruct</groupId>
-		    <artifactId>mapstruct</artifactId>
-		    <version>1.6.0.Beta1</version>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.6.0.Beta1</version>
 		</dependency>
 		<dependency>
 			<groupId>it.dmsoft.flowmanager</groupId>
 			<artifactId>DMFlowManager-entities</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.6.27.Final</version>
+		</dependency>
+		-->
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-compiler-plugin</artifactId>
-			    <configuration>
-			        <annotationProcessorPaths>
-			            <path>
-			                <groupId>org.mapstruct</groupId>
-			                <artifactId>mapstruct-processor</artifactId>
-			                <version>1.6.0.Beta1</version>
-			            </path>
-			        </annotationProcessorPaths>
-			    </configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>1.6.0.Beta1</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

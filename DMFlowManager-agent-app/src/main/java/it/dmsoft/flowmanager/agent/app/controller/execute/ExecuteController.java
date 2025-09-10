@@ -1,5 +1,8 @@
 package it.dmsoft.flowmanager.agent.app.controller.execute;
 
+import java.math.BigDecimal;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.agent.api.execute.ExecuteService;
-import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
 import jakarta.annotation.Resource;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/execute")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class ExecuteController {
 	
 	@Resource(name = "executeService")
@@ -30,16 +32,17 @@ public class ExecuteController {
 	
 	//storicizzazione o log dei dati di lancio
 	
-	@PostMapping("/synch/{flowId}")
-	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId, final @RequestBody(required = false) FullFlowData fullFlowData) {
-		FullFlowData _fullFlowData = fullFlowData;
-		if (fullFlowData == null) {
-			_fullFlowData = new FullFlowData();
-			FlowData flowData = new FlowData();
-			flowData.setId(flowId);
-			_fullFlowData.setFlow(flowData);
-		}
-			
-		return executeService.synch(_fullFlowData);
+	@PostMapping("/synch/{flowId}/{flowProgr}")
+	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId, @PathVariable(value = "flowProgr") BigDecimal flowProgr, final @RequestBody(required = false) FullFlowData fullFlowData) {
+		return executeService.synch(flowId, flowProgr, fullFlowData);
 	}
+	
+	/*
+	@MessageMapping("/hello")
+	@SendTo("/topic/greetings")
+	public Greeting greeting(HelloMessage message) throws Exception {
+		Thread.sleep(1000); // simulated delay
+		return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+	}
+	*/
 }

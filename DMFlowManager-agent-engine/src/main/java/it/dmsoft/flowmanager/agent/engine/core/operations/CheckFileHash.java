@@ -2,23 +2,26 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 
 import java.io.File;
 
-import it.dmsoft.flowmanager.be.entities.FlowHash;
-import it.dmsoft.flowmanager.be.repositories.FlowHashRepository;
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintDependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.HashCheckParam;
+import it.dmsoft.flowmanager.agent.engine.core.persistence.HibernateSessionFactory;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.HashUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.be.entities.FlowHash;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, Boolean> {
 	
 	private static final Logger logger = Logger.getLogger(CheckFileHash.class.getName());
 	
-	private FlowHashRepository flowHashRepository;
-
+	@PersistenceContext
+    protected EntityManager entityManager;
+	
     @Override
     public void updateParameters() throws Exception {
     
@@ -51,7 +54,8 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                 
                 logger.info("hash for " + fileName + "--> " + fileHash );
 
-                FlowHash flowHash = flowHashRepository.getReferenceById(fileHash);
+                //EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+                FlowHash flowHash = entityManager.getReference(FlowHash.class, fileHash);
 
                 if (flowHash != null) {
                     // Esegui il rename del file esistente, sovrascrivendo eventuali file duplicati
@@ -81,8 +85,10 @@ public class CheckFileHash extends ConstraintDependentOperation<HashCheckParam, 
                 	flowHash.setHashFootprint(fileHash);
                 	flowHash.setHashId(executionFlowData.getFlowId());
                 	flowHash.setHashProgrLogt(operationParams.getTransactionId());
-                	flowHashRepository.save(flowHash);
+                	entityManager.merge(flowHash);
                 }
+                
+                //entityManager.close();
             }
             
             logger.info("end execution of " + CheckFileHash.class.getName());

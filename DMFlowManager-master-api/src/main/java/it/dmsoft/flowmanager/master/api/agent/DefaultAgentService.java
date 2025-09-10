@@ -8,8 +8,8 @@ import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.agent.mapper.AgentMapper;
+import it.dmsoft.flowmanager.master.repositories.AgentRepository;
 import it.dmsoft.flowmanager.be.entities.Agent;
-import it.dmsoft.flowmanager.be.repositories.AgentRepository;
 
 @Service("agentService")
 public class DefaultAgentService extends DefaultBaseService<Agent, AgentData, String> {

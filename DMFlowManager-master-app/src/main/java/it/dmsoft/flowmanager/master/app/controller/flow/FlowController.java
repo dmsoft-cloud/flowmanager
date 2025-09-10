@@ -2,6 +2,7 @@ package it.dmsoft.flowmanager.master.app.controller.flow;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowDataWithDirection;
-import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.master.api.flow.DefaultFlowlService;
-import it.dmsoft.flowmanager.be.entities.Flow;
-import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
 import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/flows")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class FlowController {
 	
 	@Resource(name = "flowService")

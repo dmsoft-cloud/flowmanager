@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.agent.app.controller.synchronize;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/synchronize")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class SynchronizeController {
 	
 	@Resource(name = "flowDataService")

@@ -13,17 +13,11 @@ import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
-import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 @Service("inboundFlowManager")
 public class InboundFlowManager extends FlowManager {
-
-	public InboundFlowManager(ScheduleDateRepository scheduleDateRepository) {
-		super(scheduleDateRepository);
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	public void process(ExecutionFlowData executionFlowData, OperationParams operationParams) throws Exception {

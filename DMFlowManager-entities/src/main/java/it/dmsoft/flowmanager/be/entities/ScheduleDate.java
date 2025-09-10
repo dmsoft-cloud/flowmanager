@@ -2,12 +2,14 @@ package it.dmsoft.flowmanager.be.entities;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class ScheduleDate {
+public class ScheduleDate extends BaseEntity {
 
 	@Id
 	@Column(length = 8)

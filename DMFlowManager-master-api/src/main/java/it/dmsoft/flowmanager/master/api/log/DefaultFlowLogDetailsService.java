@@ -31,7 +31,7 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 	private FlowLogDetailsRepository flowLogDetailsRepository;
     
     @Autowired
-    private FlowLogDetailsMapper modelMapper;
+    private FlowLogDetailsMapper flowLogDetailsMapper;
 
     
     public DefaultFlowLogDetailsService(FlowLogRepository flowLogRepository) {
@@ -41,7 +41,7 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 
 	@Override
 	protected BaseMapper<FlowLogDetails, FlowLogDetailsData> getMapper() {
-		return modelMapper;
+		return flowLogDetailsMapper;
 	}
 
 	@Override

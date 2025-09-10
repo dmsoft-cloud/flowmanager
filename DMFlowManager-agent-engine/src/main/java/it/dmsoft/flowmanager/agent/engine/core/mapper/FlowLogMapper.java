@@ -6,8 +6,8 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
-import it.dmsoft.flowmanager.be.entities.FlowConfig;
-import it.dmsoft.flowmanager.be.entities.FlowLog;
+import it.dmsoft.flowmanager.common.engine.FlowConfig;
+import it.dmsoft.flowmanager.common.model.FlowLogData;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface FlowLogMapper {
@@ -18,7 +18,7 @@ public interface FlowLogMapper {
 	//file dei parametri generali: path backup generale
     
 	@Mapping(source = "flowConfig.transactionName", target = "logId")
-	FlowLog convert(FlowConfig flowConfig);
+	FlowLogData convert(FlowConfig flowConfig);
 	
     //OK
 	@Mapping(source = "executionFlowData.flowId", target = "logId")
@@ -168,6 +168,6 @@ public interface FlowLogMapper {
 	@Mapping(source = "executionFlowData.flowFetchSize", target = "logFetchSize")
 	//AL MOMENTO NON PARAMETRIZZATO MA IMPLEMENTATO
 	@Mapping(source = "executionFlowData.flowCharEmptySpace", target = "logCharEmptySpace")
-	FlowLog convert(ExecutionFlowData executionFlowData);
+	FlowLogData convert(ExecutionFlowData executionFlowData);
 
 }

@@ -3,6 +3,7 @@ package it.dmsoft.flowmanager.master.app.controller.group;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 import it.dmsoft.flowmanager.common.model.GroupData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/groups")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class GroupController {
 	
 	@Value("${cors.allowed.origins}")

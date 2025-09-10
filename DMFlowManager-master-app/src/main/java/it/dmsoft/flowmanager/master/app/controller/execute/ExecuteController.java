@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.app.controller.execute;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.master.api.execute.ExecuteService;
 import jakarta.annotation.Resource;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/execute")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class ExecuteController {
 	
 	@Resource(name = "executeService")
@@ -30,5 +31,10 @@ public class ExecuteController {
 	@PostMapping("/synch/{flowId}")
 	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId) {
 		return executeService.synch(flowId, null);
+	}
+	
+	@PostMapping("/asynch/{flowId}")
+	public FlowExecutionOutcome asynch(@PathVariable(value = "flowId") String flowId) {
+		return executeService.asynch(flowId, null);
 	}
 }

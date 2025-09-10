@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.app.controller.synchronize;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import jakarta.annotation.Resource;
 //LEGGO la lista degli agent e propago se vuota vado su agent default ipotizzandolo sulla stessa macchina
 @RestController
 @RequestMapping("/synchronize")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class SynchronizeController {
 	
 	@Resource(name = "synchDataService")

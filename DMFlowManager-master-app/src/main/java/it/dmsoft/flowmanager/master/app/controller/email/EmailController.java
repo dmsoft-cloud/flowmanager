@@ -2,6 +2,7 @@ package it.dmsoft.flowmanager.master.app.controller.email;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import it.dmsoft.flowmanager.be.entities.Email;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.Email;
+import it.dmsoft.flowmanager.framework.json.UtilityJson;
 import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/emails")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class EmailController {
 
     @Resource(name = "emailService")
@@ -52,8 +53,7 @@ public class EmailController {
     @PostMapping("/email")
     public EmailData saveEmail(final @RequestBody EmailData emailData) {
     	try {
-    	        ObjectMapper objectMapper = new ObjectMapper();
-    	        String jsonInput = objectMapper.writeValueAsString(emailData);
+    	        String jsonInput = UtilityJson.writeValueAsString(emailData);
     	        System.out.println("Received JSON: " + jsonInput);
     	    } catch (Exception e) {
     	        e.printStackTrace();

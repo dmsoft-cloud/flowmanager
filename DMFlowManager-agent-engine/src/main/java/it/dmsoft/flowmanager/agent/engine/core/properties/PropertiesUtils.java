@@ -19,16 +19,16 @@ public class PropertiesUtils {
 	private static Properties appProps;
 	
 	private static Properties getProperties() throws Exception {
-		if (appProps == null) {
+		/*if (appProps == null) {
 			//String path = new File(Main.class.getProtectionDomain().getCodeSource().getLocation()
 			//	    .toURI()).getParent();
 			String path = new File("").getAbsolutePath();
 			logger.info("Working Directory -> " + path);
 			appProps = new Properties();
 			appProps.load(new FileInputStream(path + Constants.PATH_DELIMITER + PROP_FILENAME));
-		}
+		}*/
 		
-		return appProps;
+		return new Properties();//appProps;
 	}
 	
 	public static String get(String key) throws Exception {	

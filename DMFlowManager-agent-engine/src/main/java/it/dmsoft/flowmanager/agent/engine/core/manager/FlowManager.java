@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,11 +16,13 @@ import it.dmsoft.flowmanager.agent.engine.core.exception.ParameterException;
 import it.dmsoft.flowmanager.agent.engine.core.flow.builder.FlowBuilder;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
+import it.dmsoft.flowmanager.agent.engine.core.persistence.HibernateSessionFactory;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FormatUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
-import it.dmsoft.flowmanager.be.repositories.ScheduleDateRepository;
+import it.dmsoft.flowmanager.be.entities.ScheduleDate;
+import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import jakarta.persistence.EntityManager;
@@ -32,15 +35,9 @@ public abstract class FlowManager {
 	@PersistenceContext
     protected EntityManager entityManager;
 	
-	protected ScheduleDateRepository scheduleDateRepository;
-	
 	@Autowired
     protected ApplicationContext applicationContext;
-	
-	public FlowManager(ScheduleDateRepository scheduleDateRepository) {
-		this.scheduleDateRepository = scheduleDateRepository;
-	}
-	
+
 	/*
 	public static void main(String[] args) throws Exception {
 		ExecutionFlowData executionFlowData = new ExecutionFlowData();
@@ -288,7 +285,11 @@ public abstract class FlowManager {
 			throw new OperationException("Transaction " + executionFlowData.getFlowId() + " not enabled");
 		}
 
-		operationParams.setScheduleDate(scheduleDateRepository.findAll().get(0).getData());
+		//EntityManager entityManager = HibernateSessionFactory.get().createEntityManager();
+		List<ScheduleDate> entities = entityManager.createQuery("select e from " + ScheduleDate.class.getSimpleName() + " e", ScheduleDate.class).getResultList();
+        entityManager.close();
+        
+		operationParams.setScheduleDate(entities.get(0).getData());
 		
 		String replaceLocal = replaceFileNamePlaceholder(executionFlowData.getFlowFileName(), executionFlowData, operationParams);
 		String replaceRemote = replaceFileNamePlaceholder(executionFlowData.getFlowRemoteFileName(), executionFlowData, operationParams);
@@ -296,7 +297,7 @@ public abstract class FlowManager {
 		
 		if (Direction.INBOUND.equals(executionFlowData.getFlowDirezione()) 
 				&& StringUtils.isNullOrEmpty(executionFlowData.getFlowRemoteFileName())
-				&& !Constants.THEMA_SPAZIO.equals(executionFlowData.getFlowTipoTrasferimento())) {
+				&& !ConnectionType.SPAZIO.equals(executionFlowData.getFlowTipoTrasferimento())) {
 			replaceRemote = replaceLocal;
 			replaceLocal = "";			
 		}

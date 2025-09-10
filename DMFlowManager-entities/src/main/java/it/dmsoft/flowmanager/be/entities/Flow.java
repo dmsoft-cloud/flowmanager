@@ -36,6 +36,8 @@ public class Flow extends BaseEntity {
 	@Column(length = 255)
 	private String description;
 	@Column(length = 20)
+	private String agentId;
+	@Column(length = 20)
 	private String groupId;
 	@Column(length = 2000)
 	private String note;
@@ -188,6 +190,12 @@ public class Flow extends BaseEntity {
 	}
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
+	}
+	public String getAgentId() {
+		return agentId;
+	}
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
 	}	
 
 

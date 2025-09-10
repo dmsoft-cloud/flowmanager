@@ -12,19 +12,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.io.IOException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class CorsFilter implements Filter {
+public class CorsFilter extends org.springframework.web.filter.CorsFilter implements Filter {
 
-    @Value("${cors.allowed.origins}")
+    public CorsFilter(CorsConfigurationSource configSource) {
+		super(configSource);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Value("${cors.allowed.origins}")
     private String allowedOrigins;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
 
