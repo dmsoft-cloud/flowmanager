@@ -3,6 +3,7 @@ package it.dmsoft.flowmanager.master.app.controller.log;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping("/flowLogs")
+@PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class FlowLogController {
 	
 	@Resource(name = "flowLogService")
