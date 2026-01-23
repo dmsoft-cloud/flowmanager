@@ -1,5 +1,7 @@
 package it.dmsoft.flowmanager.master.repositories.specification;
 
+
+
 import org.springframework.data.jpa.domain.Specification;
 
 import it.dmsoft.flowmanager.be.entities.Flow;
@@ -13,7 +15,11 @@ public class FlowSpecifications {
             Predicate predicate = cb.conjunction();
 
             if (filter.getId() != null && !filter.getId().isEmpty()) {
-                predicate = cb.and(predicate, cb.equal(root.get("id"), filter.getId()));
+            	predicate = cb.and(predicate,
+                        cb.like(root.get("id"), "%" + filter.getId() + "%"));
+            }
+            if (filter.getGroup() != null && !filter.getGroup().isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("groupId"), filter.getGroup()));
             }
             if (filter.getModel() != null && !filter.getModel().isEmpty()) {
                 predicate = cb.and(predicate, cb.equal(root.get("model"), filter.getModel()));
@@ -25,9 +31,9 @@ public class FlowSpecifications {
                 predicate = cb.and(predicate, cb.equal(root.get("interfaceId"), filter.getInterfaceId()));
             }
             if (filter.getAgent() != null && !filter.getAgent().isEmpty()) {
-                predicate = cb.and(predicate, cb.equal(root.get("agent"), filter.getAgent()));
+                predicate = cb.and(predicate, cb.equal(root.get("agentId"), filter.getAgent()));
             }
-            if (filter.getEnabled() != null && !filter.getEnabled().trim().isEmpty()) {            	
+            if (filter.getEnabled() != null && !filter.getEnabled().trim().isEmpty()) {
             		//YesNo enabledEnum = YesNo.getYesNo(filter.getEnabled().trim());
             		predicate = cb.and(predicate, cb.equal(root.get("enabled"), filter.getEnabled()));
             }

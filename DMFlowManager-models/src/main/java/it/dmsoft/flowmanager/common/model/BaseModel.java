@@ -3,7 +3,7 @@ package it.dmsoft.flowmanager.common.model;
 import java.time.LocalDateTime;
 
 public abstract class BaseModel {
-	
+
 
     private String creationUser;
     private LocalDateTime creationTs;

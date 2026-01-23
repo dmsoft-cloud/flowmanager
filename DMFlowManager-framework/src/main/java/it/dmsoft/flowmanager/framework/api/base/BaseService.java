@@ -27,7 +27,7 @@ public interface BaseService<X, Y, Z> {
 	List<Y> getAll();
 
 	/**
-	 * Get by ID. The service will send the data else will throw the exception. 
+	 * Get by ID. The service will send the data else will throw the exception.
 	 * @param id
 	 * @return CustomerData
 	 */

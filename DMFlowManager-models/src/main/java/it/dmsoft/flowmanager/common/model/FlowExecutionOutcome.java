@@ -3,9 +3,9 @@ package it.dmsoft.flowmanager.common.model;
 import java.util.List;
 
 public class FlowExecutionOutcome {
-	
+
 	private FlowLogData logData;
-	
+
 	private List<FlowLogDetailsData> logDetailsData;
 
 	public FlowLogData getLogData() {

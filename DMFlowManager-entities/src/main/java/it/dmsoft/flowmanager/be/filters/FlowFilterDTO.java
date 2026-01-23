@@ -4,6 +4,7 @@ import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class FlowFilterDTO {
     private String id;
+    private String group;
     private String model;
     private String origin;
     private String interfaceId;
@@ -17,6 +18,13 @@ public class FlowFilterDTO {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getGroup() {
+		return group;
+	}
+	public void setGroup(String group) {
+		this.group = group;
 	}
 	public String getModel() {
 		return model;

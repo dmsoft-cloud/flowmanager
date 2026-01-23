@@ -19,21 +19,21 @@ import jakarta.websocket.WebSocketContainer;
 public class MyWebSocketClient {
 
 	private Session session;
-	
+
     @OnMessage
     public void onMessage(String message) {
         System.out.println("Received message: " + message);
     }
-    
+
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
         System.out.println("Connected to server");
-        
+
         FlowExecutionRequest fer = new FlowExecutionRequest();
 		fer.setFlowId("TES1");
 		fer.setFlowProgr(BigDecimal.valueOf(5));
-		
+
         try {
 			sendMessage(UtilityJson.writeValueAsString(fer));
 		} catch (JsonProcessingException e) {
@@ -41,7 +41,7 @@ public class MyWebSocketClient {
 			e.printStackTrace();
 		}
     }
-    
+
     public void sendMessage(String message) {
         try {
             session.getBasicRemote().sendText(message);
@@ -60,6 +60,6 @@ public class MyWebSocketClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 }

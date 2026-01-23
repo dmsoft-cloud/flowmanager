@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.dmsoft.flowmanager.agent.api.execute.ExecuteService;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
+import it.dmsoft.flowmanager.common.websocket.FlowExecutionRequest;
 import jakarta.annotation.Resource;
 
 @RestController
@@ -35,6 +36,11 @@ public class ExecuteController {
 	@PostMapping("/synch/{flowId}/{flowProgr}")
 	public FlowExecutionOutcome synch(@PathVariable(value = "flowId") String flowId, @PathVariable(value = "flowProgr") BigDecimal flowProgr, final @RequestBody(required = false) FullFlowData fullFlowData) {
 		return executeService.synch(flowId, flowProgr, fullFlowData);
+	}
+	
+	@PostMapping("/asynch/{flowId}/{flowProgr}")
+	public FlowExecutionOutcome asynch(@PathVariable(value = "flowId") String flowId, @PathVariable(value = "flowProgr") BigDecimal flowProgr, final @RequestBody(required = false) FullFlowData fullFlowData) {
+		return executeService.asynch(flowId, flowProgr, null);
 	}
 	
 	/*

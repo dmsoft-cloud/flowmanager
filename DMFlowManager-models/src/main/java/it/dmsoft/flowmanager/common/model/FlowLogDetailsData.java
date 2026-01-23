@@ -8,7 +8,7 @@ import it.dmsoft.flowmanager.common.domain.Domains.Status;
 
 public class FlowLogDetailsData {
 
-	
+
 	public BigDecimal logProgrLog;
 	public BigDecimal logProgrFase;
 	public String logFase;

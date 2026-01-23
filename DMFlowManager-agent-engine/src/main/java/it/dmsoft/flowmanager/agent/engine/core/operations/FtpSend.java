@@ -5,12 +5,12 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Trasmission;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.ftp.manager.FtpSendManager;
 import it.dmsoft.flowmanager.agent.engine.ftp.model.FtpResponse;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class FtpSend extends Trasmission {
 

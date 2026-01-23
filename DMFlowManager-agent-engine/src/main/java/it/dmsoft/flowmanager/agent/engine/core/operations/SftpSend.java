@@ -4,11 +4,11 @@ import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Trasmission;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.sftp.manager.SendManager;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class SftpSend extends Trasmission {
 

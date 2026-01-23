@@ -13,138 +13,140 @@ import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 public class FlowLogData {
 
 	private BigDecimal logProgrLog;
-	
+
 	private String logId;
 	private Timestamp logTsInizio;
 	private Timestamp logTsFine;
-	
+
 	private Status logEsito;
-	
+
 	private String logUtente;
-	
+
 	private String logPassword;
-	
+
 	private String logCodInterfaccia;
-	
+
 	private YesNo logStato;
-	
+
 	private Type logTipFlusso;
-	
+
 	private Direction logDirezione;
-	
+
 	private String logLibreria;
-	
+
 	private String logFile;
-	
+
 	private String logMembro;
-	
+
 	private String logLibSource;
-	
+
 	private String logFileSource;
-	
+
 	private String logMembroSource;
-	
+
 	private String logFolder;
-	
+
 	private String logFileName;
-	
+
 	private FileFormat logFormato;
-	
+
 	private String logDelimRecord;
-	
+
 	private String logDelimCampo;
-	
+
 	private BigDecimal logCodepage;
-	
+
 	private String logModAcquiszione;
-	
+
 	private String logPgmControllo;
-	
+
 	private ConnectionType logTipologiaConn;
-	
+
 	private String logHost;
-	
+
 	private BigDecimal logPort;
-	
+
 	private String logRemoteFolder;
-	
+
 	private String logRemoteFileName;
-	
+
 	private String logUtenteSftp;
-	
+
 	private YesNo logIntegrityCheck;
-	
-	private YesNo logFlNameSemaforo;
-	
+
+	private String logFlNameSemaforo;
+
 	private BigDecimal logNumTentaRicez;
-	
+
 	private BigDecimal logIntervalloRetry;
-	
+
 	private BigDecimal logRetention;
-	
+
 	private YesNo logCompression;
-	
+
 	private String logBackup;
-	
+
 	private YesNo logInviaMail;
-	
+
 	private String logLetteraOk;
-	
+
 	private String logLetteraKo;
-	
+
 	private String logLogFile;
-	
+
 	private String logErroreDesc;
-	
+
 	private String logJobAs;
-	
+
 	private String logUserAs;
-	
+
 	private String logJobNbrAs;
-	
+
 	private ConnectionType logTipoTrasferimento;
-	
+
 	private YesNo logBypassQtemp;
-	
+
 	private String logJavaHome;
-	
+
 	//aggiunta campi mancanti
-	
+
 	private YesNo logEsistenzaFile;
-	
+
 	private String logLetteraFlusso;
-	
+
 	private YesNo logCreaVuoto;
-	
+
 	private String logInternaz;
-	
+
 	private String logSostValNull;
-	
+
 	private YesNo logElimNomCol;
-	
+
 	private YesNo logFlagOkVuoto;
-	
+
 	private YesNo logFtpSecure;
-	
+
 	private String logInteractiveType;
-	
+
 	private String logInteractiveProgram;
-	
+
 	private String logInteractiveResult;
-	
+
 	private String logInteractiveCommand;
-	
-	private BigDecimal logDelaySemaforo;	
-	
+
+	private BigDecimal logDelaySemaforo;
+
 	private YesNo logHashUnico;
-	
+
 	private YesNo logExportFlag;
-	
+
 	private String logExportCode;
-	
+
 	private BigDecimal logFetchSize;
-	
+
 	private YesNo logCharEmptySpace;
+
+
 
 	public BigDecimal getLogProgrLog() {
 		return logProgrLog;
@@ -578,11 +580,11 @@ public class FlowLogData {
 		this.logIntegrityCheck = logIntegrityCheck;
 	}
 
-	public YesNo getLogFlNameSemaforo() {
+	public String getLogFlNameSemaforo() {
 		return logFlNameSemaforo;
 	}
 
-	public void setLogFlNameSemaforo(YesNo logFlNameSemaforo) {
+	public void setLogFlNameSemaforo(String logFlNameSemaforo) {
 		this.logFlNameSemaforo = logFlNameSemaforo;
 	}
 
@@ -682,7 +684,8 @@ public class FlowLogData {
 		this.logCharEmptySpace = logCharEmptySpace;
 	}
 
-	
+
+	@Override
 	public String toString() {
 		return "FlowLog [logProgrLog=" + logProgrLog + ", logId=" + logId + ", logTsInizio=" + logTsInizio
 				+ ", logTsFine=" + logTsFine + ", logEsito=" + logEsito + ", logUtente=" + logUtente + ", logPassword="
@@ -711,5 +714,5 @@ public class FlowLogData {
 				+ ", logHashUnico=" + logHashUnico + ", logExportFlag=" + logExportFlag + ", logExportCode="
 				+ logExportCode + ", logFetchSize=" + logFetchSize + ", logCharEmptySpace=" + logCharEmptySpace + "]";
 	}
-	
+
 }

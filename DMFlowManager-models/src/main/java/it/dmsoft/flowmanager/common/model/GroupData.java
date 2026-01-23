@@ -3,12 +3,12 @@ package it.dmsoft.flowmanager.common.model;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class GroupData extends BaseModel {
-	
+
 	private String id;
 	private String description;
 	private YesNo enabled;
 	private String notes;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -33,6 +33,6 @@ public class GroupData extends BaseModel {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	
+
 
 }

@@ -27,7 +27,7 @@ public class FlowDataWithDirection extends FlowData {
         this.setRemoteFolder(flowData.getRemoteFolder());
         this.setRemoteFile(flowData.getRemoteFile());
         this.setLengthFixed(flowData.getLengthFixed());
-        
+
         this.direction = direction;
     }
 
@@ -38,5 +38,5 @@ public class FlowDataWithDirection extends FlowData {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
-	
+
 }

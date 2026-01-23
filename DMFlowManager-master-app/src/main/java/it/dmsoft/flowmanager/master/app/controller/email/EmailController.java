@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.dmsoft.flowmanager.be.entities.Email;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.framework.json.UtilityJson;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.Email;
 
 @RestController
 @RequestMapping("/emails")
@@ -58,7 +58,7 @@ public class EmailController {
     	    } catch (Exception e) {
     	        e.printStackTrace();
     	    }
-    	    
+
 
         return emailService.save(emailData);
     }

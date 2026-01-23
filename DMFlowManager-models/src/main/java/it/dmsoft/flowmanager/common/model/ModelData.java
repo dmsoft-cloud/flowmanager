@@ -261,7 +261,7 @@ public class ModelData extends BaseModel {
 		this.stringDelimiter = stringDelimiter;
 	}
 
-	
+
 	public StringDelimiterType getStringDelimiter() {
 		return stringDelimiter;
 	}

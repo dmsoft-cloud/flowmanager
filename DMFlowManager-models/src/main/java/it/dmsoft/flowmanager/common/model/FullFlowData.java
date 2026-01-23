@@ -5,7 +5,7 @@ public class FullFlowData {
 	private EmailData emailOk;
 
 	private EmailData emailKo;
-	
+
 	private FlowData flow;
 
 	private GroupData group;
@@ -15,9 +15,9 @@ public class FullFlowData {
 	private ModelData model;
 
 	private OriginData origin;
-	
+
 	private InterfaceData mailInterface;
-	
+
 	public FullFlowData() {
 		super();
 	}

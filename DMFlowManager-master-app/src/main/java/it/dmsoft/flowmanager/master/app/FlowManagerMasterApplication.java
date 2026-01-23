@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
@@ -27,14 +28,14 @@ import it.dmsoft.flowmanager.common.websocket.FlowExecutionRequest;
 @ComponentScan(basePackages = {"it.dmsoft.flowmanager.master.app.*", "it.dmsoft.flowmanager.master.api.*", "it.dmsoft.flowmanager.be.*", "it.dmsoft.flowmanager.framework.*"})
 @EnableJpaRepositories("it.dmsoft.flowmanager.master.repositories")
 @EntityScan("it.dmsoft.flowmanager.be.entities")
-@RegisterReflectionForBinding({FlowExecutionOutcome.class, FlowLogData.class, FlowLogDetailsData.class, 
-	FlowExecutionRequest.class, FullFlowData.class, EmailData.class, RecipientData.class, FlowData.class, 
+@RegisterReflectionForBinding({FlowExecutionOutcome.class, FlowLogData.class, FlowLogDetailsData.class,
+	FlowExecutionRequest.class, FullFlowData.class, EmailData.class, RecipientData.class, FlowData.class,
 	GroupData.class, InterfaceData.class, ConnectionType.class, ModelData.class, OriginData.class, DbType.class,  YesNo.class})
 @SpringBootApplication
 //@SpringBootApplication(scanBasePackages = "it.dmsoft.flowmanager")
 @RestController
 public class FlowManagerMasterApplication {
-	
+
 	//private static final Logger log = LoggerFactory.getLogger(FlowManagerMasterApplication.class);
 
 	public static void main(String[] args) {
@@ -43,7 +44,7 @@ public class FlowManagerMasterApplication {
 				System.out.println(arg);
 			}
 		}
-		
+
 		SpringApplication.run(FlowManagerMasterApplication.class, args);
 	}
 }

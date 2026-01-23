@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 
 public class EmailParmsData {
-	
+
 	private String smtpHost;
 
 	private String smtpUser;

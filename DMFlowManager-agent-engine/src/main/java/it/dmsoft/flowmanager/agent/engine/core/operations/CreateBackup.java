@@ -12,10 +12,10 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperatio
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.BackupParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 //<parametro in input della radice del path>/<nome della transazione>/<anno>/<nome file originazio>_<data di esecuziome AAAAMMGG>_<transactionId>      
 public class CreateBackup extends DependentOperation<BackupParam> {

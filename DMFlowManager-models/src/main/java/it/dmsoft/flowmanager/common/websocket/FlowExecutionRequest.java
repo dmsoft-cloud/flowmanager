@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
 
 public class FlowExecutionRequest {
-	
+
 	private String flowId;
-	
+
 	private BigDecimal flowProgr;
-	
+
 	private FullFlowData fullFlowData;
 
 	public String getFlowId() {

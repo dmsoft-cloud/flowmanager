@@ -1,11 +1,11 @@
 package it.dmsoft.flowmanager.common.model.email;
 
 public class RecipientData {
-	
+
     private String emailId;      // Chiave dell'email
     private String emailAddress; // Indirizzo email del destinatario
     private String type;  // Tipo di destinatario (TO, CC, BCC)
-    
+
     public String getEmailId() {
 		return emailId;
 	}
@@ -25,7 +25,7 @@ public class RecipientData {
 		this.type = type;
 	}
 
-	
-    	
+
+
 
 }

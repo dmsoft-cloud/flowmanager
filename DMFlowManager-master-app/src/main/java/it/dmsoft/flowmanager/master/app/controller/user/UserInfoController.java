@@ -1,4 +1,4 @@
-package it.dmsoft.flowmanager.master.app.controller.test;
+package it.dmsoft.flowmanager.master.app.controller.user;
 
 import java.util.List;
 
@@ -7,10 +7,19 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.dmsoft.flowmanager.common.model.UserData;
+import it.dmsoft.flowmanager.master.api.user.UserJwtProvisioningService;
+
 @RestController
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class UserInfoController {
-	
+
+	private final UserJwtProvisioningService provisioningService;
+
+	public UserInfoController(UserJwtProvisioningService provisioningService) {
+        this.provisioningService = provisioningService;
+    }
+
 /*
 	@Bean
 	public JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -48,16 +57,12 @@ public class UserInfoController {
 	  return http.build();
 	}*/
 
-	@GetMapping("/me")
+	@GetMapping("/loginUserInfo")
 	@PreAuthorize("hasAnyAuthority('flowmanager_use')")
-	public UserInfoDto getGretting(JwtAuthenticationToken auth) {
-		//jwtAuthenticationConverter().andThen(auth);
-		return null;
-	    /*return new UserInfoDto(
-	  auth.getToken().getClaimAsString(StandardClaimNames.PREFERRED_USERNAME),
-	  auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());*/
+	public UserData getGretting(JwtAuthenticationToken auth) {
+		return provisioningService.processCurrentJwtAndReturnClaims(auth);
 	}
-	
+
 	@GetMapping("/me2")
 	@PreAuthorize("hasAnyAuthority('flowmanager_use2')")
 	public UserInfoDto getGretting2(JwtAuthenticationToken auth) {

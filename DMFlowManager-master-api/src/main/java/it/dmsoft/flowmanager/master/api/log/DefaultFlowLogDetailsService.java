@@ -26,11 +26,11 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 
 	@Autowired
 	private FlowLogDetailsRepository flowLogDetailsRepository;
-    
+
     @Autowired
     private FlowLogDetailsMapper flowLogDetailsMapper;
 
-    
+
     public DefaultFlowLogDetailsService(FlowLogRepository flowLogRepository) {
 		super();
 		this.flowLogDetailsRepository = flowLogDetailsRepository;
@@ -45,7 +45,7 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 	protected JpaRepository<FlowLogDetails, FlowLogDetailsId> getRepository() {
 		return flowLogDetailsRepository;
 	}
-	
+
 	public List<FlowLogDetailsData> findByProgrLog(BigDecimal logProgrLog) {
 		List<FlowLogDetailsData> lst =
 		 flowLogDetailsRepository
@@ -56,5 +56,17 @@ public class DefaultFlowLogDetailsService extends DefaultBaseService<FlowLogDeta
 		return lst;
     }
 
-	    
+	@Override
+	public boolean setActive(FlowLogDetailsId id, boolean activate) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public FlowLogDetailsId extractIdFromModel(FlowLogDetailsData modelData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

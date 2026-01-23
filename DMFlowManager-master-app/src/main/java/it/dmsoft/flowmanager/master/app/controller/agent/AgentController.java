@@ -2,7 +2,7 @@ package it.dmsoft.flowmanager.master.app.controller.agent;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.aspectj.weaver.loadtime.Agent;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
-import it.dmsoft.flowmanager.be.entities.Agent;
 import jakarta.annotation.Resource;
 
-//@CrossAgent(agents = "http://localhost:4200") 
+//@CrossAgent(agents = "http://localhost:4200")
 //@CrossAgent(agents = "#{'${cors.allowed.agents}'}")
 @RestController
 @RequestMapping("/agents")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class AgentController {
-	
+
 	//@Value("${cors.allowed.agents}")
     //private String allowedAgents;
 

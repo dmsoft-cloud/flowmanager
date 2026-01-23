@@ -7,14 +7,14 @@ public class AgentData {
 
 	public static final AgentData DEFAULT_AGENT = new AgentData(Constants.DEFAULT_AGENT_ID, Constants.LOCALHOST, Constants.DEFAULT_AGENT_PORT,
 				Constants.DEFAULT_AGENT_DESCRIPTION, null, YesNo.YES);
-	
+
 	private String id;
 	private String host;
 	private Integer port;
 	private String description;
 	private String note;
 	private YesNo enabled;
-	
+
 	public AgentData() {
 		super();
 	}

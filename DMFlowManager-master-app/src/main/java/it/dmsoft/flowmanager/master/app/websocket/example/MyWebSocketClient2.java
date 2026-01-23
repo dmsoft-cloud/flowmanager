@@ -1,10 +1,8 @@
 package it.dmsoft.flowmanager.master.app.websocket.example;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Scanner;
 
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -30,11 +28,11 @@ public class MyWebSocketClient2 {
 		}
         FlowExecutionSocketHandler feh = new FlowExecutionSocketHandler();
         wsc.execute(feh, (WebSocketHttpHeaders) null, uriObj);
-        
+
         FlowExecutionRequest fer = new FlowExecutionRequest();
 		fer.setFlowId("TES1");
 		fer.setFlowProgr(BigDecimal.valueOf(5));
-		
+
         feh.sendMessage(fer);
         new Scanner(System.in).nextLine();
     }

@@ -15,7 +15,7 @@ public class FullFlowsData {
 	private List<ModelData> models;
 
 	private List<OriginData> origins;
-	
+
 	public FullFlowsData() {
 		super();
 	}

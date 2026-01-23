@@ -38,9 +38,9 @@ public class FlowLog {
 
 	//Auto increment
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(length = 12)
-	private BigDecimal logProgrLog;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(length = 12, nullable = false)
+	private Long logProgrLog;
 	@Column(length = 20)
 	private String logId;
 	private Timestamp logTsInizio;
@@ -51,7 +51,7 @@ public class FlowLog {
 	private String logUtente;
 	@Column(length = 64)
 	private String logPassword;
-	@Column(length = 10)
+	@Column(length = 20)
 	private String logCodInterfaccia;
 	@Column(length = 2)
 	private YesNo logStato;
@@ -174,11 +174,11 @@ public class FlowLog {
 	@Column(length = 1)
 	private YesNo logCharEmptySpace;
 
-	public BigDecimal getLogProgrLog() {
+	public Long getLogProgrLog() {
 		return logProgrLog;
 	}
 
-	public void setLogProgrLog(BigDecimal logProgrLog) {
+	public void setLogProgrLog(Long logProgrLog) {
 		this.logProgrLog = logProgrLog;
 	}
 

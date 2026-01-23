@@ -4,9 +4,9 @@ import java.util.List;
 
 import it.dmsoft.flowmanager.agent.engine.core.exception.OperationException;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.TrasmissionParams;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public abstract class ConstraintTrasmission<V> extends ConstraintOperation<TrasmissionParams, V> {
 	

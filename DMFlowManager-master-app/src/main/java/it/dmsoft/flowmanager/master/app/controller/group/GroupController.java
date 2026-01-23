@@ -21,7 +21,7 @@ import jakarta.annotation.Resource;
 @RequestMapping("/groups")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class GroupController {
-	
+
 	@Value("${cors.allowed.origins}")
     private String allowedGroups;
 
@@ -37,6 +37,7 @@ public class GroupController {
     public List<GroupData> getGroups() {
         return groupService.getAll();
     }
+
 
     /**
      * Method to get the origin data based on the ID.
@@ -68,5 +69,5 @@ public class GroupController {
     public Boolean deleteGroup(@PathVariable String id) {
         return groupService.delete(id);
     }
-	
+
 }

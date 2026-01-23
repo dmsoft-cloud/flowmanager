@@ -11,12 +11,12 @@ import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface FlowLogDetailsMapper extends BaseMapper<FlowLogDetails, FlowLogDetailsData>{
-	
+
 	@Mapping(source = "flowLogDetailsId.logProgrLog", target = "logProgrLog")
 	@Mapping(source = "flowLogDetailsId.logProgrFase", target = "logProgrFase")
 	@Override
 	FlowLogDetailsData convertEntity(FlowLogDetails entity);
-	
+
 	@Mapping(source = "logProgrLog", target = "flowLogDetailsId.logProgrLog")
 	@Mapping(source = "logProgrFase", target = "flowLogDetailsId.logProgrFase")
 	@Override

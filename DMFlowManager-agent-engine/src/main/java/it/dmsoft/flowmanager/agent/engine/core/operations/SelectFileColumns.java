@@ -19,12 +19,12 @@ import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.DatabaseUtils.DBTypeEnum;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExportUtils.ExportType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.be.entities.FileColumnsStruct;
 import it.dmsoft.flowmanager.be.entities.FileMetadata;
 import it.dmsoft.flowmanager.common.domain.Domains.DbType;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class SelectFileColumns extends ConstraintDependentOperation<SelectFileColumnsParam, Boolean> {
 	

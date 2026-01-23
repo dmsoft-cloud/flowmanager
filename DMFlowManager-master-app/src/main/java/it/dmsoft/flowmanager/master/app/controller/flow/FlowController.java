@@ -21,11 +21,11 @@ import jakarta.annotation.Resource;
 @RequestMapping("/flows")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class FlowController {
-	
+
 	@Resource(name = "flowService")
 	private DefaultFlowlService flowService;
     //private BaseService<Flow, FlowData, String> flowService;
-	
+
     /**
      * <p>Get all Flow data in the system with all fields plus direction from Model.</p>
      * @return List<FlowDataWithDirection>
@@ -44,7 +44,7 @@ public class FlowController {
     public List<FlowData> getFlows() {
         return flowService.getAll();
     }
-    
+
     //aggiunti per i filtri
     @PostMapping
     public List<FlowData> getFlows(@RequestBody(required = false) FlowFilterDTO filter) {
@@ -87,5 +87,5 @@ public class FlowController {
     public Boolean deleteFlow(@PathVariable String id) {
         return flowService.delete(id);
     }
-	
+
 }

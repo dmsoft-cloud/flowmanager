@@ -18,8 +18,11 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 
+
 import it.dmsoft.flowmanager.agent.engine.core.mapper.FlowLogMapper;
 import it.dmsoft.flowmanager.agent.engine.core.model.ExecutionFlowData;
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogNotifier;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.zip.model.ZipResponse.Outcome;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
@@ -28,6 +31,7 @@ import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.common.model.FlowLogData;
 import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
 import it.dmsoft.flowmanager.framework.json.UtilityJson;
+import it.dmsoft.flowmanager.framework.websocket.ExecuteWebSocketHandler;
 
 @Service("flowLogUtils")
 public class FlowLogUtils {
@@ -37,13 +41,20 @@ public class FlowLogUtils {
 	@Autowired
     private FlowLogMapper flowLogMapper;	
 	
+	private static ExecuteWebSocketHandler executeWebSocketHandler;
+	
 	private static ThreadLocal<FlowExecutionOutcome> threadLocalExecStatus = new ThreadLocal<>();
 	
-	private static ThreadLocal<WebSocketSession> threadLocalWebSocket = new ThreadLocal<>();
+	//private static ThreadLocal<WebSocketSession> threadLocalWebSocket = new ThreadLocal<>();
+	
 	
 	public FlowLogUtils() {
 		instance = this;
 	}
+	
+    public static void setExecuteWebSocketHandler( ExecuteWebSocketHandler handler) {
+        FlowLogUtils.executeWebSocketHandler = handler;
+    }
 	
 	public static FlowLogData headLog(BigDecimal flowProg, ExecutionFlowData executionFlowData, FlowConfig flowConfig, WebSocketSession webSocketSession) {
 		FlowLogData fld = instance.getFlowLog(executionFlowData);
@@ -54,7 +65,7 @@ public class FlowLogUtils {
 		fes.setLogDetailsData(new ArrayList<FlowLogDetailsData>());
 		
 		threadLocalExecStatus.set(fes);
-		threadLocalWebSocket.set(webSocketSession);
+		//threadLocalWebSocket.set(webSocketSession);
 		
 		return fld;
 	}
@@ -81,7 +92,7 @@ public class FlowLogUtils {
 		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogData.class.getSimpleName());
 		UtilityJson.getMapper().writeValue(file, fld);
 		
-		notifyOnWebSocketIfNecessary(fld);
+		notifyOnWebSocketIfNecessary(fld.getLogProgrLog() ,fld);
 	}
 	
 	public static void updateBackupPath(BigDecimal transactionId, String destFile) {
@@ -115,20 +126,27 @@ public class FlowLogUtils {
 		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogDetailsData.class.getSimpleName() + phaseDescr + operation);
 		UtilityJson.getMapper().writeValue(file, fld);
 		
-		notifyOnWebSocketIfNecessary(fldd);
+		notifyOnWebSocketIfNecessary(fld.getLogProgrLog() ,fldd);
 		return fldd;
 	}
 
-	private static void notifyOnWebSocketIfNecessary(Object data) {
-		notifyOnWebSocketIfNecessary(data, false);
+	private static void notifyOnWebSocketIfNecessary(BigDecimal flowProgr, Object data) {
+		notifyOnWebSocketIfNecessary(flowProgr, data, false);
 	}
-	private static void notifyOnWebSocketIfNecessary(Object data, boolean lastMsg) {
-		WebSocketSession wss = threadLocalWebSocket.get();
+	
+	
+	
+	private static void notifyOnWebSocketIfNecessary(BigDecimal flowProgr, Object data, boolean lastMsg) {
+		if (executeWebSocketHandler == null) {
+            return; // oppure log.warn(...)
+        }
+		WebSocketSession wss = executeWebSocketHandler.getSession(flowProgr);
 		
-		if(wss == null)
+		if(wss == null || !wss.isOpen())
 			return;
 		
 		try {
+			System.out.println("WS OPEN  id=" + wss.getId() + " , hash=" + System.identityHashCode(wss) + " , thread=" + Thread.currentThread().getName()  );		    
     		TextMessage textMessage = new TextMessage(UtilityJson.writeValueAsString(data));
 			wss.sendMessage(textMessage);
 		} catch (IOException e) {
@@ -146,7 +164,7 @@ public class FlowLogUtils {
 		String logDirectory = fld.getLogLogFile() + Constants.UNDERSCORE;
 		File file = new File(logDirectory + Constants.PATH_DELIMITER + FlowLogData.class.getSimpleName());
 		UtilityJson.getMapper().writeValue(file, fld);
-		notifyOnWebSocketIfNecessary(fld, true);
+		notifyOnWebSocketIfNecessary(fld.getLogProgrLog() ,fld, true);
 	}
 
 	private FlowLogData getFlowLog(ExecutionFlowData executionFlowData) {

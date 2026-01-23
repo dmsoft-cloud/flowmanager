@@ -10,12 +10,12 @@ import it.dmsoft.flowmanager.common.model.FullFlowData;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface FlowDataMapper {
-	
+
 	//DA AGGIUNGERE
 	//trustHost
 	//model.database
 	//file dei parametri generali: path backup generale
-    
+
 
     //OK
 	@Mapping(target = "flowId", source = "fullFlowData.flow.id")
@@ -166,7 +166,7 @@ public interface FlowDataMapper {
 	//AL MOMENTO NON PARAMETRIZZATO MA IMPLEMENTATO
 	//@Mapping(target = "flowCharEmptySpace", source = "")
 	@Mapping(target = "flowTrustHost", source = "fullFlowData._interface.trustHost")
-	
+
 	ExecutionFlowData convert(FullFlowData fullFlowData);
 
 }

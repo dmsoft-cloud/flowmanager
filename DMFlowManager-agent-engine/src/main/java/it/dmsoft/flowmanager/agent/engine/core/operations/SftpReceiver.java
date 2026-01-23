@@ -8,12 +8,12 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.ConstraintTrasmis
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.ExceptionUtils;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.genericWsClient.ResponseWrapper;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.sftp.manager.ReceiveManager;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpFileDescription;
 import it.dmsoft.flowmanager.agent.engine.sftp.model.SftpResponse;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class SftpReceiver extends ConstraintTrasmission<ResponseWrapper<SftpResponse>> {
 

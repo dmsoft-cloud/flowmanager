@@ -5,10 +5,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 public abstract class DefaultBaseService<X, Y, Z> implements BaseService<X, Y, Z>{
-	
+
 	/**
      * Create a customer based on the data sent to the service class.
      * @param customer
@@ -48,7 +46,7 @@ public abstract class DefaultBaseService<X, Y, Z> implements BaseService<X, Y, Z
     }
 
     /**
-     * Get customer by ID. The service will send the customer data else will throw the exception. 
+     * Get customer by ID. The service will send the customer data else will throw the exception.
      * @param customerId
      * @return CustomerData
      */
@@ -82,9 +80,13 @@ public abstract class DefaultBaseService<X, Y, Z> implements BaseService<X, Y, Z
     private X populateEntity(Y model) {
         return getMapper().convertModel(model);
     }
-    
+
     protected abstract BaseMapper<X, Y> getMapper();
-    
+
     protected abstract JpaRepository<X, Z> getRepository();
+
+    public abstract boolean setActive(Z id, boolean activate);
+
+    public abstract Z extractIdFromModel(Y modelData);
 
 }

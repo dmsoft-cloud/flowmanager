@@ -371,14 +371,16 @@ public class FlowBuilder {
 		OriginData origin = executionFlowData.getOrigin();
 		genericAS400Param.setJobd(executionFlowData.getFlowJobDesc());
 		genericAS400Param.setJobdLibrary(executionFlowData.getFlowLibJobDesc());
-		genericAS400Param.setHost(origin.getHost());
-		genericAS400Param.setPort(origin.getPort());
-		genericAS400Param.setUser(origin.getUser());
-		genericAS400Param.setPassword(origin.getPassword());
+		if (origin != null) {			
+			genericAS400Param.setHost(origin.getHost());
+			genericAS400Param.setPort(origin.getPort());
+			genericAS400Param.setUser(origin.getUser());
+			genericAS400Param.setPassword(origin.getPassword());
+			genericAS400Param.setSecure(origin.getSecure());
+			genericAS400Param.setJdbcCustomString(origin.getJdbcCustomString());
+			genericAS400Param.setDbType(origin.getDbType());
+		}
 		genericAS400Param.setCurlib(executionFlowData.getFlowLibreria());
-		genericAS400Param.setSecure(origin.getSecure());
-		genericAS400Param.setJdbcCustomString(origin.getJdbcCustomString());
-		genericAS400Param.setDbType(origin.getDbType());
 	}
 
 	public FlowBuilder createBackup(ExecutionFlowData executionFlowData, OperationParams operationParams) {

@@ -20,7 +20,7 @@ import jakarta.annotation.Resource;
 @RequestMapping("/interfaces")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class InterfaceController {
-	
+
 	 	@Resource(name = "interfaceService")
 	    private BaseService<Interface, InterfaceData, String> interfaceService;
 

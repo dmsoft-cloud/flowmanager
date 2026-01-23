@@ -4,9 +4,9 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.ChkObjParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CreateDbFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.OperationParams;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class CrtDbFileIfNotExist extends Operation<CreateDbFileParam> {
 

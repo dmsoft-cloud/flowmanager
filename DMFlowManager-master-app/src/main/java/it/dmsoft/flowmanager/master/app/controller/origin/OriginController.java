@@ -17,13 +17,13 @@ import it.dmsoft.flowmanager.common.model.OriginData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import jakarta.annotation.Resource;
 
-//@CrossOrigin(origins = "http://localhost:4200") 
+//@CrossOrigin(origins = "http://localhost:4200")
 //@CrossOrigin(origins = "#{'${cors.allowed.origins}'}")
 @RestController
 @RequestMapping("/origins")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class OriginController {
-	
+
 	@Value("${cors.allowed.origins}")
     private String allowedOrigins;
 

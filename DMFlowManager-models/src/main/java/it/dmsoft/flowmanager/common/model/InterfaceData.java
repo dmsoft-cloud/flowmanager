@@ -161,5 +161,5 @@ public class InterfaceData extends BaseModel  {
 		this.keyFile = keyFile;
 	}
 
-	
+
 }

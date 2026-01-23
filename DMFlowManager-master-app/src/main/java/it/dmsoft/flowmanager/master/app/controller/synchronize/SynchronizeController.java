@@ -15,7 +15,7 @@ import jakarta.annotation.Resource;
 @RequestMapping("/synchronize")
 @PreAuthorize("hasAnyAuthority('flowmanager_use')")
 public class SynchronizeController {
-	
+
 	@Resource(name = "synchDataService")
     private SynchronizeDataService synchDataService;
 
@@ -27,7 +27,7 @@ public class SynchronizeController {
     public FullFlowsData perform() {
         return synchDataService.synchronizeFullFlowsData();
     }
-    
+
 	/**
      * Post request to refresh flow information into the agent.
      * @param String agentId

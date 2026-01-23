@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import it.dmsoft.flowmanager.agent.app.controller.execute.ExecuteWebSocketHandler;
+import it.dmsoft.flowmanager.framework.websocket.ExecuteWebSocketHandler;
 
 @Configuration
 @EnableWebSocket
@@ -17,6 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(executeWebSocketHandler, "/flow-websocket").setAllowedOrigins("*");
+        registry.addHandler(executeWebSocketHandler, "/flow-websocket/**").setAllowedOrigins("*");
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.DbType;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.common.model.AgentData;
 import it.dmsoft.flowmanager.common.model.EmailData;
 import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
@@ -32,7 +33,7 @@ import it.dmsoft.flowmanager.common.websocket.FlowExecutionRequest;
 @EntityScan("it.dmsoft.flowmanager.be.entities")
 @RegisterReflectionForBinding({FlowExecutionOutcome.class, FlowLogData.class, FlowLogDetailsData.class, 
 	FlowExecutionRequest.class, FullFlowData.class, EmailData.class, RecipientData.class, FlowData.class, 
-	GroupData.class, InterfaceData.class, ConnectionType.class, ModelData.class, OriginData.class, DbType.class,  YesNo.class})
+	GroupData.class, InterfaceData.class, AgentData.class,ConnectionType.class, ModelData.class, OriginData.class, DbType.class,  YesNo.class})
 //@ImportRuntimeHints(ApplicationHints.class)
 @SpringBootApplication
 //@SpringBootApplication(scanBasePackages = "it.dmsoft.flowmanager")

@@ -14,14 +14,14 @@ import it.dmsoft.flowmanager.master.api.log.mapper.FlowLogMapper;
 import it.dmsoft.flowmanager.master.repositories.FlowLogRepository;
 
 @Service("flowLogService")
-public class DefaultFlowLogService extends DefaultBaseService<FlowLog, FlowLogData, BigDecimal> {
+public class DefaultFlowLogService extends DefaultBaseService<FlowLog, FlowLogData, Long> {
 
 	    private FlowLogRepository flowLogRepository;
-	    
+
 	    @Autowired
 	    private FlowLogMapper flowLogMapper;
 
-	    
+
 	    public DefaultFlowLogService(FlowLogRepository flowLogRepository) {
 			super();
 			this.flowLogRepository = flowLogRepository;
@@ -35,8 +35,22 @@ public class DefaultFlowLogService extends DefaultBaseService<FlowLog, FlowLogDa
 
 
 		@Override
-		protected JpaRepository<FlowLog, BigDecimal> getRepository() {
+		protected JpaRepository<FlowLog, Long> getRepository() {
 			return flowLogRepository;
 		}
-	    
+
+
+		@Override
+		public boolean setActive(Long id, boolean activate) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+		@Override
+		public Long extractIdFromModel(FlowLogData modelData) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 }

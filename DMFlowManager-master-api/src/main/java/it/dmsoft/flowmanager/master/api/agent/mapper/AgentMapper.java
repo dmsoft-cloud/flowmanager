@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.api.agent.mapper;
 
+
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

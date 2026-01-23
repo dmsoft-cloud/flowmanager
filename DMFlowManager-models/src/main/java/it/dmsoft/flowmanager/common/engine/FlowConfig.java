@@ -20,12 +20,12 @@ public class FlowConfig {
 	private String extTask;
 	private String masterdataOverrides;
 	private YesNo IBMi;
-	
+
 	private String datasourceUrl;
 	private String datasourceUsername;
 	private String datasourcePassword;
 	private String datasourceDriverClassName;
-	
+
 	public String getTransactionName() {
 		return transactionName;
 	}
@@ -68,7 +68,7 @@ public class FlowConfig {
 	public void setBackupPath(String backupPath) {
 		this.backupPath = backupPath;
 	}
-	
+
 	/*
 	public String getMailFrom() {
 		return mailFrom;
@@ -77,7 +77,7 @@ public class FlowConfig {
 		this.mailFrom = mailFrom;
 	}
 	*/
-	
+
 	public String getCliente() {
 		return cliente;
 	}
@@ -96,14 +96,14 @@ public class FlowConfig {
 	public void setMasterdataOverrides(String masterdataOverrides) {
 		this.masterdataOverrides = masterdataOverrides;
 	}
-	
+
 	public YesNo getLegacyModernization() {
 		return legacyModernization;
 	}
 	public void setLegacyModernization(YesNo legacyModernization) {
 		this.legacyModernization = legacyModernization;
 	}
-	
+
 	public String getExtJob() {
 		return extJob;
 	}
@@ -169,5 +169,5 @@ public class FlowConfig {
 				+ ", datasourcePassword=" + datasourcePassword + ", datasourceDriverClassName="
 				+ datasourceDriverClassName + "]";
 	}
-	
+
 }

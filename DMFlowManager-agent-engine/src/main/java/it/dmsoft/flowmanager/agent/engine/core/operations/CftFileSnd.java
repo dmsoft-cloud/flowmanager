@@ -9,10 +9,11 @@ import it.dmsoft.flowmanager.agent.engine.core.operations.params.CftFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SpFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.properties.PropertiesUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
+import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+
 
 public class CftFileSnd extends Operation<CftFileParam> {
 

@@ -21,29 +21,34 @@ import it.dmsoft.flowmanager.common.model.FlowData;
 import it.dmsoft.flowmanager.common.model.FlowExecutionOutcome;
 import it.dmsoft.flowmanager.common.model.FullFlowData;
 import it.dmsoft.flowmanager.framework.util.BeanUtils;
+import it.dmsoft.flowmanager.framework.websocket.ExecuteWebSocketHandler;
+
 import jakarta.annotation.Resource;
 
 @Service("executeService")
 public class ExecuteService {
-	
+
 	@Resource(name = "flowDataService")
     private FlowDataService flowDataService;
-	
+
 	@Resource(name = "dynamicFlowManager")
     private DynamicFlowManager dynamicFlowManager;
-	
+
 	@Resource(name = "agentPropertiesService")
     private AgentPropertiesService agentPropertiesService;
-	
+
 	@Autowired
 	private FlowConfigMapper flowConfigMapper;
 	
+	@Autowired
+	private ExecuteWebSocketHandler executeWebSocketHandler;
+
 	public static Map<BigDecimal, WebSocketSession> sessionsMap = new HashMap<>();
-	
+
 	public FlowExecutionOutcome synch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
 		return execute(flowId, flowProgr, fullFlowData, false);
 	}
-	
+
 	private FlowExecutionOutcome execute(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData, boolean asynch) {
 		//CARICARE il FLUSSO DA JSON
 		//FARE IL MERGE CON QUANTO ARRIVATO IN INPUT
@@ -53,31 +58,31 @@ public class ExecuteService {
 			flowData.setId(flowId);
 			fullFlowData.setFlow(flowData);
 		}
-		
+
 		FullFlowData storedFullFlowData = flowDataService.getFullFlowData(fullFlowData.getFlow().getId());
-		
+
 		BeanUtils.copyPropertiesNotNull(fullFlowData, storedFullFlowData);
-		
+
 		ExecutionFlowData executionFlowData = flowDataService.getExecutionFlowData(storedFullFlowData);
-		
+
 		FlowConfig flowConfig = getFlowConfig(storedFullFlowData);
-		
-		WebSocketSession wss = sessionsMap.get(flowProgr);
-		
+
+		WebSocketSession wss = executeWebSocketHandler.getSession(flowProgr);
+
 		if (wss == null && asynch) {
-			throw new RuntimeException("WebSocket is null in asunch flow");
+			throw new RuntimeException("WebSocket is null in asynch flow");
 		}
-		
+
 		try {
 			dynamicFlowManager.executeFlow(flowProgr, executionFlowData, null, flowConfig, wss);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return FlowLogUtils.getFlowExecutionOutcome();
 	}
-	
+
 	private FlowConfig getFlowConfig(FullFlowData storedFullFlowData) {
 		FlowConfig flowConfig = flowConfigMapper.convert(agentPropertiesService, storedFullFlowData);
 		flowConfig.setExecutionDateStr(FormatUtils.todayDateBigDec().toString());
@@ -85,8 +90,8 @@ public class ExecuteService {
 	}
 
 	@Async
-	public void asynch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
-		execute(flowId, flowProgr, fullFlowData, true);
+	public FlowExecutionOutcome asynch(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) {
+		return execute(flowId, flowProgr, fullFlowData, true);
 	}
 
 }

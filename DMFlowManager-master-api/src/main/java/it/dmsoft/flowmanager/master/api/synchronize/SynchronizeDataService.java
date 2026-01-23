@@ -2,14 +2,14 @@ package it.dmsoft.flowmanager.master.api.synchronize;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Flow;
 
+import org.aspectj.weaver.loadtime.Agent;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import it.dmsoft.flowmanager.be.entities.Agent;
 import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 import it.dmsoft.flowmanager.be.entities.Email;
-import it.dmsoft.flowmanager.be.entities.Flow;
 import it.dmsoft.flowmanager.be.entities.Interface;
 import it.dmsoft.flowmanager.be.entities.Model;
 import it.dmsoft.flowmanager.be.entities.Origin;
@@ -30,10 +30,10 @@ public class SynchronizeDataService {
 
     @Resource(name = "agentService")
     private BaseService<Agent, AgentData, String> agentService;
-    
+
     @Resource(name = "emailService")
     private BaseService<Email, EmailData, String> emailService;
-    
+
 	@Resource(name = "flowService")
     private BaseService<Flow, FlowData, String> flowService;
 
@@ -42,23 +42,23 @@ public class SynchronizeDataService {
 
  	@Resource(name = "interfaceService")
     private BaseService<Interface, InterfaceData, String> interfaceService;
- 	
+
     @Resource(name = "modelService")
     private BaseService<Model, ModelData, String> modelService;
-    
+
     @Resource(name = "originService")
     private BaseService<Origin, OriginData, String> originService;
 
 	public FullFlowsData synchronizeFullFlowsData() {
 		List<AgentData> agents = agentService.getAll();
 		FullFlowsData flowsData = retrieveFullFlowsData();
-		
+
 		if (agents == null || agents.size() == 0) {
 			agents = Arrays.asList(AgentData.DEFAULT_AGENT);
 		}
-		
+
 		agents.stream().forEach(x -> synchronizeFullFlowsData(x, flowsData));
-		
+
 		return flowsData;
 	}
 
@@ -67,10 +67,10 @@ public class SynchronizeDataService {
 		FullFlowsData flowsData = retrieveFullFlowsData();
 		return synchronizeFullFlowsData(agent, flowsData);
 	}
-	
-	
+
+
 	public FullFlowsData synchronizeFullFlowsData(AgentData agent, FullFlowsData flowsData) {
-		return RestClientHelper.getAgentRestClient(agent).post()
+		return RestClientHelper.getAgentRestClientRelayToken(agent).post()
 				.uri(uriBuilder -> uriBuilder
 			      .path("/synchronize/perform")
 			      .build())
@@ -78,17 +78,17 @@ public class SynchronizeDataService {
 				.body(flowsData)
 				.retrieve()
 				.body(FullFlowsData.class);
-				
+
 	}
-	
+
 	private FullFlowsData retrieveFullFlowsData() {
 		FullFlowsData fullFlowsData = new FullFlowsData(
-				emailService.getAll(), flowService.getAll(), groupService.getAll(), 
+				emailService.getAll(), flowService.getAll(), groupService.getAll(),
 				interfaceService.getAll(), modelService.getAll(), originService.getAll());
-		
+
 		return fullFlowsData;
 	}
 
-	
+
 }
 

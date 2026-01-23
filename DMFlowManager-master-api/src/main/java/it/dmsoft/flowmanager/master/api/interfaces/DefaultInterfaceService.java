@@ -4,22 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import it.dmsoft.flowmanager.be.entities.Interface;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.common.model.InterfaceData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.interfaces.mapper.InterfaceMapper;
 import it.dmsoft.flowmanager.master.repositories.InterfaceRepository;
-import it.dmsoft.flowmanager.be.entities.Interface;
 
 @Service("interfaceService")
 public class DefaultInterfaceService extends DefaultBaseService<Interface, InterfaceData, String> {
 
 	    private InterfaceRepository interfaceRepository;
-	    
+
 	    @Autowired
 	    private InterfaceMapper interfaceMapper;
 
-	    
+
 	    public DefaultInterfaceService(InterfaceRepository interfaceRepository) {
 			super();
 			this.interfaceRepository = interfaceRepository;
@@ -36,5 +37,25 @@ public class DefaultInterfaceService extends DefaultBaseService<Interface, Inter
 		protected JpaRepository<Interface, String> getRepository() {
 			return interfaceRepository;
 		}
-	    
+
+
+		@Override
+		public boolean setActive(String id, boolean activate) {
+			YesNo value = activate ? YesNo.YES : YesNo.NO;
+			return interfaceRepository.findById(id)
+			        .map(itf -> {
+			        	itf.setEnabled(value);
+			            interfaceRepository.save(itf);
+			            return true;
+			        })
+			        .orElse(false);
+		}
+
+
+		@Override
+		public String extractIdFromModel(InterfaceData interfaceData) {
+			// TODO Auto-generated method stub
+			return interfaceData.getId();
+		}
+
 }

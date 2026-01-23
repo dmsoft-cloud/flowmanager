@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.dmsoft.flowmanager.be.entities.Model;
+import it.dmsoft.flowmanager.be.filters.FlowFilterDTO;
+import it.dmsoft.flowmanager.be.filters.ModelFilterDTO;
+import it.dmsoft.flowmanager.common.model.FlowDataWithDirection;
 import it.dmsoft.flowmanager.common.model.ModelData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
+import it.dmsoft.flowmanager.master.api.model.DefaultModelService;
 import jakarta.annotation.Resource;
 
 @RestController
@@ -22,7 +26,7 @@ import jakarta.annotation.Resource;
 public class ModelController {
 
     @Resource(name = "modelService")
-    private BaseService<Model, ModelData, String> modelService;
+    private DefaultModelService modelService;
 
     /**
      * <p>Get all model data in the system.For production system you many want to use
@@ -32,6 +36,12 @@ public class ModelController {
     @GetMapping
     public List<ModelData> getModels() {
         return modelService.getAll();
+    }
+    
+    //aggiunti per i filtri
+    @PostMapping
+    public List<ModelData> getModels(@RequestBody(required = false) ModelFilterDTO filter) {
+        return (filter == null) ? getModels() : modelService.getAllFiltered(filter);
     }
 
     /**

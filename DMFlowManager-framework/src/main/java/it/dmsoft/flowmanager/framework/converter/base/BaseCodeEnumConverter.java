@@ -10,16 +10,18 @@ import jakarta.persistence.AttributeConverter;
 public abstract class BaseCodeEnumConverter<T extends CodeEnum> implements AttributeConverter<T, String>{
 
 	protected Class<? extends CodeEnum> codeEnumClass;
-	
+
     @SuppressWarnings("unchecked")
     public BaseCodeEnumConverter() {
         this.codeEnumClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
-	
+
+	@Override
 	public String convertToDatabaseColumn(T attribute) {
 		return attribute != null ? attribute.getCode() : null;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public T convertToEntityAttribute(String dbData) {
 		return (dbData != null) ? (T) CodeEnum.getCodeEnum(codeEnumClass, dbData) : null;

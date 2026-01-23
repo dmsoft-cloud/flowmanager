@@ -31,29 +31,40 @@ import com.nimbusds.jose.shaded.gson.internal.LinkedTreeMap;
 @EnableWebSocketSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-	
+
 	public static ThreadLocal<Jwt> threadLocalJwt = new ThreadLocal<>();
 
 	@Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
 	private String clientId;
-	
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/execute/**", "/flow-websocket/**", "/flow-websocket").hasAnyAuthority("flowmanager_use")
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/ws/**", "/synchronize/perform") // la handshake WS non va CSRF-protetta
+                )
+             .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/ws/**").permitAll()
+                    .requestMatchers("/execute/**", "/flow-websocket/**", "/flow-websocket").hasAnyAuthority("flowmanager_use")
                     .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
         return http.build();
     }
-    
+
     @Bean
     AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
         // The following code configures message-level authorization rules.
     	//SecurityContext sc = SecurityContextHolder.getContext();
         //sc.setAuthentication(auth);
-    	messages.simpDestMatchers("/flow-websocket", "/flow-websocket/**").hasAnyAuthority("flowmanager_use");// fullyAuthenticated();
+    	messages
+        	.simpTypeMatchers(
+                org.springframework.messaging.simp.SimpMessageType.CONNECT,
+                org.springframework.messaging.simp.SimpMessageType.HEARTBEAT,
+                org.springframework.messaging.simp.SimpMessageType.UNSUBSCRIBE,
+                org.springframework.messaging.simp.SimpMessageType.DISCONNECT
+            ).permitAll()
+    		.simpSubscribeDestMatchers("/topic/**").permitAll()
+    		.simpDestMatchers("/flow-websocket", "/flow-websocket/**").hasAnyAuthority("flowmanager_use");// fullyAuthenticated();
             // Specify that messages with destination "/user/**" should have the "USER" role.
             //.simpDestMatchers("/user/**").hasRole("USER");
 
@@ -65,7 +76,7 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverterForKeycloak() {
         Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter = jwt -> {
         	threadLocalJwt.set(jwt);
-        	
+
             Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
 
             Object client = resourceAccess.get(clientId);

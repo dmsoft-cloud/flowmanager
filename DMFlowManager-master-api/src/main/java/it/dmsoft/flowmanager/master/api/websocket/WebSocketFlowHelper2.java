@@ -1,5 +1,6 @@
 package it.dmsoft.flowmanager.master.api.websocket;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -15,14 +16,14 @@ import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.Session;
 import jakarta.websocket.WebSocketContainer;
 
-public class WebSocketHelper {
-	
-	public static Session openSocket(ExecuteWebSocketClient wsclient, AgentData agentData) {
+public class WebSocketFlowHelper2 {
+
+	public static Session openSocket(ExecuteWebSocketClient wsclient, AgentData agentData, BigDecimal executionId) {
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-	
+
 		String token = SecurityConfig.threadLocalJwt.get().getTokenValue();
-        String uri = "ws://" + agentData.getHost() + ":" + agentData.getPort() + "/flow-websocket"; // Example WebSocket server
-        
+        String uri = "ws://" + agentData.getHost() + ":" + agentData.getPort() + "/flow-websocket/" + executionId ; // Example WebSocket server
+
         Builder configBuilder = ClientEndpointConfig.Builder.create();
         configBuilder.configurator(new Configurator() {
             @Override
@@ -35,17 +36,21 @@ public class WebSocketHelper {
         try {
             Session session = container.connectToServer(wsclient, clientConfig, URI.create(uri));
             System.out.println("Connected to server");
+            System.out.println("WS OPEN  id=" + session.getId() + " , hash=" + System.identityHashCode(session) + " , thread=" + Thread.currentThread().getName()  );
+    	    
             return session;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return null;
-        
+
+	}
+
+	public static void openSocket (ExecuteWebSocketClient wsclient, BigDecimal executionId) {
+		openSocket(wsclient, AgentData.DEFAULT_AGENT, executionId );
 	}
 	
-	public static void openSocket (ExecuteWebSocketClient wsclient) {
-		openSocket(wsclient, AgentData.DEFAULT_AGENT);
-	}
+
 
 }

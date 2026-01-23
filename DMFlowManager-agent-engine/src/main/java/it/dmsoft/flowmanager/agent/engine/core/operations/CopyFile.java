@@ -6,10 +6,10 @@ import it.dmsoft.flowmanager.agent.engine.core.as400.CallAs400;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.DependentOperation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.CopyFileParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.StringUtils;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 //CPYF FROMFILE(B2BDATI/CCCOMUNI) TOFILE(OCSOAM/PROVA1) MBROPT(*ADD) 
 

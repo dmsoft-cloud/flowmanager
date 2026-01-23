@@ -11,6 +11,6 @@ import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
 
 @Repository
 public interface FlowLogDetailsRepository extends JpaRepository<FlowLogDetails, FlowLogDetailsId> {
-	
+
 	List<FlowLogDetails> findByFlowLogDetailsIdLogProgrLog(BigDecimal logProgrLog);
 }

@@ -12,12 +12,12 @@ import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface EmailMapper  extends BaseMapper<Email, EmailData>{
-	
+
 	@Override
     @Mapping(target = "id", source = "id") // Assicura il mapping dell'ID
     Email convertModel(EmailData model);
 
 	@Override
     EmailData convertEntity(Email entity);
-	
+
 }

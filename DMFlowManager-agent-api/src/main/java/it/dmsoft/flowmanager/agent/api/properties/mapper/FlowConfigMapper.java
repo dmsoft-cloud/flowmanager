@@ -11,7 +11,7 @@ import it.dmsoft.flowmanager.common.model.FullFlowData;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface FlowConfigMapper {
-	
+
 	@Mapping(target = "transactionName", source = "fullFlowData.flow.id")
 	@Mapping(target = "transactionId", source = "fullFlowData.flow.description")
 	@Mapping(target = "cliente", source = "agentPropertiesService.customer")

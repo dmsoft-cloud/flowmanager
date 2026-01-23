@@ -25,13 +25,13 @@ public class FlowDataService {
 
 	@Value("${flowmanager.agent.config.data.file}")
 	private String dataFile;
-	
+
 	@Value("${flowmanager.agent.properties.mailInterfaceId}")
 	private String mailInterfaceId;
-	
+
     @Autowired
     private FlowDataMapper flowDataMapper;
-	
+
 	private static FullFlowsData flowsData;
 
 	public FullFlowsData storeFullFlowsData(final FullFlowsData fullFlowsData) {
@@ -42,45 +42,45 @@ public class FlowDataService {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		flowsData = fullFlowsData;
 		return fullFlowsData;
 	}
-	
+
 	public FullFlowData getFullFlowData(String flowId) {
 		//TODO HANDLE BETTER CACHE
 		if(flowsData == null) {
 			flowsData = loadFullFlowsData();
 		}
-		
+
 		FlowData flow = flowsData.getFlows().stream().filter(x -> x.getId().equals(flowId)).findAny().get();
 		GroupData group = flowsData.getGroups().stream().filter(x -> x.getId().equals(flow.getGroupId())).findAny().orElse(null);
 		EmailData emailOk = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationOk())).findAny().orElse(null);
 		EmailData emailKo = flowsData.getEmails().stream().filter(x -> x.getId().equals(flow.getNotificationKo())).findAny().orElse(null);
 		//flowsData.get
-		
+
 		InterfaceData _interface = flowsData.getInterfaces().stream().filter(x -> x.getId().equals(flow.getInterfaceId())).findAny().get();
-		InterfaceData mailInterface = flowsData.getInterfaces().stream().filter(x -> x.getId().equals(mailInterfaceId)).findAny().orElse(null);;
-		
-		
+		InterfaceData mailInterface = flowsData.getInterfaces().stream().filter(x -> x.getId().equals(mailInterfaceId)).findAny().orElse(null);
+
+
 		ModelData model = flowsData.getModels().stream().filter(x -> x.getId().equals(flow.getModel())).findAny().get();
-		
+
 		List<OriginData> origins = flowsData.getOrigins();
 		OriginData origin = origins.stream().filter(x -> x.getId().equals(flow.getOrigin())).findAny().orElse(null);
-		
+
 		FullFlowData fullFlowData = new FullFlowData(flow, group, emailOk, emailKo, _interface, model, origin, mailInterface);
 		return fullFlowData;
 	}
-	
+
 	public ExecutionFlowData getExecutionFlowData(String flowId) {
 		return getExecutionFlowData(getFullFlowData(flowId));
 	}
-	
+
 	public ExecutionFlowData getExecutionFlowData(FullFlowData fullFlowData) {
 		return flowDataMapper.convert(fullFlowData);
 	}
-	
-	
+
+
 	private FullFlowsData loadFullFlowsData() {
 		try {
 			File file = new File(dataFile);
@@ -88,7 +88,7 @@ public class FlowDataService {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
 
 }

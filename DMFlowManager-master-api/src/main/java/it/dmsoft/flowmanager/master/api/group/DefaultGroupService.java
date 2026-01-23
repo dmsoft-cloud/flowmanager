@@ -4,23 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
+import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
 import it.dmsoft.flowmanager.common.model.GroupData;
 import it.dmsoft.flowmanager.framework.api.base.BaseMapper;
 import it.dmsoft.flowmanager.framework.api.base.DefaultBaseService;
 import it.dmsoft.flowmanager.master.api.group.mapper.GroupMapper;
 import it.dmsoft.flowmanager.master.repositories.ConfigurationGroupRepository;
-import it.dmsoft.flowmanager.be.entities.ConfigurationGroup;
 
 
 @Service("groupService")
 public class DefaultGroupService extends DefaultBaseService<ConfigurationGroup, GroupData, String> {
 
 	private ConfigurationGroupRepository groupRepository;
-    
+
     @Autowired
     private GroupMapper groupMapper;
 
-    
+
     public DefaultGroupService(ConfigurationGroupRepository groupRepository) {
 		super();
 		this.groupRepository = groupRepository;
@@ -37,4 +38,24 @@ public class DefaultGroupService extends DefaultBaseService<ConfigurationGroup, 
 	protected JpaRepository<ConfigurationGroup, String> getRepository() {
 		return groupRepository;
 	}
+
+
+	@Override
+	public boolean setActive(String id, boolean activate) {
+		YesNo value = activate ? YesNo.YES : YesNo.NO;
+		return groupRepository.findById(id)
+		        .map(group -> {
+		        	group.setEnabled(value);
+		        	groupRepository.save(group);
+		            return true;
+		        })
+		        .orElse(false);
+	}
+
+
+	@Override
+	public String extractIdFromModel(GroupData group) {
+		return group.getId();
+	}
+	
 }

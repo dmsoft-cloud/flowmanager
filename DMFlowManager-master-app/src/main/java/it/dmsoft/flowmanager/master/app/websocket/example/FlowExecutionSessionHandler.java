@@ -21,7 +21,7 @@ public class FlowExecutionSessionHandler implements StompSessionHandler {
 		FlowExecutionRequest fer = new FlowExecutionRequest();
 		fer.setFlowId("TES1");
 		fer.setFlowProgr(BigDecimal.valueOf(5));
-		
+
 		try {
 			session.send("/flow-websocket", UtilityJson.writeValueAsString(fer));
 		} catch (JsonProcessingException e) {

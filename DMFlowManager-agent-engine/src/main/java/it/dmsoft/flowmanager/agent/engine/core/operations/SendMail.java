@@ -3,9 +3,9 @@ package it.dmsoft.flowmanager.agent.engine.core.operations;
 import it.dmsoft.flowmanager.agent.engine.core.operations.core.Operation;
 import it.dmsoft.flowmanager.agent.engine.core.operations.params.SendMailParam;
 import it.dmsoft.flowmanager.agent.engine.core.utils.Constants.OperationType;
-import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 import it.dmsoft.flowmanager.agent.engine.generic.utility.logger.Logger;
 import it.dmsoft.flowmanager.agent.engine.mailclient.SendMailManager;
+import it.dmsoft.flowmanager.agent.engine.core.utils.FlowLogUtils;
 
 public class SendMail extends Operation<SendMailParam> {
 

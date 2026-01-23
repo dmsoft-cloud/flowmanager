@@ -183,7 +183,7 @@ public class DynamicFlowManager {
 		Logger logger = Logger.getLogger(config.getLogRotation(), config.getLogSizeMB(), logFile, config.getLogLevel(), config.getTransactionId(), Main.class.getName(),
 				config.getCliente(), Constants.GESTOREFLUSSI);
 		
-		FlowLogUtils.updateLogPath(logFile);
+		flowLogUtils.updateLogPath(logFile);
 		
 		String resubmitTransactionId = null;
 		

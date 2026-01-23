@@ -32,31 +32,31 @@ import jakarta.websocket.WebSocketContainer;
 @ClientEndpoint
 @Component("executeWebSocketClient")
 public class ExecuteWebSocketClient extends Endpoint{
-	
+
 	private boolean firstMessage = false;
 
 	private Session session;
-	
+
     @Resource(name = "flowLogService")
     private BaseService<FlowLog, FlowLogData, String> flowLogService;
-    
+
     @Resource(name = "flowLogDetailsService")
-    private BaseService<FlowLogDetails, FlowLogDetailsData, FlowLogDetailsId> flowLogDetailsService; 
-	
+    private BaseService<FlowLogDetails, FlowLogDetailsData, FlowLogDetailsId> flowLogDetailsService;
+
     @OnMessage
     public void onMessage(String message) {
         System.out.println("Received message: " + message);
-        
+
         try {
 	        if (firstMessage || message.contains("logId")) {
 				FlowLogData logData = UtilityJson.readValue(message, FlowLogData.class);
 				flowLogService.save(logData);
-				
+
 				if(!firstMessage) {
 					session.close();
 				} else {
 					firstMessage = false;
-				}	
+				}
 			} else {
 				FlowLogDetailsData logDetailsData = UtilityJson.readValue(message, FlowLogDetailsData.class);
 				flowLogDetailsService.save(logDetailsData);
@@ -66,27 +66,27 @@ public class ExecuteWebSocketClient extends Endpoint{
 			e.printStackTrace();
 		}
     }
-    
+
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
         System.out.println("Connected to server");
     }
-    
+
 	public void sendMessage(String flowId, BigDecimal flowProgr, FullFlowData fullFlowData) throws JsonProcessingException, InterruptedException, IOException {
 		FlowExecutionRequest fer = new FlowExecutionRequest();
 		fer.setFlowId(flowId);
 		fer.setFlowProgr(flowProgr);
 		fer.setFullFlowData(fullFlowData);
-		
+
 		sendMessage(fer);
-	}  
-    	
+	}
+
     public void sendMessage(FlowExecutionRequest fer) throws InterruptedException, JsonProcessingException, IOException {
         while(session == null) {
         	Thread.sleep(10);
         }
-    	
+
         session.getBasicRemote().sendText(UtilityJson.writeValueAsString(fer));
     }
 
@@ -100,7 +100,7 @@ public class ExecuteWebSocketClient extends Endpoint{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
 	@Override

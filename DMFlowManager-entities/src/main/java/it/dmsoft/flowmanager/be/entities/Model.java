@@ -1,5 +1,7 @@
 package it.dmsoft.flowmanager.be.entities;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
 import it.dmsoft.flowmanager.common.domain.Domains.Locale;
