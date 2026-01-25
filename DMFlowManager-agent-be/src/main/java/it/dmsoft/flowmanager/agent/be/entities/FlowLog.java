@@ -48,7 +48,7 @@ public class FlowLog {
 	private String logUtente;
 	@Column(length = 64)
 	private String logPassword;
-	@Column(length = 10)
+	@Column(length = 20)
 	private String logCodInterfaccia;
 	@Column(length = 2)
 	private Status logStato;
@@ -140,7 +140,7 @@ public class FlowLog {
 	private String logLetteraFlusso;
 	@Column(length = 1)
 	private YesNo logCreaVuoto;
-	@Column(length = 2)
+	@Column(length = 5)
 	private String logInternaz;
 	@Column(length = 7)
 	private String logSostValNull;

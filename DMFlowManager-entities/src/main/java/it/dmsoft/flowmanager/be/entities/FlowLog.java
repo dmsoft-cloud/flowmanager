@@ -143,7 +143,7 @@ public class FlowLog {
 	private String logLetteraFlusso;
 	@Column(length = 1)
 	private YesNo logCreaVuoto;
-	@Column(length = 2)
+	@Column(length = 5)
 	private String logInternaz;
 	@Column(length = 7)
 	private String logSostValNull;
