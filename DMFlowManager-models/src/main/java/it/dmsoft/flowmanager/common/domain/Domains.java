@@ -225,7 +225,8 @@ public class Domains {
 
     public enum Status implements CodeEnum {
  		OK("OK"),
- 		KO("KO");
+ 		KO("KO"),
+ 		BLANK("");
 
  		private String code;
 

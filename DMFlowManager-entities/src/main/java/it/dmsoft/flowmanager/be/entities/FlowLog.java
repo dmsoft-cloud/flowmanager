@@ -6,10 +6,19 @@ import java.sql.Timestamp;
 import it.dmsoft.flowmanager.common.domain.Domains.ConnectionType;
 import it.dmsoft.flowmanager.common.domain.Domains.Direction;
 import it.dmsoft.flowmanager.common.domain.Domains.FileFormat;
+import it.dmsoft.flowmanager.common.domain.Domains.RecordDelimiterType;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
 import it.dmsoft.flowmanager.common.domain.Domains.Type;
 import it.dmsoft.flowmanager.common.domain.Domains.YesNo;
+import it.dmsoft.flowmanager.framework.converter.ConnectionTypeConverter;
+import it.dmsoft.flowmanager.framework.converter.DirectionConverter;
+import it.dmsoft.flowmanager.framework.converter.FileFormatConverter;
+import it.dmsoft.flowmanager.framework.converter.RecordDelimiterTypeConverter;
+import it.dmsoft.flowmanager.framework.converter.StatusConverter;
+import it.dmsoft.flowmanager.framework.converter.TypeConverter;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +54,7 @@ public class FlowLog {
 	private String logId;
 	private Timestamp logTsInizio;
 	private Timestamp logTsFine;
+	@Convert(converter = StatusConverter.class)
 	@Column(length = 2)
 	private Status logEsito;
 	@Column(length = 64)
@@ -55,8 +65,10 @@ public class FlowLog {
 	private String logCodInterfaccia;
 	@Column(length = 2)
 	private YesNo logStato;
-	@Column(length = 10)
+	@Convert(converter = TypeConverter.class)
+	@Column(length = 1)
 	private Type logTipFlusso;
+	@Convert(converter = DirectionConverter.class)
 	@Column(length = 1)
 	private Direction logDirezione;
 	@Column(length = 10)
@@ -75,10 +87,12 @@ public class FlowLog {
 	private String logFolder;
 	@Column(length = 255)
 	private String logFileName;
+	@Convert(converter = FileFormatConverter.class)
 	@Column(length = 5)
 	private FileFormat logFormato;
+	@Convert(converter = RecordDelimiterTypeConverter.class)
 	@Column(length = 6)
-	private String logDelimRecord;
+	private RecordDelimiterType logDelimRecord;
 	@Column(length = 4)
 	private String logDelimCampo;
 	@Column(length = 5)
@@ -87,6 +101,7 @@ public class FlowLog {
 	private String logModAcquiszione;
 	@Column(length = 132)
 	private String logPgmControllo;
+	@Convert(converter = ConnectionTypeConverter.class)
 	@Column(length = 5)
 	private ConnectionType logTipologiaConn;
 	@Column(length = 255)
@@ -99,6 +114,7 @@ public class FlowLog {
 	private String logRemoteFileName;
 	@Column(length = 64)
 	private String logUtenteSftp;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logIntegrityCheck;
 	@Column(length = 255)
@@ -109,10 +125,12 @@ public class FlowLog {
 	private BigDecimal logIntervalloRetry;
 	@Column(length = 5)
 	private BigDecimal logRetention;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logCompression;
 	@Column(length = 255)
 	private String logBackup;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logInviaMail;
 	@Column(length = 4)
@@ -131,26 +149,32 @@ public class FlowLog {
 	private String logJobNbrAs;
 	@Column(length = 1)
 	private ConnectionType logTipoTrasferimento;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logBypassQtemp;
 	@Column(length = 255)
 	private String logJavaHome;
 	
 	//aggiunta campi mancanti
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logEsistenzaFile;
 	@Column(length = 5)
 	private String logLetteraFlusso;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logCreaVuoto;
 	@Column(length = 5)
 	private String logInternaz;
 	@Column(length = 7)
 	private String logSostValNull;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logElimNomCol;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logFlagOkVuoto;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logFtpSecure;
 	@Column(length = 1)
@@ -163,14 +187,17 @@ public class FlowLog {
 	private String logInteractiveCommand;
 	@Column(length = 3)
 	private BigDecimal logDelaySemaforo;	
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logHashUnico;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logExportFlag;
 	@Column(length = 10)
 	private String logExportCode;
 	@Column(length = 6)
 	private BigDecimal logFetchSize;
+	@Convert(converter = YesNoConverter.class)
 	@Column(length = 1)
 	private YesNo logCharEmptySpace;
 
@@ -326,11 +353,12 @@ public class FlowLog {
 		this.logFileName = logFileName;
 	}
 
-	public String getLogDelimRecord() {
+
+	public RecordDelimiterType getLogDelimRecord() {
 		return logDelimRecord;
 	}
 
-	public void setLogDelimRecord(String logDelimRecord) {
+	public void setLogDelimRecord(RecordDelimiterType logDelimRecord) {
 		this.logDelimRecord = logDelimRecord;
 	}
 

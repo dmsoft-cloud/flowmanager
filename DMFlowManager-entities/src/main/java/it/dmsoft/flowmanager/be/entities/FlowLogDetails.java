@@ -5,7 +5,10 @@ import java.sql.Timestamp;
 
 import it.dmsoft.flowmanager.be.keys.FlowLogDetailsId;
 import it.dmsoft.flowmanager.common.domain.Domains.Status;
+import it.dmsoft.flowmanager.framework.converter.StatusConverter;
+import it.dmsoft.flowmanager.framework.converter.YesNoConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,6 +32,7 @@ public class FlowLogDetails {
 	@Column(length = 10)
 	public String logFase;
 	public Timestamp logTs;
+	@Convert(converter = StatusConverter.class)
 	@Column(length = 2)
 	public Status logEsito;
 	@Column(length = 255)

@@ -15,6 +15,7 @@ import it.dmsoft.flowmanager.common.model.FlowLogData;
 import it.dmsoft.flowmanager.common.model.FlowLogDetailsData;
 import it.dmsoft.flowmanager.framework.api.base.BaseService;
 import it.dmsoft.flowmanager.framework.json.UtilityJson;
+import it.dmsoft.flowmanager.master.api.log.DefaultFlowLogService;
 import jakarta.annotation.Resource;
 
 @Component
@@ -22,7 +23,7 @@ public class FlowExecutionSocketHandler
         extends TextWebSocketHandler {
 	
     @Resource(name = "flowLogService")
-    private BaseService<FlowLog, FlowLogData, String> flowLogService;
+    private DefaultFlowLogService flowLogService;
     
     @Resource(name = "flowLogDetailsService")
     private BaseService<FlowLogDetails, FlowLogDetailsData, FlowLogDetailsId> flowLogDetailsService;
