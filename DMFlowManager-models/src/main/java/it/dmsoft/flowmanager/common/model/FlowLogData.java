@@ -15,6 +15,7 @@ public class FlowLogData {
 	private BigDecimal logProgrLog;
 
 	private String logId;
+	private String logAgent;
 	private Timestamp logTsInizio;
 	private Timestamp logTsFine;
 
@@ -162,6 +163,14 @@ public class FlowLogData {
 
 	public void setLogId(String logId) {
 		this.logId = logId;
+	}
+
+	public String getLogAgent() {
+		return logAgent;
+	}
+
+	public void setLogAgent(String logAgent) {
+		this.logAgent = logAgent;
 	}
 
 	public Timestamp getLogTsInizio() {
@@ -684,35 +693,39 @@ public class FlowLogData {
 		this.logCharEmptySpace = logCharEmptySpace;
 	}
 
-
 	@Override
 	public String toString() {
-		return "FlowLog [logProgrLog=" + logProgrLog + ", logId=" + logId + ", logTsInizio=" + logTsInizio
-				+ ", logTsFine=" + logTsFine + ", logEsito=" + logEsito + ", logUtente=" + logUtente + ", logPassword="
-				+ logPassword + ", logCodInterfaccia=" + logCodInterfaccia + ", logStato=" + logStato
-				+ ", logTipFlusso=" + logTipFlusso + ", logDirezione=" + logDirezione + ", logLibreria=" + logLibreria
-				+ ", logFile=" + logFile + ", logMembro=" + logMembro + ", logLibSource=" + logLibSource
-				+ ", logFileSource=" + logFileSource + ", logMembroSource=" + logMembroSource + ", logFolder="
-				+ logFolder + ", logFileName=" + logFileName + ", logFormato=" + logFormato + ", logDelimRecord="
-				+ logDelimRecord + ", logDelimCampo=" + logDelimCampo + ", logCodepage=" + logCodepage
-				+ ", logModAcquiszione=" + logModAcquiszione + ", logPgmControllo=" + logPgmControllo + ", logTipologiaConn="
-				+ logTipologiaConn + ", logHost=" + logHost + ", logPort=" + logPort + ", logRemoteFolder="
-				+ logRemoteFolder + ", logRemoteFileName=" + logRemoteFileName + ", logUtenteSftp=" + logUtenteSftp
-				+ ", logIntegrityCheck=" + logIntegrityCheck + ", logFlNameSemaforo=" + logFlNameSemaforo
-				+ ", logNumTentaRicez=" + logNumTentaRicez + ", logIntervalloRetry=" + logIntervalloRetry
-				+ ", logRetention=" + logRetention + ", logCompression=" + logCompression + ", logBackup=" + logBackup
-				+ ", logInviaMail=" + logInviaMail + ", logLetteraOk=" + logLetteraOk + ", logLetteraKo=" + logLetteraKo
-				+ ", logLogFile=" + logLogFile + ", logErroreDesc=" + logErroreDesc + ", logJobAs=" + logJobAs
-				+ ", logUserAs=" + logUserAs + ", logJobNbrAs=" + logJobNbrAs + ", logTipoTrasferimento="
-				+ logTipoTrasferimento + ", logBypassQtemp=" + logBypassQtemp + ", logJavaHome=" + logJavaHome
-				+ ", logEsistenzaFile=" + logEsistenzaFile + ", logLetteraFlusso=" + logLetteraFlusso
-				+ ", logCreaVuoto=" + logCreaVuoto + ", logInternaz=" + logInternaz + ", logSostValNull="
-				+ logSostValNull + ", logElimNomCol=" + logElimNomCol + ", logFlagOkVuoto=" + logFlagOkVuoto
-				+ ", logFtpSecure=" + logFtpSecure + ", logInteractiveType=" + logInteractiveType
+		return "FlowLogData [logProgrLog=" + logProgrLog + ", logId=" + logId + ", logAgent=" + logAgent
+				+ ", logTsInizio=" + logTsInizio + ", logTsFine=" + logTsFine + ", logEsito=" + logEsito
+				+ ", logUtente=" + logUtente + ", logPassword=" + logPassword + ", logCodInterfaccia="
+				+ logCodInterfaccia + ", logStato=" + logStato + ", logTipFlusso=" + logTipFlusso + ", logDirezione="
+				+ logDirezione + ", logLibreria=" + logLibreria + ", logFile=" + logFile + ", logMembro=" + logMembro
+				+ ", logLibSource=" + logLibSource + ", logFileSource=" + logFileSource + ", logMembroSource="
+				+ logMembroSource + ", logFolder=" + logFolder + ", logFileName=" + logFileName + ", logFormato="
+				+ logFormato + ", logDelimRecord=" + logDelimRecord + ", logDelimCampo=" + logDelimCampo
+				+ ", logCodepage=" + logCodepage + ", logModAcquiszione=" + logModAcquiszione + ", logPgmControllo="
+				+ logPgmControllo + ", logTipologiaConn=" + logTipologiaConn + ", logHost=" + logHost + ", logPort="
+				+ logPort + ", logRemoteFolder=" + logRemoteFolder + ", logRemoteFileName=" + logRemoteFileName
+				+ ", logUtenteSftp=" + logUtenteSftp + ", logIntegrityCheck=" + logIntegrityCheck
+				+ ", logFlNameSemaforo=" + logFlNameSemaforo + ", logNumTentaRicez=" + logNumTentaRicez
+				+ ", logIntervalloRetry=" + logIntervalloRetry + ", logRetention=" + logRetention + ", logCompression="
+				+ logCompression + ", logBackup=" + logBackup + ", logInviaMail=" + logInviaMail + ", logLetteraOk="
+				+ logLetteraOk + ", logLetteraKo=" + logLetteraKo + ", logLogFile=" + logLogFile + ", logErroreDesc="
+				+ logErroreDesc + ", logJobAs=" + logJobAs + ", logUserAs=" + logUserAs + ", logJobNbrAs=" + logJobNbrAs
+				+ ", logTipoTrasferimento=" + logTipoTrasferimento + ", logBypassQtemp=" + logBypassQtemp
+				+ ", logJavaHome=" + logJavaHome + ", logEsistenzaFile=" + logEsistenzaFile + ", logLetteraFlusso="
+				+ logLetteraFlusso + ", logCreaVuoto=" + logCreaVuoto + ", logInternaz=" + logInternaz
+				+ ", logSostValNull=" + logSostValNull + ", logElimNomCol=" + logElimNomCol + ", logFlagOkVuoto="
+				+ logFlagOkVuoto + ", logFtpSecure=" + logFtpSecure + ", logInteractiveType=" + logInteractiveType
 				+ ", logInteractiveProgram=" + logInteractiveProgram + ", logInteractiveResult=" + logInteractiveResult
 				+ ", logInteractiveCommand=" + logInteractiveCommand + ", logDelaySemaforo=" + logDelaySemaforo
 				+ ", logHashUnico=" + logHashUnico + ", logExportFlag=" + logExportFlag + ", logExportCode="
 				+ logExportCode + ", logFetchSize=" + logFetchSize + ", logCharEmptySpace=" + logCharEmptySpace + "]";
 	}
+
+
+
+
+
 
 }

@@ -60,6 +60,11 @@
 			<artifactId>DMFlowManager-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>it.dmsoft.flowmanager</groupId>
+			<artifactId>DMFlowManager-models</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

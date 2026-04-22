@@ -60,6 +60,10 @@ public class FlowLogUtils {
 		FlowLogData fld = instance.getFlowLog(executionFlowData);
 		fld.setLogProgrLog(flowProg);
 		
+		//calcolo timestamp di avvio
+		Date date= new Date();
+		fld.setLogTsInizio(new Timestamp(date.getTime()));
+		
 		FlowExecutionOutcome fes = new FlowExecutionOutcome();
 		fes.setLogData(fld);
 		fes.setLogDetailsData(new ArrayList<FlowLogDetailsData>());
